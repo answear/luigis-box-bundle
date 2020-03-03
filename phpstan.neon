@@ -1,0 +1,8 @@
+includes:
+    - vendor/phpstan/phpstan-webmozart-assert/extension.neon
+
+parameters:
+    autoload_files:
+        - vendor/autoload.php
+    excludes_analyse:
+        - src/LuigisBoxBundle/Tests/*
