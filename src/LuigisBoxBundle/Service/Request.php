@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Answear\LuigisBoxBundle\Service;
 
-use Answear\LuigisBoxBundle\DTO\ContentRemovalObjects;
-use Answear\LuigisBoxBundle\DTO\ContentUpdateObjects;
 use Answear\LuigisBoxBundle\Factory\ContentRemovalFactory;
 use Answear\LuigisBoxBundle\Factory\ContentUpdateFactory;
 use Answear\LuigisBoxBundle\Factory\PartialContentUpdateFactory;
+use Answear\LuigisBoxBundle\ValueObject\ContentRemovalObjects;
+use Answear\LuigisBoxBundle\ValueObject\ContentUpdateObjects;
 use Psr\Http\Message\ResponseInterface;
 
 class Request
@@ -69,7 +69,7 @@ class Request
             throw new \RuntimeException(
                 sprintf(
                     'Expect less than or equal %s objects. Got %s.',
-                    self::CONTENT_UPDATE_OBJECTS_LIMIT,
+                    self::PARTIAL_CONTENT_UPDATE_OBJECTS_LIMIT,
                     \count($objects)
                 )
             );
