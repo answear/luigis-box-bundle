@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Answear\LuigisBoxBundle\Service;
 
-use Answear\LuigisBoxBundle\DTO\ObjectsInterface;
+use Answear\LuigisBoxBundle\ValueObject\ObjectsInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;

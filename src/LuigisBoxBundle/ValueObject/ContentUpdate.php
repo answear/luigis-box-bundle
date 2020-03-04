@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Answear\LuigisBoxBundle\DTO;
+namespace Answear\LuigisBoxBundle\ValueObject;
 
 use Webmozart\Assert\Assert;
 
@@ -57,7 +57,7 @@ class ContentUpdate
         Assert::keyExists($fields, 'title', 'Field title must be provided for $fields');
 
         if (isset($fields['availability'])) {
-            Assert::oneOf($fields['availability'], $fields, 'Field availability must be one of [0, 1]');
+            Assert::oneOf($fields['availability'], [0, 1], 'Field availability must be one of [0, 1]');
         }
 
         if (isset($fields['availability_rank'])) {
@@ -70,6 +70,7 @@ class ContentUpdate
         $this->url = $url;
         $this->type = $type;
         $this->fields = $fields;
+        $this->nested = [];
     }
 
     public function getUrl(): string
@@ -89,7 +90,10 @@ class ContentUpdate
 
     public function setAutocompleteType(?array $autocompleteType): void
     {
-        Assert::allString($autocompleteType);
+        if (null !== $autocompleteType) {
+            Assert::allString($autocompleteType);
+        }
+
         $this->autocompleteType = $autocompleteType;
     }
 
