@@ -6,7 +6,7 @@ namespace Answear\LuigisBoxBundle\ValueObject;
 
 use Webmozart\Assert\Assert;
 
-class ContentAvailabilityObjects
+class ContentAvailabilityCollection
 {
     /**
      * @var ContentAvailability[]

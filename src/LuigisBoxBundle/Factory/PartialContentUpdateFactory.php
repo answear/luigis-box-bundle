@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Answear\LuigisBoxBundle\Factory;
 
 use Answear\LuigisBoxBundle\ValueObject\ContentAvailability;
-use Answear\LuigisBoxBundle\ValueObject\ContentAvailabilityObjects;
-use Answear\LuigisBoxBundle\ValueObject\ContentUpdateObjects;
+use Answear\LuigisBoxBundle\ValueObject\ContentAvailabilityCollection;
+use Answear\LuigisBoxBundle\ValueObject\ContentUpdateCollection;
 use GuzzleHttp\Psr7\Request;
 use Webmozart\Assert\Assert;
 
@@ -16,12 +16,12 @@ class PartialContentUpdateFactory extends AbstractFactory
     private const ENDPOINT = '/v1/content';
 
     /**
-     * @param ContentAvailabilityObjects|ContentAvailability $object
+     * @param ContentAvailabilityCollection|ContentAvailability $object
      */
     public function prepareRequestForAvailability($object): Request
     {
         $expectedClasses = [
-            ContentAvailabilityObjects::class,
+            ContentAvailabilityCollection::class,
             ContentAvailability::class,
         ];
 
@@ -36,10 +36,10 @@ class PartialContentUpdateFactory extends AbstractFactory
 
         $objects = $object;
         if ($object instanceof ContentAvailability) {
-            $objects = new ContentAvailabilityObjects([$object]);
+            $objects = new ContentAvailabilityCollection([$object]);
         }
 
-        return $this->prepareRequest(ContentUpdateObjects::fromContentAvailabilityObjects($objects));
+        return $this->prepareRequest(ContentUpdateCollection::fromContentAvailabilityObjects($objects));
     }
 
     protected function getHttpMethod(): string
