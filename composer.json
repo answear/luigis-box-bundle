@@ -26,6 +26,11 @@
       "Answear\\LuigisBoxBundle\\": "src/LuigisBoxBundle/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Answear\\LuigisBoxBundle\\Tests\\": "tests"
+    }
+  },
   "scripts": {
     "post-install-cmd": [
       "GrumPHP\\Composer\\DevelopmentIntegrator::integrate"
