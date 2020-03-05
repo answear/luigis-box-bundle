@@ -1,5 +1,6 @@
 # Luigi's Box Bundle
 [Luigi's Box](https://www.luigisbox.com/) integration for Symfony.
+Luigi's Box documentation: https://live.luigisbox.com/.
 
 Installation
 ------------
@@ -10,4 +11,16 @@ Installation
 Setup
 ------------
 * provide required config data
+```
+answear_luigis_box:
+    host: 'https://live.luigisbox.com'
+    publicKey: 'your_public_key'
+    privateKey: 'your_private_key'
+    connectionTimeout: 5.0
+    requestTimeout: 5.0
+```
 * TODO: write me
+
+Usage
+------------
+TODO (?)
