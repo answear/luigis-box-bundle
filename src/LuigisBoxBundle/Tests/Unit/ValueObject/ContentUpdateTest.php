@@ -15,7 +15,7 @@ class ContentUpdateTest extends TestCase
      */
     public function createObjectSuccessfully(
         string $url,
-        string $type,
+        ?string $type,
         array $fields,
         ?array $autocompleteType = null,
         ?string $generation = null,

@@ -20,6 +20,16 @@ class ContentUpdateObjects implements ObjectsInterface, \Countable
         $this->objects = $objects;
     }
 
+    public static function fromContentAvailabilityObjects(ContentAvailabilityObjects $objects): self
+    {
+        $contentUpdateObjects = [];
+        foreach ($objects->getObjects() as $object) {
+            $contentUpdateObjects[] = ContentUpdate::fromContentAvailability($object);
+        }
+
+        return new self($contentUpdateObjects);
+    }
+
     /**
      * @return ContentUpdate[]
      */

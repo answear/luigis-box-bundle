@@ -14,7 +14,7 @@ class ContentUpdate
     private $url;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $type;
 
@@ -52,7 +52,7 @@ class ContentUpdate
      */
     private $nested;
 
-    public function __construct(string $url, string $type, array $fields)
+    public function __construct(string $url, ?string $type, array $fields)
     {
         Assert::keyExists($fields, 'title', 'Field title must be provided for $fields');
 
@@ -63,7 +63,7 @@ class ContentUpdate
         if (isset($fields['availability_rank'])) {
             Assert::integer($fields['availability_rank'], 'Field availability_rank must be integer');
             if ($fields['availability_rank'] < 1 || $fields['availability_rank'] > 15) {
-                throw new \InvalidArgumentException('Field availability_rank be between 1 and 15');
+                throw new \InvalidArgumentException('Field availability_rank must be between 1 and 15');
             }
         }
 
@@ -73,12 +73,23 @@ class ContentUpdate
         $this->nested = [];
     }
 
+    public static function fromContentAvailability(ContentAvailability $object): self
+    {
+        return new self(
+            $object->getUrl(),
+            null,
+            [
+                'availability' => $object->isAvailable(),
+            ]
+        );
+    }
+
     public function getUrl(): string
     {
         return $this->url;
     }
 
-    public function getType(): string
+    public function getType(): ?string
     {
         return $this->type;
     }
