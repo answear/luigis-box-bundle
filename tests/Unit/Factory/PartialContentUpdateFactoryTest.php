@@ -8,7 +8,7 @@ use Answear\LuigisBoxBundle\Factory\PartialContentUpdateFactory;
 use Answear\LuigisBoxBundle\Service\ConfigProvider;
 use Answear\LuigisBoxBundle\Service\LuigisBoxSerializer;
 use Answear\LuigisBoxBundle\ValueObject\ContentAvailability;
-use Answear\LuigisBoxBundle\ValueObject\ContentAvailabilityObjects;
+use Answear\LuigisBoxBundle\ValueObject\ContentAvailabilityCollection;
 use PHPUnit\Framework\TestCase;
 
 class PartialContentUpdateFactoryTest extends TestCase
@@ -40,7 +40,7 @@ class PartialContentUpdateFactoryTest extends TestCase
 
         yield [new ContentAvailability('url', false)];
 
-        yield [new ContentAvailabilityObjects([new ContentAvailability('url', false)])];
+        yield [new ContentAvailabilityCollection([new ContentAvailability('url', false)])];
     }
 
     private function getFactory(): PartialContentUpdateFactory
