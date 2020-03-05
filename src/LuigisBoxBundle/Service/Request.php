@@ -8,9 +8,9 @@ use Answear\LuigisBoxBundle\Factory\ContentRemovalFactory;
 use Answear\LuigisBoxBundle\Factory\ContentUpdateFactory;
 use Answear\LuigisBoxBundle\Factory\PartialContentUpdateFactory;
 use Answear\LuigisBoxBundle\ValueObject\ContentAvailability;
-use Answear\LuigisBoxBundle\ValueObject\ContentAvailabilityObjects;
-use Answear\LuigisBoxBundle\ValueObject\ContentRemovalObjects;
-use Answear\LuigisBoxBundle\ValueObject\ContentUpdateObjects;
+use Answear\LuigisBoxBundle\ValueObject\ContentAvailabilityCollection;
+use Answear\LuigisBoxBundle\ValueObject\ContentRemovalCollection;
+use Answear\LuigisBoxBundle\ValueObject\ContentUpdateCollection;
 use Psr\Http\Message\ResponseInterface;
 
 class Request
@@ -50,7 +50,7 @@ class Request
         $this->contentRemovalFactory = $contentRemovalFactory;
     }
 
-    public function contentUpdate(ContentUpdateObjects $objects): ResponseInterface
+    public function contentUpdate(ContentUpdateCollection $objects): ResponseInterface
     {
         if (\count($objects) > self::CONTENT_UPDATE_OBJECTS_LIMIT) {
             throw new \RuntimeException(
@@ -65,7 +65,7 @@ class Request
         return $this->client->request($this->contentUpdateFactory->prepareRequest($objects));
     }
 
-    public function partialContentUpdate(ContentUpdateObjects $objects): ResponseInterface
+    public function partialContentUpdate(ContentUpdateCollection $objects): ResponseInterface
     {
         if (\count($objects) > self::PARTIAL_CONTENT_UPDATE_OBJECTS_LIMIT) {
             throw new \RuntimeException(
@@ -80,13 +80,13 @@ class Request
         return $this->client->request($this->partialContentUpdateFactory->prepareRequest($objects));
     }
 
-    public function contentRemoval(ContentRemovalObjects $objects): ResponseInterface
+    public function contentRemoval(ContentRemovalCollection $objects): ResponseInterface
     {
         return $this->client->request($this->contentRemovalFactory->prepareRequest($objects));
     }
 
     /**
-     * @param ContentAvailabilityObjects|ContentAvailability $object
+     * @param ContentAvailabilityCollection|ContentAvailability $object
      */
     public function changeAvailability($object): ResponseInterface
     {

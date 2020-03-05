@@ -6,7 +6,7 @@ namespace Answear\LuigisBoxBundle\ValueObject;
 
 use Webmozart\Assert\Assert;
 
-class ContentRemovalObjects implements ObjectsInterface
+class ContentRemovalCollection implements ObjectsInterface
 {
     /**
      * @var ContentRemoval[]

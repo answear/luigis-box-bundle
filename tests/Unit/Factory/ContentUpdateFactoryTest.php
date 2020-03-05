@@ -8,7 +8,7 @@ use Answear\LuigisBoxBundle\Factory\ContentUpdateFactory;
 use Answear\LuigisBoxBundle\Service\ConfigProvider;
 use Answear\LuigisBoxBundle\Service\LuigisBoxSerializer;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdate;
-use Answear\LuigisBoxBundle\ValueObject\ContentUpdateObjects;
+use Answear\LuigisBoxBundle\ValueObject\ContentUpdateCollection;
 use Answear\LuigisBoxBundle\ValueObject\ObjectsInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -47,13 +47,13 @@ class ContentUpdateFactoryTest extends TestCase
         return new ContentUpdateFactory($configProvider, $serializer);
     }
 
-    private function getObjects(): ContentUpdateObjects
+    private function getObjects(): ContentUpdateCollection
     {
         $objects = [
             new ContentUpdate('test.url', 'type', ['title' => 't']),
             new ContentUpdate('test.url2', 'type', ['title' => 't2']),
         ];
 
-        return new ContentUpdateObjects($objects);
+        return new ContentUpdateCollection($objects);
     }
 }
