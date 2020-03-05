@@ -34,6 +34,15 @@ class PartialContentUpdateFactoryTest extends TestCase
         $this->assertSame('serialized', $request->getBody()->getContents());
     }
 
+    public function provideAvailabilityObjects(): iterable
+    {
+        yield [new ContentAvailability('url', true)];
+
+        yield [new ContentAvailability('url', false)];
+
+        yield [new ContentAvailabilityObjects([new ContentAvailability('url', false)])];
+    }
+
     private function getFactory(): PartialContentUpdateFactory
     {
         $configProvider = new ConfigProvider('host', 'key', 'key', 1, 1);
@@ -43,14 +52,5 @@ class PartialContentUpdateFactoryTest extends TestCase
             ->willReturn('serialized');
 
         return new PartialContentUpdateFactory($configProvider, $serializer);
-    }
-
-    public function provideAvailabilityObjects(): iterable
-    {
-        yield [new ContentAvailability('url', true)];
-
-        yield [new ContentAvailability('url', false)];
-
-        yield [new ContentAvailabilityObjects([new ContentAvailability('url', false)])];
     }
 }
