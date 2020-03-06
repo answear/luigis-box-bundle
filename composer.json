@@ -10,7 +10,8 @@
     "symfony/validator": "^4.1",
     "symfony/http-kernel": "^4.1",
     "php-http/guzzle6-adapter": "^1.1",
-    "symfony/serializer": "^4.4"
+    "symfony/serializer": "^4.4",
+    "symfony/property-access": "^4.1"
   },
   "require-dev": {
     "roave/security-advisories": "dev-master",

@@ -48,7 +48,7 @@ abstract class AbstractContentUpdate
     protected $fields;
 
     /**
-     * @var AbstractContentUpdate[]
+     * @var AbstractContentUpdate[]|null
      */
     protected $nested;
 
@@ -68,7 +68,6 @@ abstract class AbstractContentUpdate
         $this->url = $url;
         $this->type = $type;
         $this->fields = $fields;
-        $this->nested = [];
     }
 
     public function getUrl(): string
@@ -131,9 +130,9 @@ abstract class AbstractContentUpdate
     }
 
     /**
-     * @return AbstractContentUpdate[]
+     * @return AbstractContentUpdate[]|null
      */
-    public function getNested(): array
+    public function getNested(): ?array
     {
         return $this->nested;
     }
