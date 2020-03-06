@@ -13,9 +13,13 @@
          convertWarningsToExceptions="true"
          verbose="true"
 >
+    <php>
+        <ini name="error_reporting" value="-1"/>
+    </php>
+
     <testsuites>
         <testsuite name="Answear LuigisBox Test Suite">
-            <directory>./src/LuigisBoxBundle/Tests</directory>
+            <directory>./tests</directory>
         </testsuite>
     </testsuites>
 
