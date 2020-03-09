@@ -5,13 +5,7 @@ services:
         public: false
 
     Answear\LuigisBoxBundle\:
-        resource: '%kernel.project_dir%/src/LuigisBoxBundle/{Service,Factory}'
+        resource: '../../../../src/LuigisBoxBundle/{Service,Factory}'
 
-    Answear\LuigisBoxBundle\Service\ConfigProvider:
-        arguments:
-            $host: '%answear_luigis_box.host%'
-            $publicKey: '%answear_luigis_box.publicKey%'
-            $privateKey: '%answear_luigis_box.privateKey%'
-            $connectionTimeout: '%answear_luigis_box.connectionTimeout%'
-            $requestTimeout: '%answear_luigis_box.requestTimeout%'
+    Answear\LuigisBoxBundle\Service\ConfigProvider: ~
 

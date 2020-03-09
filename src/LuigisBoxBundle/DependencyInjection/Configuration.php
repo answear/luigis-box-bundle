@@ -20,8 +20,8 @@ class Configuration implements ConfigurationInterface
         $treeBuilder->getRootNode()
             ->children()
                 ->scalarNode('host')->defaultValue(self::HOST)->end()
-                ->scalarNode('publicKey')->end()
-                ->scalarNode('privateKey')->end()
+                ->scalarNode('publicKey')->cannotBeEmpty()->end()
+                ->scalarNode('privateKey')->cannotBeEmpty()->end()
                 ->floatNode('connectionTimeout')->defaultValue(self::CONNECTION_TIMEOUT)->end()
                 ->floatNode('requestTimeout')->defaultValue(self::REQUEST_TIMEOUT)->end()
             ->end();
