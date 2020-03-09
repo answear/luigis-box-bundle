@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-class LuigisBoxExtension extends Extension
+class AnswearLuigisBoxExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container): void
     {
