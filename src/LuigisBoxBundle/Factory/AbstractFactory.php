@@ -35,10 +35,7 @@ abstract class AbstractFactory
 
         return new Request(
             $this->getHttpMethod(),
-            new Uri(
-                $this->configProvider->host
-                . '/' . $this->getEndpoint()
-            ),
+            new Uri($this->configProvider->host . $this->getEndpoint()),
             $this->configProvider->getRequestHeaders($this->getHttpMethod(), $this->getEndpoint(), $now),
             $this->serializer->serialize($bodyObject)
         );

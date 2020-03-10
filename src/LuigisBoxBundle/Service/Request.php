@@ -7,6 +7,8 @@ namespace Answear\LuigisBoxBundle\Service;
 use Answear\LuigisBoxBundle\Factory\ContentRemovalFactory;
 use Answear\LuigisBoxBundle\Factory\ContentUpdateFactory;
 use Answear\LuigisBoxBundle\Factory\PartialContentUpdateFactory;
+use Answear\LuigisBoxBundle\ValueObject\ContentAvailability;
+use Answear\LuigisBoxBundle\ValueObject\ContentAvailabilityObjects;
 use Answear\LuigisBoxBundle\ValueObject\ContentRemovalObjects;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdateObjects;
 use Psr\Http\Message\ResponseInterface;
@@ -81,5 +83,13 @@ class Request
     public function contentRemoval(ContentRemovalObjects $objects): ResponseInterface
     {
         return $this->client->request($this->contentRemovalFactory->prepareRequest($objects));
+    }
+
+    /**
+     * @param ContentAvailabilityObjects|ContentAvailability $object
+     */
+    public function changeAvailability($object): ResponseInterface
+    {
+        return $this->client->request($this->partialContentUpdateFactory->prepareRequestForAvailability($object));
     }
 }

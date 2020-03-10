@@ -41,6 +41,14 @@ class ValueObjectDataProvider
 
         yield [
             'test.url2',
+            null,
+            [
+                'title' => 'test url title',
+            ],
+        ];
+
+        yield [
+            'test.url2',
             'categories',
             [
                 'title' => 'test url title',
@@ -82,7 +90,7 @@ class ValueObjectDataProvider
         ];
 
         yield [
-            'Field availability_rank be between 1 and 15',
+            'Field availability_rank must be between 1 and 15',
             'test.url',
             'products',
             [
