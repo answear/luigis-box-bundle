@@ -62,6 +62,7 @@ class Request
      * @throws ToManyRequestsException
      * @throws ToManyItemsException
      * @throws ServiceUnavailableException
+     * @throws MalformedResponseException
      */
     public function contentUpdate(ContentUpdateCollection $objects): ApiResponse
     {
@@ -84,6 +85,7 @@ class Request
      * @throws ToManyRequestsException
      * @throws ToManyItemsException
      * @throws ServiceUnavailableException
+     * @throws MalformedResponseException
      */
     public function partialContentUpdate(ContentUpdateCollection $objects): ApiResponse
     {
@@ -106,6 +108,7 @@ class Request
      * @throws ToManyRequestsException
      * @throws ToManyItemsException
      * @throws ServiceUnavailableException
+     * @throws MalformedResponseException
      */
     public function contentRemoval(ContentRemovalCollection $objects): ApiResponse
     {
@@ -126,6 +129,7 @@ class Request
      * @throws ToManyRequestsException
      * @throws ToManyItemsException
      * @throws ServiceUnavailableException
+     * @throws MalformedResponseException
      */
     public function changeAvailability($object): ApiResponse
     {
@@ -143,8 +147,9 @@ class Request
     /**
      * @throws ToManyRequestsException
      * @throws ToManyItemsException
+     * @throws MalformedResponseException
      */
-    public function handleResponse(\GuzzleHttp\Psr7\Request $request, ResponseInterface $response): array
+    private function handleResponse(\GuzzleHttp\Psr7\Request $request, ResponseInterface $response): array
     {
         if (Response::HTTP_TOO_MANY_REQUESTS === $response->getStatusCode()) {
             $retryAfter = $response->getHeader('Retry-After');

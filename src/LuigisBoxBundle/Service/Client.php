@@ -27,8 +27,8 @@ class Client
     public function request(Request $request): ResponseInterface
     {
         $options = [
-            RequestOptions::TIMEOUT => $this->configProvider->requestTimeout,
-            RequestOptions::CONNECT_TIMEOUT => $this->configProvider->connectionTimeout,
+            RequestOptions::TIMEOUT => $this->configProvider->getRequestTimeout(),
+            RequestOptions::CONNECT_TIMEOUT => $this->configProvider->getConnectionTimeout(),
             RequestOptions::HTTP_ERRORS => false,
         ];
 
