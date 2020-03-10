@@ -26,7 +26,7 @@ class AnswearLuigisBoxExtension extends Extension
         $definition = $container->getDefinition(ConfigProvider::class);
         $definition->setArguments(
             [
-                $config['host'],
+                rtrim($config['host'], '/'),
                 $config['publicKey'],
                 $config['privateKey'],
                 $config['connectionTimeout'],
