@@ -11,27 +11,27 @@ class ConfigProvider
     /**
      * @var string
      */
-    public $host;
+    private $host;
 
     /**
      * @var string
      */
-    public $publicKey;
+    private $publicKey;
 
     /**
      * @var string
      */
-    public $privateKey;
+    private $privateKey;
 
     /**
      * @var float
      */
-    public $connectionTimeout;
+    private $connectionTimeout;
 
     /**
      * @var float
      */
-    public $requestTimeout;
+    private $requestTimeout;
 
     public function __construct(
         string $host,
@@ -56,5 +56,20 @@ class ConfigProvider
             $endpoint,
             $date
         );
+    }
+
+    public function getHost(): string
+    {
+        return $this->host;
+    }
+
+    public function getConnectionTimeout(): float
+    {
+        return $this->connectionTimeout;
+    }
+
+    public function getRequestTimeout(): float
+    {
+        return $this->requestTimeout;
     }
 }
