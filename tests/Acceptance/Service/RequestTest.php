@@ -32,7 +32,7 @@ class RequestTest extends TestCase
             $collection
         );
 
-        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame([], $response->getResponse());
     }
 
     /**
@@ -48,7 +48,7 @@ class RequestTest extends TestCase
             $collection
         );
 
-        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame([], $response->getResponse());
     }
 
     /**
@@ -64,7 +64,7 @@ class RequestTest extends TestCase
             $collection
         );
 
-        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame([], $response->getResponse());
     }
 
     /**
@@ -77,7 +77,7 @@ class RequestTest extends TestCase
             $collection
         );
 
-        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame([], $response->getResponse());
     }
 
     private function getRequestService(string $httpMethod, string $expectedContent): Request
@@ -128,7 +128,13 @@ class RequestTest extends TestCase
                     }
                 )
             )
-            ->willReturn(new Response());
+            ->willReturn(
+                new Response(
+                    200,
+                    [],
+                    json_encode([], JSON_THROW_ON_ERROR, 512)
+                )
+            );
 
         return new Request(
             $client,
