@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Answear\LuigisBoxBundle\Exceptions;
+namespace Answear\LuigisBoxBundle\Exception;
 
 use GuzzleHttp\Psr7\Request;
 
-class ApiError extends \RuntimeException
+class ApiErrorException extends \RuntimeException
 {
     /**
      * @var Request

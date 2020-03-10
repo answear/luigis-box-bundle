@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Answear\LuigisBoxBundle\Exceptions;
+namespace Answear\LuigisBoxBundle\Exception;
 
 use Psr\Http\Message\ResponseInterface;
 

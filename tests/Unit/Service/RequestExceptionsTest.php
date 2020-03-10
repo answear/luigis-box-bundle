@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Answear\LuigisBoxBundle\Tests\Unit\Service;
 
-use Answear\LuigisBoxBundle\Exceptions\MalformedResponse;
-use Answear\LuigisBoxBundle\Exceptions\ServiceUnavailable;
-use Answear\LuigisBoxBundle\Exceptions\ToManyItemsException;
-use Answear\LuigisBoxBundle\Exceptions\ToManyRequestsException;
+use Answear\LuigisBoxBundle\Exception\MalformedResponseException;
+use Answear\LuigisBoxBundle\Exception\ServiceUnavailableException;
+use Answear\LuigisBoxBundle\Exception\ToManyItemsException;
+use Answear\LuigisBoxBundle\Exception\ToManyRequestsException;
 use Answear\LuigisBoxBundle\Factory\ContentRemovalFactory;
 use Answear\LuigisBoxBundle\Factory\ContentUpdateFactory;
 use Answear\LuigisBoxBundle\Factory\PartialContentUpdateFactory;
@@ -66,7 +66,7 @@ class RequestExceptionsTest extends TestCase
      */
     public function malformedResponseThrows(): void
     {
-        $this->expectException(MalformedResponse::class);
+        $this->expectException(MalformedResponseException::class);
         $this->expectExceptionMessage(
             'Expected an array. Got: string'
         );
@@ -87,7 +87,7 @@ class RequestExceptionsTest extends TestCase
      */
     public function serviceUnavailableThrows(): void
     {
-        $this->expectException(ServiceUnavailable::class);
+        $this->expectException(ServiceUnavailableException::class);
         $this->expectExceptionMessage('bad transfer');
 
         $objects = new ContentUpdateCollection([new ContentUpdate('url', null, ['title' => 'title'])]);

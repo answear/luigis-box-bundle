@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Answear\LuigisBoxBundle\Tests\Unit\Service;
 
-use Answear\LuigisBoxBundle\Exceptions\ToManyItemsException;
+use Answear\LuigisBoxBundle\Exception\ToManyItemsException;
 use Answear\LuigisBoxBundle\Factory\ContentRemovalFactory;
 use Answear\LuigisBoxBundle\Factory\ContentUpdateFactory;
 use Answear\LuigisBoxBundle\Factory\PartialContentUpdateFactory;

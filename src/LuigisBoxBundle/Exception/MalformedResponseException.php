@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Answear\LuigisBoxBundle\Exceptions;
+namespace Answear\LuigisBoxBundle\Exception;
 
 use GuzzleHttp\Psr7\Request;
 
-class MalformedResponse extends \RuntimeException
+class MalformedResponseException extends \RuntimeException
 {
     /**
      * @var string|null

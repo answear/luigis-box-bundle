@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Answear\LuigisBoxBundle\Service;
 
-use Answear\LuigisBoxBundle\Exceptions\MalformedResponse;
-use Answear\LuigisBoxBundle\Exceptions\ServiceUnavailable;
-use Answear\LuigisBoxBundle\Exceptions\ToManyItemsException;
-use Answear\LuigisBoxBundle\Exceptions\ToManyRequestsException;
+use Answear\LuigisBoxBundle\Exception\MalformedResponseException;
+use Answear\LuigisBoxBundle\Exception\ServiceUnavailableException;
+use Answear\LuigisBoxBundle\Exception\ToManyItemsException;
+use Answear\LuigisBoxBundle\Exception\ToManyRequestsException;
 use Answear\LuigisBoxBundle\Factory\ContentRemovalFactory;
 use Answear\LuigisBoxBundle\Factory\ContentUpdateFactory;
 use Answear\LuigisBoxBundle\Factory\PartialContentUpdateFactory;
@@ -61,7 +61,7 @@ class Request
     /**
      * @throws ToManyRequestsException
      * @throws ToManyItemsException
-     * @throws ServiceUnavailable
+     * @throws ServiceUnavailableException
      */
     public function contentUpdate(ContentUpdateCollection $objects): ApiResponse
     {
@@ -72,18 +72,18 @@ class Request
         try {
             $request = $this->contentUpdateFactory->prepareRequest($objects);
 
-            return ApiResponse::fromArray(
+            return new ApiResponse(
                 $this->handleResponse($request, $this->client->request($request))
             );
         } catch (GuzzleException $e) {
-            throw new ServiceUnavailable($e->getMessage(), $e->getCode(), $e);
+            throw new ServiceUnavailableException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
     /**
      * @throws ToManyRequestsException
      * @throws ToManyItemsException
-     * @throws ServiceUnavailable
+     * @throws ServiceUnavailableException
      */
     public function partialContentUpdate(ContentUpdateCollection $objects): ApiResponse
     {
@@ -94,29 +94,29 @@ class Request
         try {
             $request = $this->partialContentUpdateFactory->prepareRequest($objects);
 
-            return ApiResponse::fromArray(
+            return new ApiResponse(
                 $this->handleResponse($request, $this->client->request($request))
             );
         } catch (GuzzleException $e) {
-            throw new ServiceUnavailable($e->getMessage(), $e->getCode(), $e);
+            throw new ServiceUnavailableException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
     /**
      * @throws ToManyRequestsException
      * @throws ToManyItemsException
-     * @throws ServiceUnavailable
+     * @throws ServiceUnavailableException
      */
     public function contentRemoval(ContentRemovalCollection $objects): ApiResponse
     {
         try {
             $request = $this->contentRemovalFactory->prepareRequest($objects);
 
-            return ApiResponse::fromArray(
+            return new ApiResponse(
                 $this->handleResponse($request, $this->client->request($request))
             );
         } catch (GuzzleException $e) {
-            throw new ServiceUnavailable($e->getMessage(), $e->getCode(), $e);
+            throw new ServiceUnavailableException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -125,18 +125,18 @@ class Request
      *
      * @throws ToManyRequestsException
      * @throws ToManyItemsException
-     * @throws ServiceUnavailable
+     * @throws ServiceUnavailableException
      */
     public function changeAvailability($object): ApiResponse
     {
         try {
             $request = $this->partialContentUpdateFactory->prepareRequestForAvailability($object);
 
-            return ApiResponse::fromArray(
+            return new ApiResponse(
                 $this->handleResponse($request, $this->client->request($request))
             );
         } catch (GuzzleException $e) {
-            throw new ServiceUnavailable($e->getMessage(), $e->getCode(), $e);
+            throw new ServiceUnavailableException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -163,7 +163,7 @@ class Request
             $decoded = \json_decode($responseText, true, 512, JSON_THROW_ON_ERROR);
             Assert::isArray($decoded);
         } catch (\Throwable $e) {
-            throw new MalformedResponse($e->getMessage(), $responseText, $request, $e);
+            throw new MalformedResponseException($e->getMessage(), $responseText, $request, $e);
         }
 
         return $decoded;
