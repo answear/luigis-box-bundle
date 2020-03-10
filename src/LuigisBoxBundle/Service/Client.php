@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Answear\LuigisBoxBundle\Service;
 
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\ResponseInterface;
@@ -20,6 +21,9 @@ class Client
         $this->configProvider = $configProvider;
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function request(Request $request): ResponseInterface
     {
         $options = [
