@@ -5,12 +5,14 @@
   "license": "MIT",
   "require": {
     "php": ">=7.3",
+    "ext-json": "*",
     "marc-mabe/php-enum": "^3.0",
     "webmozart/assert": "^1.3",
     "symfony/validator": "^4.1",
     "symfony/http-kernel": "^4.1",
     "php-http/guzzle6-adapter": "^1.1",
-    "symfony/serializer": "^4.4"
+    "symfony/serializer": "^4.4",
+    "symfony/property-access": "^4.1"
   },
   "require-dev": {
     "roave/security-advisories": "dev-master",
@@ -24,6 +26,11 @@
   "autoload": {
     "psr-4": {
       "Answear\\LuigisBoxBundle\\": "src/LuigisBoxBundle/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Answear\\LuigisBoxBundle\\Tests\\": "tests"
     }
   },
   "scripts": {

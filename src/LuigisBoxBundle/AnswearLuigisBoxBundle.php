@@ -6,6 +6,6 @@ namespace Answear\LuigisBoxBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class LuigisBoxBundle extends Bundle
+class AnswearLuigisBoxBundle extends Bundle
 {
 }

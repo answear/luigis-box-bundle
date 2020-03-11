@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Answear\LuigisBoxBundle\Tests\Unit\Service;
 
+use Answear\LuigisBoxBundle\Exception\ToManyItemsException;
 use Answear\LuigisBoxBundle\Factory\ContentRemovalFactory;
 use Answear\LuigisBoxBundle\Factory\ContentUpdateFactory;
 use Answear\LuigisBoxBundle\Factory\PartialContentUpdateFactory;
 use Answear\LuigisBoxBundle\Service\Client;
 use Answear\LuigisBoxBundle\Service\Request;
-use Answear\LuigisBoxBundle\ValueObject\ContentRemovalObjects;
-use Answear\LuigisBoxBundle\ValueObject\ContentUpdateObjects;
+use Answear\LuigisBoxBundle\ValueObject\ContentRemovalCollection;
+use Answear\LuigisBoxBundle\ValueObject\ContentUpdateCollection;
 use Answear\LuigisBoxBundle\ValueObject\ObjectsInterface;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Uri;
@@ -22,52 +23,49 @@ class RequestTest extends TestCase
      * @test
      * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\ContentUpdateDataProvider::provideSuccessContentUpdateObjects()
      */
-    public function contentUpdateWithSuccess(ContentUpdateObjects $objects): void
+    public function contentUpdateWithSuccess(ContentUpdateCollection $objects): void
     {
         $requestService = $this->getRequestServiceForContentUpdate($objects);
         $response = $requestService->contentUpdate($objects);
 
-        $this->assertSame(200, $response->getStatusCode());
-        $body = $response->getBody()->getContents();
-        $this->assertSame('example response', $body);
+        $body = $response->getResponse();
+        $this->assertSame(['example response'], $body);
     }
 
     /**
      * @test
      * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\ContentUpdateDataProvider::provideSuccessContentUpdateObjects()
      */
-    public function partialContentUpdateWithSuccess(ContentUpdateObjects $objects): void
+    public function partialContentUpdateWithSuccess(ContentUpdateCollection $objects): void
     {
         $requestService = $this->getRequestServiceForPartialUpdate($objects);
         $response = $requestService->partialContentUpdate($objects);
 
-        $this->assertSame(200, $response->getStatusCode());
-        $body = $response->getBody()->getContents();
-        $this->assertSame('example response', $body);
+        $body = $response->getResponse();
+        $this->assertSame(['example response'], $body);
     }
 
     /**
      * @test
      * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\ContentUpdateDataProvider::provideContentRemovalObjects()
      */
-    public function contentRemovalWithSuccess(ContentRemovalObjects $objects): void
+    public function contentRemovalWithSuccess(ContentRemovalCollection $objects): void
     {
         $requestService = $this->getRequestServiceForRemoval($objects);
         $response = $requestService->contentRemoval($objects);
 
-        $this->assertSame(200, $response->getStatusCode());
-        $body = $response->getBody()->getContents();
-        $this->assertSame('example response', $body);
+        $body = $response->getResponse();
+        $this->assertSame(['example response'], $body);
     }
 
     /**
      * @test
      * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\ContentUpdateDataProvider::provideAboveLimitContentUpdateObjects()
      */
-    public function contentUpdateWithExceededLimit(ContentUpdateObjects $objects): void
+    public function contentUpdateWithExceededLimit(ContentUpdateCollection $objects): void
     {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage(sprintf('Expect less than or equal %s objects. Got %s.', 100, \count($objects)));
+        $this->expectException(ToManyItemsException::class);
+        $this->expectExceptionMessage(sprintf('Expect less than or equal %s items. Got %s.', 100, \count($objects)));
 
         $requestService = $this->getSimpleRequestService();
         $requestService->contentUpdate($objects);
@@ -77,10 +75,10 @@ class RequestTest extends TestCase
      * @test
      * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\ContentUpdateDataProvider::provideAboveLimitContentUpdateObjects()
      */
-    public function partialContentUpdateWithExceededLimit(ContentUpdateObjects $objects): void
+    public function partialContentUpdateWithExceededLimit(ContentUpdateCollection $objects): void
     {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage(sprintf('Expect less than or equal %s objects. Got %s.', 50, \count($objects)));
+        $this->expectException(ToManyItemsException::class);
+        $this->expectExceptionMessage(sprintf('Expect less than or equal %s items. Got %s.', 50, \count($objects)));
 
         $requestService = $this->getSimpleRequestService();
         $requestService->partialContentUpdate($objects);
@@ -103,7 +101,7 @@ class RequestTest extends TestCase
                 new Response(
                     200,
                     [],
-                    'example response'
+                    json_encode(['example response'], JSON_THROW_ON_ERROR, 512)
                 )
             );
 
@@ -135,7 +133,7 @@ class RequestTest extends TestCase
                 new Response(
                     200,
                     [],
-                    'example response'
+                    json_encode(['example response'], JSON_THROW_ON_ERROR, 512)
                 )
             );
 
@@ -171,7 +169,7 @@ class RequestTest extends TestCase
                 new Response(
                     200,
                     [],
-                    'example response'
+                    json_encode(['example response'], JSON_THROW_ON_ERROR, 512)
                 )
             );
 

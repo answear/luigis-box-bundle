@@ -4,24 +4,25 @@ declare(strict_types=1);
 
 namespace Answear\LuigisBoxBundle\Tests\Unit\Factory;
 
-use Answear\LuigisBoxBundle\Factory\PartialContentUpdateFactory;
+use Answear\LuigisBoxBundle\Factory\ContentUpdateFactory;
 use Answear\LuigisBoxBundle\Service\ConfigProvider;
 use Answear\LuigisBoxBundle\Service\LuigisBoxSerializer;
-use Answear\LuigisBoxBundle\ValueObject\ContentAvailability;
-use Answear\LuigisBoxBundle\ValueObject\ContentAvailabilityObjects;
+use Answear\LuigisBoxBundle\ValueObject\ContentUpdate;
+use Answear\LuigisBoxBundle\ValueObject\ContentUpdateCollection;
+use Answear\LuigisBoxBundle\ValueObject\ObjectsInterface;
 use PHPUnit\Framework\TestCase;
 
-class PartialContentUpdateFactoryTest extends TestCase
+class ContentUpdateFactoryTest extends TestCase
 {
     /**
      * @test
-     * @dataProvider provideAvailabilityObjects
      */
-    public function prepareRequestSuccessfully($objects): void
+    public function prepareRequestSuccessfully(): void
     {
-        $factory = $this->getFactory();
+        $objects = $this->getObjects();
+        $factory = $this->getFactory($objects);
 
-        $request = $factory->prepareRequestForAvailability($objects);
+        $request = $factory->prepareRequest($objects);
 
         $this->assertSame('host/v1/content', $request->getUri()->getPath());
 
@@ -34,23 +35,25 @@ class PartialContentUpdateFactoryTest extends TestCase
         $this->assertSame('serialized', $request->getBody()->getContents());
     }
 
-    private function getFactory(): PartialContentUpdateFactory
+    private function getFactory(ObjectsInterface $objects): ContentUpdateFactory
     {
         $configProvider = new ConfigProvider('host', 'key', 'key', 1, 1);
         $serializer = $this->createMock(LuigisBoxSerializer::class);
         $serializer->expects($this->once())
             ->method('serialize')
+            ->with($objects)
             ->willReturn('serialized');
 
-        return new PartialContentUpdateFactory($configProvider, $serializer);
+        return new ContentUpdateFactory($configProvider, $serializer);
     }
 
-    public function provideAvailabilityObjects(): iterable
+    private function getObjects(): ContentUpdateCollection
     {
-        yield [new ContentAvailability('url', true)];
+        $objects = [
+            new ContentUpdate('test.url', 'type', ['title' => 't']),
+            new ContentUpdate('test.url2', 'type', ['title' => 't2']),
+        ];
 
-        yield [new ContentAvailability('url', false)];
-
-        yield [new ContentAvailabilityObjects([new ContentAvailability('url', false)])];
+        return new ContentUpdateCollection($objects);
     }
 }
