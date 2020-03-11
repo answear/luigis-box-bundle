@@ -11,7 +11,7 @@ class ToManyItemsException extends \RuntimeException
     /**
      * @var int|null
      */
-    private $passedObjects;
+    private $passedObjectsCount;
 
     /**
      * @var int|null
@@ -23,27 +23,27 @@ class ToManyItemsException extends \RuntimeException
      */
     private $response;
 
-    public function __construct(?int $passedObjects, ?int $limit, ?ResponseInterface $response = null)
+    public function __construct(?int $passedObjectsCount, ?int $limit, ?ResponseInterface $response = null)
     {
         $message = sprintf(
             'Expect less than or equal %s items. Got %s.',
             $limit,
-            $passedObjects
+            $passedObjectsCount
         );
-        if (null === $passedObjects || null === $limit) {
+        if (null === $passedObjectsCount || null === $limit) {
             $message = 'To many items in single request.';
         }
 
         parent::__construct($message);
 
-        $this->passedObjects = $passedObjects;
+        $this->passedObjectsCount = $passedObjectsCount;
         $this->limit = $limit;
         $this->response = $response;
     }
 
-    public function getPassedObjects(): int
+    public function getPassedObjectsCount(): int
     {
-        return $this->passedObjects;
+        return $this->passedObjectsCount;
     }
 
     public function getLimit(): int
