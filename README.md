@@ -9,7 +9,7 @@ Installation
 ```
 composer require answear/luigis-box-bundle
 ```
-* consider to use specific version (ex. `0.1.1`, `0.1.2`) until we provide `1.0.0` version (`^1.0.0`)
+* consider using specific version (ex. `0.1.1`, `0.1.2`) until we provide `1.0.0` version (`^1.0.0`)
 
 Setup
 ------------
@@ -69,7 +69,7 @@ $apiResponse = $request->contentRemoval($collection);
 
 4. Change availability
 
-Additional method to simply enable/disable object - used partial update.
+Additional method to simply enable/disable objects - partial update will be used.
 ```php
 use Answear\LuigisBoxBundle\ValueObject\ContentAvailability;
 use Answear\LuigisBoxBundle\ValueObject\ContentAvailabilityCollection;
@@ -91,14 +91,16 @@ $apiResponse = $request->changeAvailability(new ContentAvailability('product/url
 
 ---
 In all request you can catch some exceptions:
-* `ToManyItemsException` - make request with less items,
+* `BadRequestException` - bad request,
+* `ToManyItemsException` - make request with fewer items,
 * `MalformedResponseException` - something went wrong with Luigi's Box api response,
 * `ToManyRequestsException` - delay request rate,
 * `ServiceUnavailableException`
 
-Consider to catch them separately:
+Consider catching them separately:
 ```php
 
+use Answear\LuigisBoxBundle\Exception\BadRequestException;
 use Answear\LuigisBoxBundle\Exception\ToManyItemsException;
 use Answear\LuigisBoxBundle\Exception\MalformedResponseException;
 use Answear\LuigisBoxBundle\Exception\ToManyRequestsException;
@@ -106,17 +108,21 @@ use Answear\LuigisBoxBundle\Exception\ServiceUnavailableException;
 
 try {
     // ... request
+} catch (BadRequestException $e){
+    //bad request
+    $request = $e->getRequest();
+    $response = $e->getResponse();
 } catch (ToManyItemsException $e){
     //items limit reached
     $limit = $e->getLimit();
 } catch (MalformedResponseException $e){
     //bad response 
-    $textResponse = $e->getResponse();
+    $response = $e->getResponse();
 } catch (ToManyRequestsException $e){
-    //consider to repeat request after $retryAfter seconds
+    //repeat request after $retryAfter seconds
     $retryAfter = $e->getRetryAfterSeconds();
 } catch (ServiceUnavailableException $e){
-    //consider to delay request
+    //delay request
 }
 
 ```
@@ -124,4 +130,29 @@ try {
 Response
 ------------
 
-//TODO - write it
+`\Answear\LuigisBoxBundle\Response\ApiResponse`:
+* (bool) `$success` - `true` if all documents will pass successfully,
+* (int) `$okCount` - number of successfully passed documents,
+* (int) `$errorsCount` - number of failed documents,
+* (array) `$errors` - array of `\Answear\LuigisBoxBundle\Response\ApiResponseError` objects,
+* (array) `$rawResponse` - decoded response from api.
+
+`ApiResponseError`:
+* (string) `$url` - url of document
+* (string) `$type` - type of error (ex. `malformed_input`)
+* (string) `$reason` - failure text (ex. `incorrect object format`)
+* (array|null) `$causedBy` - specific reason of error (ex. `["url": ["is missing"]]`)
+
+
+Note!
+
+If some document will fail, `ApiResponse::$success` will be `false`. Check `$okCount` if you want to know how many documents were been updated and `$errors` to check exactly which documents fails.
+
+
+Final notes
+------------
+
+Feel free to make pull requests with new features, improvements or bug fixes. The Answear team will be grateful for any comments.
+
+
+### Have fun!

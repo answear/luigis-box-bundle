@@ -11,6 +11,7 @@ use Answear\LuigisBoxBundle\Factory\PartialContentUpdateFactory;
 use Answear\LuigisBoxBundle\Service\Client;
 use Answear\LuigisBoxBundle\Service\Request;
 use Answear\LuigisBoxBundle\ValueObject\ContentRemovalCollection;
+use Answear\LuigisBoxBundle\ValueObject\ContentUpdate;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdateCollection;
 use Answear\LuigisBoxBundle\ValueObject\ObjectsInterface;
 use GuzzleHttp\Psr7\Response;
@@ -23,39 +24,45 @@ class RequestTest extends TestCase
      * @test
      * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\ContentUpdateDataProvider::provideSuccessContentUpdateObjects()
      */
-    public function contentUpdateWithSuccess(ContentUpdateCollection $objects): void
+    public function contentUpdateWithSuccess(ContentUpdateCollection $objects, array $apiResponse): void
     {
-        $requestService = $this->getRequestServiceForContentUpdate($objects);
+        $requestService = $this->getRequestServiceForContentUpdate($objects, $apiResponse);
         $response = $requestService->contentUpdate($objects);
 
-        $body = $response->getResponse();
-        $this->assertSame(['example response'], $body);
+        $this->assertTrue($response->isSuccess());
+        $this->assertSame(\count($objects), $response->getOkCount());
+        $this->assertSame(0, $response->getErrorsCount());
+        $this->assertSame([], $response->getErrors());
     }
 
     /**
      * @test
      * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\ContentUpdateDataProvider::provideSuccessContentUpdateObjects()
      */
-    public function partialContentUpdateWithSuccess(ContentUpdateCollection $objects): void
+    public function partialContentUpdateWithSuccess(ContentUpdateCollection $objects, array $apiResponse): void
     {
-        $requestService = $this->getRequestServiceForPartialUpdate($objects);
+        $requestService = $this->getRequestServiceForPartialUpdate($objects, $apiResponse);
         $response = $requestService->partialContentUpdate($objects);
 
-        $body = $response->getResponse();
-        $this->assertSame(['example response'], $body);
+        $this->assertTrue($response->isSuccess());
+        $this->assertSame(\count($objects), $response->getOkCount());
+        $this->assertSame(0, $response->getErrorsCount());
+        $this->assertSame([], $response->getErrors());
     }
 
     /**
      * @test
      * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\ContentUpdateDataProvider::provideContentRemovalObjects()
      */
-    public function contentRemovalWithSuccess(ContentRemovalCollection $objects): void
+    public function contentRemovalWithSuccess(ContentRemovalCollection $objects, array $apiResponse): void
     {
-        $requestService = $this->getRequestServiceForRemoval($objects);
+        $requestService = $this->getRequestServiceForRemoval($objects, $apiResponse);
         $response = $requestService->contentRemoval($objects);
 
-        $body = $response->getResponse();
-        $this->assertSame(['example response'], $body);
+        $this->assertTrue($response->isSuccess());
+        $this->assertSame(\count($objects), $response->getOkCount());
+        $this->assertSame(0, $response->getErrorsCount());
+        $this->assertSame([], $response->getErrors());
     }
 
     /**
@@ -84,7 +91,66 @@ class RequestTest extends TestCase
         $requestService->partialContentUpdate($objects);
     }
 
-    private function getRequestServiceForContentUpdate(ObjectsInterface $objects): Request
+    /**
+     * @test
+     */
+    public function contentUpdateWithErrors(): void
+    {
+        $objects = new ContentUpdateCollection(
+            [
+                new ContentUpdate(
+                    'test.url',
+                    'products',
+                    [
+                        'title' => 'test url title',
+                    ],
+                ),
+                new ContentUpdate(
+                    'test.url2',
+                    'categories',
+                    [
+                        'title' => '',
+                    ]
+                ),
+            ]
+        );
+
+        $requestService = $this->getRequestServiceForContentUpdate(
+            $objects,
+            [
+                'ok_count' => 1,
+                'errors_count' => 1,
+                'errors' => [
+                    'test.url2' => [
+                        'type' => 'malformed_input',
+                        'reason' => 'incorrect object format',
+                        'caused_by' => [
+                            'title' => ['must be filled'],
+                        ],
+                    ],
+                ],
+            ]
+        );
+        $response = $requestService->contentUpdate($objects);
+
+        $this->assertFalse($response->isSuccess());
+        $this->assertSame(1, $response->getOkCount());
+        $this->assertSame(1, $response->getErrorsCount());
+        $this->assertCount(1, $response->getErrors());
+
+        $apiResponseError = $response->getErrors()[0];
+        $this->assertSame('test.url2', $apiResponseError->getUrl());
+        $this->assertSame('malformed_input', $apiResponseError->getType());
+        $this->assertSame('incorrect object format', $apiResponseError->getReason());
+        $this->assertSame(
+            [
+                'title' => ['must be filled'],
+            ],
+            $apiResponseError->getCausedBy()
+        );
+    }
+
+    private function getRequestServiceForContentUpdate(ObjectsInterface $objects, array $apiResponse): Request
     {
         $guzzleRequest = new \GuzzleHttp\Psr7\Request(
             'POST',
@@ -101,7 +167,7 @@ class RequestTest extends TestCase
                 new Response(
                     200,
                     [],
-                    json_encode(['example response'], JSON_THROW_ON_ERROR, 512)
+                    json_encode($apiResponse, JSON_THROW_ON_ERROR, 512)
                 )
             );
 
@@ -116,7 +182,7 @@ class RequestTest extends TestCase
         return new Request($client, $contentUpdateFactory, $partialContentUpdateFactory, $contentRemovalUpdateFactory);
     }
 
-    private function getRequestServiceForPartialUpdate(ObjectsInterface $objects): Request
+    private function getRequestServiceForPartialUpdate(ObjectsInterface $objects, array $apiResponse): Request
     {
         $guzzleRequest = new \GuzzleHttp\Psr7\Request(
             'POST',
@@ -133,7 +199,7 @@ class RequestTest extends TestCase
                 new Response(
                     200,
                     [],
-                    json_encode(['example response'], JSON_THROW_ON_ERROR, 512)
+                    json_encode($apiResponse, JSON_THROW_ON_ERROR, 512)
                 )
             );
 
@@ -152,7 +218,7 @@ class RequestTest extends TestCase
         );
     }
 
-    private function getRequestServiceForRemoval(ObjectsInterface $objects): Request
+    private function getRequestServiceForRemoval(ObjectsInterface $objects, array $apiResponse): Request
     {
         $guzzleRequest = new \GuzzleHttp\Psr7\Request(
             'POST',
@@ -169,7 +235,7 @@ class RequestTest extends TestCase
                 new Response(
                     200,
                     [],
-                    json_encode(['example response'], JSON_THROW_ON_ERROR, 512)
+                    json_encode($apiResponse, JSON_THROW_ON_ERROR, 512)
                 )
             );
 

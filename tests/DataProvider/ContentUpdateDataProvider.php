@@ -19,7 +19,7 @@ class ContentUpdateDataProvider
                 'products',
                 [
                     'title' => 'test url title',
-                ]
+                ],
             ),
             new ContentUpdate(
                 'test.url2',
@@ -30,7 +30,12 @@ class ContentUpdateDataProvider
             ),
         ];
 
-        yield [new ContentUpdateCollection($objects)];
+        yield [
+            new ContentUpdateCollection($objects),
+            [
+                'ok_count' => 2,
+            ],
+        ];
     }
 
     public static function provideAboveLimitContentUpdateObjects(): iterable
@@ -56,6 +61,11 @@ class ContentUpdateDataProvider
             new ContentRemoval('test.url2'),
         ];
 
-        yield [new ContentRemovalCollection($objects)];
+        yield [
+            new ContentRemovalCollection($objects),
+            [
+                'ok_count' => 2,
+            ],
+        ];
     }
 }

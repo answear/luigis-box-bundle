@@ -20,6 +20,9 @@ class RequestDataProvider
             'POST',
             new ContentUpdateCollection([new ContentUpdate('product/1', 'products', ['title' => 'title'])]),
             '{"objects":[{"url":"product\/1","type":"products","fields":{"title":"title"}}]}',
+            [
+                'ok_count' => 1,
+            ],
         ];
 
         $collection = new ContentUpdateCollection(
@@ -29,6 +32,9 @@ class RequestDataProvider
             'POST',
             $collection,
             '{"objects":[{"url":"product\/1","type":"products","fields":{"title":"title","availability":1}}]}',
+            [
+                'ok_count' => 1,
+            ],
         ];
 
         $contentUpdate1 = new ContentUpdate('product/2', 'products', ['title' => 'title', 'availability' => 1]);
@@ -49,6 +55,9 @@ class RequestDataProvider
             'POST',
             $collection,
             '{"objects":[{"url":"product\/2","type":"products","autocomplete_type":["categories","other"],"active_to":"2019-12-12 00:01:02","fields":{"title":"title","availability":1}},{"url":"product\/1","type":"products","generation":"one","fields":{"title":"title","availability":0},"nested":[{"url":"product\/2","type":"products","autocomplete_type":["categories","other"],"active_to":"2019-12-12 00:01:02","fields":{"title":"title","availability":1}}]}]}',
+            [
+                'ok_count' => 2,
+            ],
         ];
     }
 
@@ -58,12 +67,18 @@ class RequestDataProvider
             'PATCH',
             new ContentUpdateCollection([new PartialContentUpdate('product/1', 'products', ['brand' => 'brand name'])]),
             '{"objects":[{"url":"product\/1","type":"products","fields":{"brand":"brand name"}}]}',
+            [
+                'ok_count' => 1,
+            ],
         ];
 
         yield [
             'PATCH',
             new ContentUpdateCollection([new PartialContentUpdate('product/1', 'products', ['title' => 'title'])]),
             '{"objects":[{"url":"product\/1","type":"products","fields":{"title":"title"}}]}',
+            [
+                'ok_count' => 1,
+            ],
         ];
 
         $collection = new ContentUpdateCollection(
@@ -73,6 +88,9 @@ class RequestDataProvider
             'PATCH',
             $collection,
             '{"objects":[{"url":"product\/1","type":"products","fields":{"title":"title","availability":1}}]}',
+            [
+                'ok_count' => 1,
+            ],
         ];
 
         $contentUpdate1 = new PartialContentUpdate('product/2', 'products', ['title' => 'title', 'availability' => 1]);
@@ -87,6 +105,9 @@ class RequestDataProvider
             'PATCH',
             $collection,
             '{"objects":[{"url":"product\/2","type":"products","active_to":"2019-12-12 00:01:02","fields":{"title":"title","availability":1}},{"url":"product\/1","type":"products","generation":"one","fields":{"title":"title","availability":0},"nested":[{"url":"product\/2","type":"products","active_to":"2019-12-12 00:01:02","fields":{"title":"title","availability":1}}]}]}',
+            [
+                'ok_count' => 2,
+            ],
         ];
     }
 
@@ -96,6 +117,9 @@ class RequestDataProvider
             'DELETE',
             new ContentRemovalCollection([new ContentRemoval('product/1')]),
             '{"objects":[{"url":"product\/1"}]}',
+            [
+                'ok_count' => 1,
+            ],
         ];
     }
 
@@ -105,6 +129,9 @@ class RequestDataProvider
             'PATCH',
             new ContentAvailabilityCollection([new ContentAvailability('product/1', true)]),
             '{"objects":[{"url":"product\/1","fields":{"availability":1}}]}',
+            [
+                'ok_count' => 1,
+            ],
         ];
 
         yield [
@@ -113,12 +140,18 @@ class RequestDataProvider
                 [new ContentAvailability('product/1', true), new ContentAvailability('product/2', false)]
             ),
             '{"objects":[{"url":"product\/1","fields":{"availability":1}},{"url":"product\/2","fields":{"availability":0}}]}',
+            [
+                'ok_count' => 2,
+            ],
         ];
 
         yield [
             'PATCH',
             new ContentAvailability('product/1', true),
             '{"objects":[{"url":"product\/1","fields":{"availability":1}}]}',
+            [
+                'ok_count' => 1,
+            ],
         ];
     }
 }

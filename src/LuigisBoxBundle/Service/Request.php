@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Answear\LuigisBoxBundle\Service;
 
+use Answear\LuigisBoxBundle\Exception\BadRequestException;
 use Answear\LuigisBoxBundle\Exception\MalformedResponseException;
 use Answear\LuigisBoxBundle\Exception\ServiceUnavailableException;
 use Answear\LuigisBoxBundle\Exception\ToManyItemsException;
@@ -74,6 +75,7 @@ class Request
             $request = $this->contentUpdateFactory->prepareRequest($objects);
 
             return new ApiResponse(
+                \count($objects),
                 $this->handleResponse($request, $this->client->request($request))
             );
         } catch (GuzzleException $e) {
@@ -97,6 +99,7 @@ class Request
             $request = $this->partialContentUpdateFactory->prepareRequest($objects);
 
             return new ApiResponse(
+                \count($objects),
                 $this->handleResponse($request, $this->client->request($request))
             );
         } catch (GuzzleException $e) {
@@ -116,6 +119,7 @@ class Request
             $request = $this->contentRemovalFactory->prepareRequest($objects);
 
             return new ApiResponse(
+                \count($objects),
                 $this->handleResponse($request, $this->client->request($request))
             );
         } catch (GuzzleException $e) {
@@ -126,10 +130,10 @@ class Request
     /**
      * @param ContentAvailabilityCollection|ContentAvailability $object
      *
-     * @throws ToManyRequestsException
      * @throws ToManyItemsException
      * @throws ServiceUnavailableException
      * @throws MalformedResponseException
+     * @throws ToManyRequestsException
      */
     public function changeAvailability($object): ApiResponse
     {
@@ -137,6 +141,7 @@ class Request
             $request = $this->partialContentUpdateFactory->prepareRequestForAvailability($object);
 
             return new ApiResponse(
+                $object instanceof ContentAvailabilityCollection ? \count($object) : 1,
                 $this->handleResponse($request, $this->client->request($request))
             );
         } catch (GuzzleException $e) {
@@ -145,12 +150,17 @@ class Request
     }
 
     /**
+     * @throws BadRequestException
      * @throws ToManyRequestsException
      * @throws ToManyItemsException
      * @throws MalformedResponseException
      */
     private function handleResponse(\GuzzleHttp\Psr7\Request $request, ResponseInterface $response): array
     {
+        if (Response::HTTP_BAD_REQUEST === $response->getStatusCode()) {
+            throw new BadRequestException($response, $request);
+        }
+
         if (Response::HTTP_TOO_MANY_REQUESTS === $response->getStatusCode()) {
             $retryAfter = $response->getHeader('Retry-After');
             $retryAfter = reset($retryAfter);
@@ -168,7 +178,7 @@ class Request
             $decoded = \json_decode($responseText, true, 512, JSON_THROW_ON_ERROR);
             Assert::isArray($decoded);
         } catch (\Throwable $e) {
-            throw new MalformedResponseException($e->getMessage(), $responseText, $request, $e);
+            throw new MalformedResponseException($e->getMessage(), $response, $request, $e);
         }
 
         return $decoded;

@@ -11,6 +11,7 @@ use Answear\LuigisBoxBundle\Service\Client;
 use Answear\LuigisBoxBundle\Service\ConfigProvider;
 use Answear\LuigisBoxBundle\Service\LuigisBoxSerializer;
 use Answear\LuigisBoxBundle\Service\Request;
+use Answear\LuigisBoxBundle\ValueObject\ContentAvailability;
 use Answear\LuigisBoxBundle\ValueObject\ContentRemovalCollection;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdateCollection;
 use GuzzleHttp\Psr7\Response;
@@ -26,13 +27,17 @@ class RequestTest extends TestCase
     public function contentUpdateRequestPassed(
         string $httpMethod,
         ContentUpdateCollection $collection,
-        string $expectedContent
+        string $expectedContent,
+        array $apiResponse
     ): void {
-        $response = $this->getRequestService($httpMethod, $expectedContent)->contentUpdate(
+        $response = $this->getRequestService($httpMethod, $expectedContent, $apiResponse)->contentUpdate(
             $collection
         );
 
-        $this->assertSame([], $response->getResponse());
+        $this->assertTrue($response->isSuccess());
+        $this->assertSame(\count($collection), $response->getOkCount());
+        $this->assertSame(0, $response->getErrorsCount());
+        $this->assertSame([], $response->getErrors());
     }
 
     /**
@@ -42,13 +47,17 @@ class RequestTest extends TestCase
     public function partialContentUpdateRequestPassed(
         string $httpMethod,
         ContentUpdateCollection $collection,
-        string $expectedContent
+        string $expectedContent,
+        array $apiResponse
     ): void {
-        $response = $this->getRequestService($httpMethod, $expectedContent)->partialContentUpdate(
+        $response = $this->getRequestService($httpMethod, $expectedContent, $apiResponse)->partialContentUpdate(
             $collection
         );
 
-        $this->assertSame([], $response->getResponse());
+        $this->assertTrue($response->isSuccess());
+        $this->assertSame(\count($collection), $response->getOkCount());
+        $this->assertSame(0, $response->getErrorsCount());
+        $this->assertSame([], $response->getErrors());
     }
 
     /**
@@ -58,29 +67,43 @@ class RequestTest extends TestCase
     public function contentRemovalRequestPassed(
         string $httpMethod,
         ContentRemovalCollection $collection,
-        string $expectedContent
+        string $expectedContent,
+        array $apiResponse
     ): void {
-        $response = $this->getRequestService($httpMethod, $expectedContent)->contentRemoval(
+        $response = $this->getRequestService($httpMethod, $expectedContent, $apiResponse)->contentRemoval(
             $collection
         );
 
-        $this->assertSame([], $response->getResponse());
+        $this->assertTrue($response->isSuccess());
+        $this->assertSame(\count($collection), $response->getOkCount());
+        $this->assertSame(0, $response->getErrorsCount());
+        $this->assertSame([], $response->getErrors());
     }
 
     /**
      * @test
      * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\RequestDataProvider::forChangeAvailability()
      */
-    public function changeAvailabilityRequestPassed(string $httpMethod, $collection, string $expectedContent): void
-    {
-        $response = $this->getRequestService($httpMethod, $expectedContent)->changeAvailability(
+    public function changeAvailabilityRequestPassed(
+        string $httpMethod,
+        $collection,
+        string $expectedContent,
+        array $apiResponse
+    ): void {
+        $response = $this->getRequestService($httpMethod, $expectedContent, $apiResponse)->changeAvailability(
             $collection
         );
 
-        $this->assertSame([], $response->getResponse());
+        $this->assertTrue($response->isSuccess());
+        $this->assertSame(
+            ($collection instanceof ContentAvailability) ? 1 : \count($collection),
+            $response->getOkCount()
+        );
+        $this->assertSame(0, $response->getErrorsCount());
+        $this->assertSame([], $response->getErrors());
     }
 
-    private function getRequestService(string $httpMethod, string $expectedContent): Request
+    private function getRequestService(string $httpMethod, string $expectedContent, array $apiResponse): Request
     {
         $endpoint = '/v1/content';
 
@@ -132,7 +155,7 @@ class RequestTest extends TestCase
                 new Response(
                     200,
                     [],
-                    json_encode([], JSON_THROW_ON_ERROR, 512)
+                    json_encode($apiResponse, JSON_THROW_ON_ERROR, 512)
                 )
             );
 
