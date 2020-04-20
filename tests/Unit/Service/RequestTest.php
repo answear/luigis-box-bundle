@@ -99,18 +99,16 @@ class RequestTest extends TestCase
         $objects = new ContentUpdateCollection(
             [
                 new ContentUpdate(
+                    'test title',
                     'test.url',
                     'products',
-                    [
-                        'title' => 'test url title',
-                    ],
+                    [],
                 ),
                 new ContentUpdate(
+                    'test title',
                     'test.url2',
                     'categories',
-                    [
-                        'title' => '',
-                    ]
+                    []
                 ),
             ]
         );

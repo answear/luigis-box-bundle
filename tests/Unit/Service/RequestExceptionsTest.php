@@ -29,7 +29,7 @@ class RequestExceptionsTest extends TestCase
         $this->expectException(ToManyItemsException::class);
         $this->expectExceptionMessage('To many items in single request.');
 
-        $objects = new ContentUpdateCollection([new ContentUpdate('url', null, ['title' => 'title'])]);
+        $objects = new ContentUpdateCollection([new ContentUpdate('title', 'url', null, [])]);
         $service = $this->getService(
             new Response(
                 \Symfony\Component\HttpFoundation\Response::HTTP_REQUEST_ENTITY_TOO_LARGE,
@@ -50,7 +50,7 @@ class RequestExceptionsTest extends TestCase
             'To many requests. Check $retryAfterSeconds field to see how many seconds must wait before retrying the request.'
         );
 
-        $objects = new ContentUpdateCollection([new ContentUpdate('url', null, ['title' => 'title'])]);
+        $objects = new ContentUpdateCollection([new ContentUpdate('title', 'url', null, [])]);
         $service = $this->getService(
             new Response(
                 \Symfony\Component\HttpFoundation\Response::HTTP_TOO_MANY_REQUESTS,
@@ -71,7 +71,7 @@ class RequestExceptionsTest extends TestCase
             'Expected an array. Got: string'
         );
 
-        $objects = new ContentUpdateCollection([new ContentUpdate('url', null, ['title' => 'title'])]);
+        $objects = new ContentUpdateCollection([new ContentUpdate('title', 'url', null, [])]);
         $service = $this->getService(
             new Response(
                 200,
@@ -90,7 +90,7 @@ class RequestExceptionsTest extends TestCase
         $this->expectException(ServiceUnavailableException::class);
         $this->expectExceptionMessage('bad transfer');
 
-        $objects = new ContentUpdateCollection([new ContentUpdate('url', null, ['title' => 'title'])]);
+        $objects = new ContentUpdateCollection([new ContentUpdate('title', 'url', null, [])]);
 
         $service = $this->getServiceWithGuzzleException();
         $service->contentUpdate($objects);

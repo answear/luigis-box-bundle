@@ -62,9 +62,10 @@ class ValueObjectDataProvider
             'generation 1',
             [
                 new ContentUpdate(
-                    's', 'products', [
-                        'title' => 'title',
-                    ]
+                    'title',
+                    's',
+                    'products',
+                    []
                 ),
             ],
         ];
@@ -73,7 +74,7 @@ class ValueObjectDataProvider
     public static function provideContentUpdateObjectsForException(): iterable
     {
         yield [
-            'Field title must be provided for $fields',
+            'Field title can not be empty',
             'test.url',
             'products',
             [],
