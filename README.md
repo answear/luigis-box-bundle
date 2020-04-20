@@ -41,7 +41,7 @@ $collection = new ContentUpdateCollection([new ContentUpdate('product title', 'p
 $apiResponse = $request->contentUpdate($collection);
 ```
 
-Note! If you pass `title` field on `fields` array, it will be sent to Luigi's Box instead of property `$title`. If there is no `title` on `fields` array than property `$title` will be used.
+`First argument (`$title`) will used as product's title in Luigi's Box unless a `title` field is present in the `$fields` argument. 
 
 2. [Partial update](https://live.luigisbox.com/?php#content-updates-partial-content-update)
 ```php
