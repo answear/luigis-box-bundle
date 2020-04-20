@@ -20,8 +20,8 @@ answear_luigis_box:
     host: 'https://live.luigisbox.com' #default
     publicKey: 'your_public_key'
     privateKey: 'your_private_key'
-    connectionTimeout: 5.0 #default
-    requestTimeout: 5.0 #default
+    connectionTimeout: 10.0 #default
+    requestTimeout: 10.0 #default
 ```
 
 config will be passed to `\Answear\LuigisBoxBundle\Service\ConfigProvider` class.

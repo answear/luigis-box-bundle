@@ -10,8 +10,8 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 class Configuration implements ConfigurationInterface
 {
     private const HOST = 'https://live.luigisbox.com';
-    private const CONNECTION_TIMEOUT = 5.0;
-    private const REQUEST_TIMEOUT = 5.0;
+    private const CONNECTION_TIMEOUT = 10.0;
+    private const REQUEST_TIMEOUT = 10.0;
 
     public function getConfigTreeBuilder(): TreeBuilder
     {
