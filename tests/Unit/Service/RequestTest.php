@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Answear\LuigisBoxBundle\Tests\Unit\Service;
 
-use Answear\LuigisBoxBundle\Exception\ToManyItemsException;
+use Answear\LuigisBoxBundle\Exception\TooManyItemsException;
 use Answear\LuigisBoxBundle\Factory\ContentRemovalFactory;
 use Answear\LuigisBoxBundle\Factory\ContentUpdateFactory;
 use Answear\LuigisBoxBundle\Factory\PartialContentUpdateFactory;
@@ -71,7 +71,7 @@ class RequestTest extends TestCase
      */
     public function contentUpdateWithExceededLimit(ContentUpdateCollection $objects): void
     {
-        $this->expectException(ToManyItemsException::class);
+        $this->expectException(TooManyItemsException::class);
         $this->expectExceptionMessage(sprintf('Expect less than or equal %s items. Got %s.', 100, \count($objects)));
 
         $requestService = $this->getSimpleRequestService();
@@ -84,7 +84,7 @@ class RequestTest extends TestCase
      */
     public function partialContentUpdateWithExceededLimit(ContentUpdateCollection $objects): void
     {
-        $this->expectException(ToManyItemsException::class);
+        $this->expectException(TooManyItemsException::class);
         $this->expectExceptionMessage(sprintf('Expect less than or equal %s items. Got %s.', 50, \count($objects)));
 
         $requestService = $this->getSimpleRequestService();

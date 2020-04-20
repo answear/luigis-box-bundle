@@ -6,8 +6,8 @@ namespace Answear\LuigisBoxBundle\Tests\Unit\Service;
 
 use Answear\LuigisBoxBundle\Exception\MalformedResponseException;
 use Answear\LuigisBoxBundle\Exception\ServiceUnavailableException;
-use Answear\LuigisBoxBundle\Exception\ToManyItemsException;
-use Answear\LuigisBoxBundle\Exception\ToManyRequestsException;
+use Answear\LuigisBoxBundle\Exception\TooManyItemsException;
+use Answear\LuigisBoxBundle\Exception\TooManyRequestsException;
 use Answear\LuigisBoxBundle\Factory\ContentRemovalFactory;
 use Answear\LuigisBoxBundle\Factory\ContentUpdateFactory;
 use Answear\LuigisBoxBundle\Factory\PartialContentUpdateFactory;
@@ -24,9 +24,9 @@ class RequestExceptionsTest extends TestCase
     /**
      * @test
      */
-    public function toManyItemsExceptionThrows(): void
+    public function tooManyItemsExceptionThrows(): void
     {
-        $this->expectException(ToManyItemsException::class);
+        $this->expectException(TooManyItemsException::class);
         $this->expectExceptionMessage('To many items in single request.');
 
         $objects = new ContentUpdateCollection([new ContentUpdate('title', 'url', null, [])]);
@@ -43,9 +43,9 @@ class RequestExceptionsTest extends TestCase
     /**
      * @test
      */
-    public function toManyRequestsExceptionThrows(): void
+    public function tooManyRequestsExceptionThrows(): void
     {
-        $this->expectException(ToManyRequestsException::class);
+        $this->expectException(TooManyRequestsException::class);
         $this->expectExceptionMessage(
             'To many requests. Check $retryAfterSeconds field to see how many seconds must wait before retrying the request.'
         );

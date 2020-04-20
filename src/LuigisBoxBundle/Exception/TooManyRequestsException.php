@@ -6,7 +6,7 @@ namespace Answear\LuigisBoxBundle\Exception;
 
 use Psr\Http\Message\ResponseInterface;
 
-class ToManyRequestsException extends \RuntimeException
+class TooManyRequestsException extends \RuntimeException
 {
     /**
      * @var int

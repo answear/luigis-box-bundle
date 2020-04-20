@@ -94,18 +94,18 @@ $apiResponse = $request->changeAvailability(new ContentAvailability('product/url
 ---
 In all request you can catch some exceptions:
 * `BadRequestException` - bad request,
-* `ToManyItemsException` - make request with fewer items,
+* `TooManyItemsException` - make request with fewer items,
 * `MalformedResponseException` - something went wrong with Luigi's Box api response,
-* `ToManyRequestsException` - delay request rate,
+* `TooManyRequestsException` - delay request rate,
 * `ServiceUnavailableException`
 
 Consider catching them separately:
 ```php
 
 use Answear\LuigisBoxBundle\Exception\BadRequestException;
-use Answear\LuigisBoxBundle\Exception\ToManyItemsException;
+use Answear\LuigisBoxBundle\Exception\TooManyItemsException;
 use Answear\LuigisBoxBundle\Exception\MalformedResponseException;
-use Answear\LuigisBoxBundle\Exception\ToManyRequestsException;
+use Answear\LuigisBoxBundle\Exception\TooManyRequestsException;
 use Answear\LuigisBoxBundle\Exception\ServiceUnavailableException;
 
 try {
@@ -114,13 +114,13 @@ try {
     //bad request
     $request = $e->getRequest();
     $response = $e->getResponse();
-} catch (ToManyItemsException $e){
+} catch (TooManyItemsException $e){
     //items limit reached
     $limit = $e->getLimit();
 } catch (MalformedResponseException $e){
     //bad response 
     $response = $e->getResponse();
-} catch (ToManyRequestsException $e){
+} catch (TooManyRequestsException $e){
     //repeat request after $retryAfter seconds
     $retryAfter = $e->getRetryAfterSeconds();
 } catch (ServiceUnavailableException $e){
