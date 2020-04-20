@@ -131,7 +131,7 @@ Response
 ------------
 
 `\Answear\LuigisBoxBundle\Response\ApiResponse`:
-* (bool) `$success` - `true` if all documents will pass successfully,
+* (bool) `$success` - `true` if all documents will be passed successfully,
 * (int) `$okCount` - number of successfully passed documents,
 * (int) `$errorsCount` - number of failed documents,
 * (array) `$errors` - array of `\Answear\LuigisBoxBundle\Response\ApiResponseError` objects,
