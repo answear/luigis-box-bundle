@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Answear\LuigisBoxBundle\Response;
 
-class ApiResponseError
+class ApiResponseError implements \JsonSerializable
 {
     private const TYPE_PARAM = 'type';
     private const REASON_PARAM = 'reason';
@@ -56,5 +56,15 @@ class ApiResponseError
     public function getCausedBy(): ?array
     {
         return $this->causedBy;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'url' => $this->getUrl(),
+            'type' => $this->getType(),
+            'reason' => $this->getReason(),
+            'causedBy' => $this->getCausedBy(),
+        ];
     }
 }

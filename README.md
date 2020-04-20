@@ -63,7 +63,7 @@ use Answear\LuigisBoxBundle\ValueObject\ContentRemovalCollection;
 
 // ...
 
-$collection = new ContentRemovalCollection([new ContentRemoval('product/url')]);
+$collection = new ContentRemovalCollection([new ContentRemoval('product/url', 'product')]);
 
 /** @var \Answear\LuigisBoxBundle\Service\Request $request **/
 $apiResponse = $request->contentRemoval($collection);

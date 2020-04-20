@@ -110,7 +110,7 @@ class ValueObjectDataProvider
             null,
             null,
             [
-                new ContentRemoval(''),
+                new ContentRemoval('', ''),
             ],
         ];
     }

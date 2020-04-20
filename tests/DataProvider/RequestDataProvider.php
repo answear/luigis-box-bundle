@@ -115,8 +115,8 @@ class RequestDataProvider
     {
         yield [
             'DELETE',
-            new ContentRemovalCollection([new ContentRemoval('product/1')]),
-            '{"objects":[{"url":"product\/1"}]}',
+            new ContentRemovalCollection([new ContentRemoval('product/1', 'product')]),
+            '{"objects":[{"url":"product\/1","type":"product"}]}',
             [
                 'ok_count' => 1,
             ],

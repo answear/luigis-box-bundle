@@ -15,7 +15,7 @@ class ContentRemovalTest extends TestCase
      */
     public function createObjectSuccessfully(string $url): void
     {
-        $object = new ContentRemoval($url);
+        $object = new ContentRemoval($url, '');
 
         $this->assertSame($url, $object->getUrl());
     }

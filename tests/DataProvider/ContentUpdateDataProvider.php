@@ -54,8 +54,8 @@ class ContentUpdateDataProvider
     public static function provideContentRemovalObjects(): iterable
     {
         $objects = [
-            new ContentRemoval('test.url'),
-            new ContentRemoval('test.url2'),
+            new ContentRemoval('test.url', 'product'),
+            new ContentRemoval('test.url2', 'product'),
         ];
 
         yield [
