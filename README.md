@@ -146,7 +146,7 @@ Response
 
 Note!
 
-If some document will fail, `ApiResponse::$success` will be `false`. Check `$okCount` if you want to know how many documents were been updated and `$errors` to check exactly which documents fails.
+`ApiResponse::$success` will be set to `false` if any of passed documents fails. Check `$okCount` if you want to know how many documents were updated and `$errors` to check exactly which documents failed.
 
 
 Final notes
