@@ -9,7 +9,6 @@ Installation
 ```
 composer require answear/luigis-box-bundle
 ```
-* consider using specific version (ex. `0.1.1`, `0.1.2`) until we provide `1.0.0` version (`^1.0.0`)
 
 Setup
 ------------
@@ -41,7 +40,7 @@ $collection = new ContentUpdateCollection([new ContentUpdate('product title', 'p
 $apiResponse = $request->contentUpdate($collection);
 ```
 
-`First argument (`$title`) will used as product's title in Luigi's Box unless a `title` field is present in the `$fields` argument. 
+First argument (`$title`) will be used as product's title in Luigi's Box unless a `title` field is present in the `$fields` argument. 
 
 2. [Partial update](https://live.luigisbox.com/?php#content-updates-partial-content-update)
 ```php
