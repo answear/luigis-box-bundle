@@ -41,7 +41,7 @@ $collection = new ContentUpdateCollection([new ContentUpdate('product title', 'p
 $apiResponse = $request->contentUpdate($collection);
 ```
 
-Note! If you pass `title` field on `fields` array, it will be sent to Luigi's Box instead of property `$title`. If there is no `title` on `fields` array than property `$title` will be used.
+`First argument (`$title`) will used as product's title in Luigi's Box unless a `title` field is present in the `$fields` argument. 
 
 2. [Partial update](https://live.luigisbox.com/?php#content-updates-partial-content-update)
 ```php
@@ -133,7 +133,7 @@ Response
 ------------
 
 `\Answear\LuigisBoxBundle\Response\ApiResponse`:
-* (bool) `$success` - `true` if all documents will pass successfully,
+* (bool) `$success` - `true` if all documents will be passed successfully,
 * (int) `$okCount` - number of successfully passed documents,
 * (int) `$errorsCount` - number of failed documents,
 * (array) `$errors` - array of `\Answear\LuigisBoxBundle\Response\ApiResponseError` objects,
@@ -148,7 +148,7 @@ Response
 
 Note!
 
-If some document will fail, `ApiResponse::$success` will be `false`. Check `$okCount` if you want to know how many documents were been updated and `$errors` to check exactly which documents fails.
+`ApiResponse::$success` will be set to `false` if any of passed documents fails. Check `$okCount` if you want to know how many documents were updated and `$errors` to check exactly which documents failed.
 
 
 Final notes
