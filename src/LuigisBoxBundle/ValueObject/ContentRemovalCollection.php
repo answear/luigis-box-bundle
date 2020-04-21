@@ -6,7 +6,7 @@ namespace Answear\LuigisBoxBundle\ValueObject;
 
 use Webmozart\Assert\Assert;
 
-class ContentRemovalCollection implements ObjectsInterface
+class ContentRemovalCollection implements ObjectsInterface, \Countable
 {
     /**
      * @var ContentRemoval[]
@@ -26,5 +26,10 @@ class ContentRemovalCollection implements ObjectsInterface
     public function getObjects(): array
     {
         return $this->objects;
+    }
+
+    public function count(): int
+    {
+        return \count($this->getObjects());
     }
 }

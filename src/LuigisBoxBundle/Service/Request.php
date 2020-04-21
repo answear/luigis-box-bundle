@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Answear\LuigisBoxBundle\Service;
 
+use Answear\LuigisBoxBundle\Exception\BadRequestException;
 use Answear\LuigisBoxBundle\Exception\MalformedResponseException;
 use Answear\LuigisBoxBundle\Exception\ServiceUnavailableException;
-use Answear\LuigisBoxBundle\Exception\ToManyItemsException;
-use Answear\LuigisBoxBundle\Exception\ToManyRequestsException;
+use Answear\LuigisBoxBundle\Exception\TooManyItemsException;
+use Answear\LuigisBoxBundle\Exception\TooManyRequestsException;
 use Answear\LuigisBoxBundle\Factory\ContentRemovalFactory;
 use Answear\LuigisBoxBundle\Factory\ContentUpdateFactory;
 use Answear\LuigisBoxBundle\Factory\PartialContentUpdateFactory;
@@ -59,21 +60,22 @@ class Request
     }
 
     /**
-     * @throws ToManyRequestsException
-     * @throws ToManyItemsException
+     * @throws TooManyRequestsException
+     * @throws TooManyItemsException
      * @throws ServiceUnavailableException
      * @throws MalformedResponseException
      */
     public function contentUpdate(ContentUpdateCollection $objects): ApiResponse
     {
         if (\count($objects) > self::CONTENT_UPDATE_OBJECTS_LIMIT) {
-            throw new ToManyItemsException(\count($objects), self::CONTENT_UPDATE_OBJECTS_LIMIT);
+            throw new TooManyItemsException(\count($objects), self::CONTENT_UPDATE_OBJECTS_LIMIT);
         }
 
         try {
             $request = $this->contentUpdateFactory->prepareRequest($objects);
 
             return new ApiResponse(
+                \count($objects),
                 $this->handleResponse($request, $this->client->request($request))
             );
         } catch (GuzzleException $e) {
@@ -82,21 +84,22 @@ class Request
     }
 
     /**
-     * @throws ToManyRequestsException
-     * @throws ToManyItemsException
+     * @throws TooManyRequestsException
+     * @throws TooManyItemsException
      * @throws ServiceUnavailableException
      * @throws MalformedResponseException
      */
     public function partialContentUpdate(ContentUpdateCollection $objects): ApiResponse
     {
         if (\count($objects) > self::PARTIAL_CONTENT_UPDATE_OBJECTS_LIMIT) {
-            throw new ToManyItemsException(\count($objects), self::PARTIAL_CONTENT_UPDATE_OBJECTS_LIMIT);
+            throw new TooManyItemsException(\count($objects), self::PARTIAL_CONTENT_UPDATE_OBJECTS_LIMIT);
         }
 
         try {
             $request = $this->partialContentUpdateFactory->prepareRequest($objects);
 
             return new ApiResponse(
+                \count($objects),
                 $this->handleResponse($request, $this->client->request($request))
             );
         } catch (GuzzleException $e) {
@@ -105,8 +108,8 @@ class Request
     }
 
     /**
-     * @throws ToManyRequestsException
-     * @throws ToManyItemsException
+     * @throws TooManyRequestsException
+     * @throws TooManyItemsException
      * @throws ServiceUnavailableException
      * @throws MalformedResponseException
      */
@@ -116,6 +119,7 @@ class Request
             $request = $this->contentRemovalFactory->prepareRequest($objects);
 
             return new ApiResponse(
+                \count($objects),
                 $this->handleResponse($request, $this->client->request($request))
             );
         } catch (GuzzleException $e) {
@@ -126,10 +130,10 @@ class Request
     /**
      * @param ContentAvailabilityCollection|ContentAvailability $object
      *
-     * @throws ToManyRequestsException
-     * @throws ToManyItemsException
+     * @throws TooManyItemsException
      * @throws ServiceUnavailableException
      * @throws MalformedResponseException
+     * @throws TooManyRequestsException
      */
     public function changeAvailability($object): ApiResponse
     {
@@ -137,6 +141,7 @@ class Request
             $request = $this->partialContentUpdateFactory->prepareRequestForAvailability($object);
 
             return new ApiResponse(
+                $object instanceof ContentAvailabilityCollection ? \count($object) : 1,
                 $this->handleResponse($request, $this->client->request($request))
             );
         } catch (GuzzleException $e) {
@@ -145,20 +150,25 @@ class Request
     }
 
     /**
-     * @throws ToManyRequestsException
-     * @throws ToManyItemsException
+     * @throws BadRequestException
+     * @throws TooManyRequestsException
+     * @throws TooManyItemsException
      * @throws MalformedResponseException
      */
     private function handleResponse(\GuzzleHttp\Psr7\Request $request, ResponseInterface $response): array
     {
+        if (Response::HTTP_BAD_REQUEST === $response->getStatusCode()) {
+            throw new BadRequestException($response, $request);
+        }
+
         if (Response::HTTP_TOO_MANY_REQUESTS === $response->getStatusCode()) {
             $retryAfter = $response->getHeader('Retry-After');
             $retryAfter = reset($retryAfter);
-            throw new ToManyRequestsException((int) $retryAfter, $response);
+            throw new TooManyRequestsException((int) $retryAfter, $response);
         }
 
         if (Response::HTTP_REQUEST_ENTITY_TOO_LARGE === $response->getStatusCode()) {
-            throw new ToManyItemsException(null, null, $response);
+            throw new TooManyItemsException(null, null, $response);
         }
 
         $responseText = $response->getBody()->getContents();
@@ -168,7 +178,7 @@ class Request
             $decoded = \json_decode($responseText, true, 512, JSON_THROW_ON_ERROR);
             Assert::isArray($decoded);
         } catch (\Throwable $e) {
-            throw new MalformedResponseException($e->getMessage(), $responseText, $request, $e);
+            throw new MalformedResponseException($e->getMessage(), $response, $request, $e);
         }
 
         return $decoded;

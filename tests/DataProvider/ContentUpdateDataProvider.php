@@ -15,22 +15,25 @@ class ContentUpdateDataProvider
     {
         $objects = [
             new ContentUpdate(
+                'test url title',
                 'test.url',
                 'products',
-                [
-                    'title' => 'test url title',
-                ]
+                [],
             ),
             new ContentUpdate(
+                'test url title',
                 'test.url2',
                 'categories',
-                [
-                    'title' => 'test url title',
-                ]
+                []
             ),
         ];
 
-        yield [new ContentUpdateCollection($objects)];
+        yield [
+            new ContentUpdateCollection($objects),
+            [
+                'ok_count' => 2,
+            ],
+        ];
     }
 
     public static function provideAboveLimitContentUpdateObjects(): iterable
@@ -38,11 +41,10 @@ class ContentUpdateDataProvider
         $objects = [];
         for ($i = 0; $i <= 101; ++$i) {
             $objects[] = new ContentUpdate(
+                'test url title' . $i,
                 'test.url' . $i,
                 'products',
-                [
-                    'title' => 'test url title' . $i,
-                ]
+                []
             );
         }
 
@@ -56,6 +58,11 @@ class ContentUpdateDataProvider
             new ContentRemoval('test.url2'),
         ];
 
-        yield [new ContentRemovalCollection($objects)];
+        yield [
+            new ContentRemovalCollection($objects),
+            [
+                'ok_count' => 2,
+            ],
+        ];
     }
 }

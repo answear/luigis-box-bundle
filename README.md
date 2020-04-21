@@ -9,7 +9,7 @@ Installation
 ```
 composer require answear/luigis-box-bundle
 ```
-* consider to use specific version (ex. `0.1.1`, `0.1.2`) until we provide `1.0.0` version (`^1.0.0`)
+* consider using specific version (ex. `0.1.1`, `0.1.2`) until we provide `1.0.0` version (`^1.0.0`)
 
 Setup
 ------------
@@ -35,11 +35,13 @@ use Answear\LuigisBoxBundle\ValueObject\ContentUpdateCollection;
 
 // ...
 
-$collection = new ContentUpdateCollection([new ContentUpdate('product/url', 'object type', ['title' => 'product title'])]);
+$collection = new ContentUpdateCollection([new ContentUpdate('product title', 'product/url', 'object type', ['field' => 'field 1'])]);
 
 /** @var \Answear\LuigisBoxBundle\Service\Request $request **/
 $apiResponse = $request->contentUpdate($collection);
 ```
+
+`First argument (`$title`) will used as product's title in Luigi's Box unless a `title` field is present in the `$fields` argument. 
 
 2. [Partial update](https://live.luigisbox.com/?php#content-updates-partial-content-update)
 ```php
@@ -69,7 +71,7 @@ $apiResponse = $request->contentRemoval($collection);
 
 4. Change availability
 
-Additional method to simply enable/disable object - used partial update.
+Additional method to simply enable/disable objects - partial update will be used.
 ```php
 use Answear\LuigisBoxBundle\ValueObject\ContentAvailability;
 use Answear\LuigisBoxBundle\ValueObject\ContentAvailabilityCollection;
@@ -91,32 +93,38 @@ $apiResponse = $request->changeAvailability(new ContentAvailability('product/url
 
 ---
 In all request you can catch some exceptions:
-* `ToManyItemsException` - make request with less items,
+* `BadRequestException` - bad request,
+* `TooManyItemsException` - make request with fewer items,
 * `MalformedResponseException` - something went wrong with Luigi's Box api response,
-* `ToManyRequestsException` - delay request rate,
+* `TooManyRequestsException` - delay request rate,
 * `ServiceUnavailableException`
 
-Consider to catch them separately:
+Consider catching them separately:
 ```php
 
-use Answear\LuigisBoxBundle\Exception\ToManyItemsException;
+use Answear\LuigisBoxBundle\Exception\BadRequestException;
+use Answear\LuigisBoxBundle\Exception\TooManyItemsException;
 use Answear\LuigisBoxBundle\Exception\MalformedResponseException;
-use Answear\LuigisBoxBundle\Exception\ToManyRequestsException;
+use Answear\LuigisBoxBundle\Exception\TooManyRequestsException;
 use Answear\LuigisBoxBundle\Exception\ServiceUnavailableException;
 
 try {
     // ... request
-} catch (ToManyItemsException $e){
+} catch (BadRequestException $e){
+    //bad request
+    $request = $e->getRequest();
+    $response = $e->getResponse();
+} catch (TooManyItemsException $e){
     //items limit reached
     $limit = $e->getLimit();
 } catch (MalformedResponseException $e){
     //bad response 
-    $textResponse = $e->getResponse();
-} catch (ToManyRequestsException $e){
-    //consider to repeat request after $retryAfter seconds
+    $response = $e->getResponse();
+} catch (TooManyRequestsException $e){
+    //repeat request after $retryAfter seconds
     $retryAfter = $e->getRetryAfterSeconds();
 } catch (ServiceUnavailableException $e){
-    //consider to delay request
+    //delay request
 }
 
 ```
@@ -124,4 +132,29 @@ try {
 Response
 ------------
 
-//TODO - write it
+`\Answear\LuigisBoxBundle\Response\ApiResponse`:
+* (bool) `$success` - `true` if all documents will be passed successfully,
+* (int) `$okCount` - number of successfully passed documents,
+* (int) `$errorsCount` - number of failed documents,
+* (array) `$errors` - array of `\Answear\LuigisBoxBundle\Response\ApiResponseError` objects,
+* (array) `$rawResponse` - decoded response from api.
+
+`ApiResponseError`:
+* (string) `$url` - url of document
+* (string) `$type` - type of error (ex. `malformed_input`)
+* (string) `$reason` - failure text (ex. `incorrect object format`)
+* (array|null) `$causedBy` - specific reason of error (ex. `["url": ["is missing"]]`)
+
+
+Note!
+
+`ApiResponse::$success` will be set to `false` if any of passed documents fails. Check `$okCount` if you want to know how many documents were updated and `$errors` to check exactly which documents failed.
+
+
+Final notes
+------------
+
+Feel free to make pull requests with new features, improvements or bug fixes. The Answear team will be grateful for any comments.
+
+
+### Have fun!

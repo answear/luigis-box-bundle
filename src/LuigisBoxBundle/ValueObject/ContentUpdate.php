@@ -8,10 +8,17 @@ use Webmozart\Assert\Assert;
 
 class ContentUpdate extends AbstractContentUpdate
 {
-    public function __construct(string $url, ?string $type, array $fields)
-    {
-        Assert::keyExists($fields, 'title', 'Field title must be provided for $fields');
+    /**
+     * @var string
+     */
+    private $title;
 
+    public function __construct(string $title, string $url, ?string $type, array $fields)
+    {
+        $fields['title'] = $fields['title'] ?? $title;
+        Assert::notEmpty($fields['title'], 'Field title can not be empty');
+
+        $this->title = $title;
         parent::__construct($url, $type, $fields);
     }
 
@@ -19,5 +26,10 @@ class ContentUpdate extends AbstractContentUpdate
     {
         Assert::allIsInstanceOf($nested, ContentUpdate::class);
         $this->nested = $nested;
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
     }
 }
