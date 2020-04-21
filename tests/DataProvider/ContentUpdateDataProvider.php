@@ -15,18 +15,16 @@ class ContentUpdateDataProvider
     {
         $objects = [
             new ContentUpdate(
+                'test url title',
                 'test.url',
                 'products',
-                [
-                    'title' => 'test url title',
-                ],
+                [],
             ),
             new ContentUpdate(
+                'test url title',
                 'test.url2',
                 'categories',
-                [
-                    'title' => 'test url title',
-                ]
+                []
             ),
         ];
 
@@ -43,11 +41,10 @@ class ContentUpdateDataProvider
         $objects = [];
         for ($i = 0; $i <= 101; ++$i) {
             $objects[] = new ContentUpdate(
+                'test url title' . $i,
                 'test.url' . $i,
                 'products',
-                [
-                    'title' => 'test url title' . $i,
-                ]
+                []
             );
         }
 

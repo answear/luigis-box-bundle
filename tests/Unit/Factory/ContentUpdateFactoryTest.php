@@ -50,8 +50,8 @@ class ContentUpdateFactoryTest extends TestCase
     private function getObjects(): ContentUpdateCollection
     {
         $objects = [
-            new ContentUpdate('test.url', 'type', ['title' => 't']),
-            new ContentUpdate('test.url2', 'type', ['title' => 't2']),
+            new ContentUpdate('t', 'test.url', 'type', []),
+            new ContentUpdate('t2', 'test.url2', 'type', []),
         ];
 
         return new ContentUpdateCollection($objects);
