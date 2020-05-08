@@ -37,7 +37,7 @@ class RequestTest extends TestCase
 
     /**
      * @test
-     * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\ContentUpdateDataProvider::provideSuccessContentUpdateObjects()
+     * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\ContentUpdateDataProvider::provideSuccessPartialContentUpdateObjects()
      */
     public function partialContentUpdateWithSuccess(ContentUpdateCollection $objects, array $apiResponse): void
     {
@@ -80,7 +80,7 @@ class RequestTest extends TestCase
 
     /**
      * @test
-     * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\ContentUpdateDataProvider::provideAboveLimitContentUpdateObjects()
+     * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\ContentUpdateDataProvider::provideAboveLimitPartialContentUpdateObjects()
      */
     public function partialContentUpdateWithExceededLimit(ContentUpdateCollection $objects): void
     {
