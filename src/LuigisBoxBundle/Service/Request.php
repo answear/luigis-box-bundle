@@ -16,7 +16,9 @@ use Answear\LuigisBoxBundle\Response\ApiResponse;
 use Answear\LuigisBoxBundle\ValueObject\ContentAvailability;
 use Answear\LuigisBoxBundle\ValueObject\ContentAvailabilityCollection;
 use Answear\LuigisBoxBundle\ValueObject\ContentRemovalCollection;
+use Answear\LuigisBoxBundle\ValueObject\ContentUpdate;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdateCollection;
+use Answear\LuigisBoxBundle\ValueObject\PartialContentUpdate;
 use GuzzleHttp\Exception\GuzzleException;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -67,6 +69,8 @@ class Request
      */
     public function contentUpdate(ContentUpdateCollection $objects): ApiResponse
     {
+        Assert::allIsInstanceOf($objects->getObjects(), ContentUpdate::class);
+
         if (\count($objects) > self::CONTENT_UPDATE_OBJECTS_LIMIT) {
             throw new TooManyItemsException(\count($objects), self::CONTENT_UPDATE_OBJECTS_LIMIT);
         }
@@ -91,6 +95,8 @@ class Request
      */
     public function partialContentUpdate(ContentUpdateCollection $objects): ApiResponse
     {
+        Assert::allIsInstanceOf($objects->getObjects(), PartialContentUpdate::class);
+
         if (\count($objects) > self::PARTIAL_CONTENT_UPDATE_OBJECTS_LIMIT) {
             throw new TooManyItemsException(\count($objects), self::PARTIAL_CONTENT_UPDATE_OBJECTS_LIMIT);
         }
@@ -147,6 +153,16 @@ class Request
         } catch (GuzzleException $e) {
             throw new ServiceUnavailableException($e->getMessage(), $e->getCode(), $e);
         }
+    }
+
+    public static function getContentUpdateLimit(): int
+    {
+        return self::CONTENT_UPDATE_OBJECTS_LIMIT;
+    }
+
+    public static function getPartialContentUpdateLimit(): int
+    {
+        return self::PARTIAL_CONTENT_UPDATE_OBJECTS_LIMIT;
     }
 
     /**
