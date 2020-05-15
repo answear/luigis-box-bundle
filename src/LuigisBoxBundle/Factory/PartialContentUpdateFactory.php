@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Answear\LuigisBoxBundle\Factory;
 
+use Answear\LuigisBoxBundle\Service\ConfigProvider;
 use Answear\LuigisBoxBundle\ValueObject\ContentAvailability;
 use Answear\LuigisBoxBundle\ValueObject\ContentAvailabilityCollection;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdateCollection;
@@ -13,7 +14,7 @@ use Webmozart\Assert\Assert;
 class PartialContentUpdateFactory extends AbstractFactory
 {
     private const HTTP_METHOD = 'PATCH';
-    private const ENDPOINT = '/v1/content';
+    private const ENDPOINT = '/' . ConfigProvider::API_VERSION . '/content';
 
     /**
      * @param ContentAvailabilityCollection|ContentAvailability $object

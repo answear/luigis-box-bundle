@@ -8,6 +8,8 @@ use Answear\LuigisBoxBundle\Util\AuthenticationUtil;
 
 class ConfigProvider
 {
+    public const API_VERSION = 'v1';
+
     /**
      * @var string
      */
