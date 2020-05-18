@@ -21,7 +21,7 @@ class SearchResponse
     /**
      * @var string
      */
-    private $passedUrl;
+    private $searchUrl;
 
     /**
      * @var string
@@ -63,9 +63,9 @@ class SearchResponse
      */
     private $currentSize;
 
-    public function __construct(string $passedUrl, array $response)
+    public function __construct(string $searchUrl, array $response)
     {
-        $this->passedUrl = $passedUrl;
+        $this->searchUrl = $searchUrl;
 
         $result = $response[self::RESULTS_PARAM];
         $this->query = $result[self::RESULTS_QUERY_PARAM];
@@ -81,9 +81,9 @@ class SearchResponse
         $this->currentSize = isset($result[self::RESULTS_OFFSET_PARAM]) ? (int) $result[self::RESULTS_OFFSET_PARAM] : $result[self::RESULTS_TOTAL_HITS_PARAM];
     }
 
-    public function getPassedUrl(): string
+    public function getSearchUrl(): string
     {
-        return $this->passedUrl;
+        return $this->searchUrl;
     }
 
     public function getQuery(): string

@@ -27,7 +27,7 @@ class SearchFactory
     {
         return new Request(
             'GET',
-            new Uri($this->configProvider->getHost() . self::ENDPOINT . '?' . $searchUrlBuilder->toUrl())
+            new Uri($this->configProvider->getHost() . self::ENDPOINT . '?' . $searchUrlBuilder->toUrlQuery())
         );
     }
 }

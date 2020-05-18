@@ -19,12 +19,12 @@ class SearchUrlBuilder
     /**
      * @var string|null
      */
-    private $q;
+    private $query;
 
     /**
      * @var bool|null
      */
-    private $qu;
+    private $queryUnderstanding;
 
     /**
      * @var array|null
@@ -94,7 +94,7 @@ class SearchUrlBuilder
 
     public function setQuery(string $query): self
     {
-        $this->q = $query;
+        $this->query = $query;
 
         return $this;
     }
@@ -105,7 +105,7 @@ class SearchUrlBuilder
             throw new \InvalidArgumentException('Set $userId first.');
         }
 
-        $this->qu = true;
+        $this->queryUnderstanding = true;
 
         return $this;
     }
@@ -219,7 +219,7 @@ class SearchUrlBuilder
         return $this;
     }
 
-    public function toUrl(): string
+    public function toUrlQuery(): string
     {
         $queryFields = [
             'size' => $this->size,
@@ -227,12 +227,12 @@ class SearchUrlBuilder
             'page' => $this->page,
         ];
 
-        if (null !== $this->q) {
-            $queryFields['q'] = $this->q;
+        if (null !== $this->query) {
+            $queryFields['q'] = $this->query;
         }
 
-        if (null !== $this->qu) {
-            $queryFields['qu'] = true === $this->qu ? 1 : 0;
+        if (null !== $this->queryUnderstanding) {
+            $queryFields['qu'] = true === $this->queryUnderstanding ? 1 : 0;
         }
 
         if (null !== $this->userId) {
@@ -314,6 +314,6 @@ class SearchUrlBuilder
 
     public function __toString(): string
     {
-        return $this->toUrl();
+        return $this->toUrlQuery();
     }
 }

@@ -46,7 +46,7 @@ class SearchRequest
             $request = $this->searchFactory->prepareRequest($searchUrlBuilder);
 
             return new SearchResponse(
-                $searchUrlBuilder->toUrl(),
+                $searchUrlBuilder->toUrlQuery(),
                 $this->handleResponse($request, $this->client->request($request))
             );
         } catch (GuzzleException $e) {

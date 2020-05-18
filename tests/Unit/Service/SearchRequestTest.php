@@ -26,7 +26,7 @@ class SearchRequestTest extends TestCase
         $requestService = $this->getRequestService($urlBuilder, $arrayRawResponse);
         $response = $requestService->search($urlBuilder);
 
-        $this->assertSame($urlBuilder->toUrl(), $response->getPassedUrl());
+        $this->assertSame($urlBuilder->toUrlQuery(), $response->getSearchUrl());
         $rawResults = $arrayRawResponse['results'];
         $this->assertSame($rawResults['query'], $response->getQuery());
         $this->assertSame($rawResults['corrected_query'], $response->getCorrectedQuery());

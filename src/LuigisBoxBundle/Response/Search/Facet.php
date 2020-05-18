@@ -25,11 +25,11 @@ class Facet
      */
     private $values;
 
-    public function __construct(array $hitArray)
+    public function __construct(array $facetData)
     {
-        $this->name = $hitArray[self::NAME_PARAM];
-        $this->type = $hitArray[self::TYPE_PARAM];
-        $this->values = $hitArray[self::VALUES_PARAM];
+        $this->name = $facetData[self::NAME_PARAM];
+        $this->type = $facetData[self::TYPE_PARAM];
+        $this->values = $facetData[self::VALUES_PARAM];
     }
 
     public function getName(): string
