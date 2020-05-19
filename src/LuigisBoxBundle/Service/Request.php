@@ -187,9 +187,12 @@ class Request
             throw new TooManyItemsException(null, null, $response);
         }
 
+        if ($response->getBody()->isSeekable()) {
+            $response->getBody()->rewind();
+        }
+
         $responseText = $response->getBody()->getContents();
 
-        $decoded = null;
         try {
             $decoded = \json_decode($responseText, true, 512, JSON_THROW_ON_ERROR);
             Assert::isArray($decoded);
