@@ -11,10 +11,10 @@ use Webmozart\Assert\Assert;
  */
 class SearchUrlBuilder
 {
-    private const AVAILABLE_ORDER_DIRECTIONS = ['asc', 'desc'];
     public const ARRAY_ITEM_SEPARATOR = ':';
     public const LIST_SEPARATOR = ',';
     public const DEFAULT_SIZE = 10;
+    private const AVAILABLE_ORDER_DIRECTIONS = ['asc', 'desc'];
 
     /**
      * @var string|null

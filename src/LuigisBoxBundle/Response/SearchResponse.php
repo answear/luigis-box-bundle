@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Answear\LuigisBoxBundle\Response;
 
 use Answear\LuigisBoxBundle\ValueObject\SearchUrlBuilder;
+use Webmozart\Assert\Assert;
 
 class SearchResponse
 {
@@ -67,7 +68,11 @@ class SearchResponse
     {
         $this->searchUrl = $searchUrl;
 
+        Assert::isArray($response[self::RESULTS_PARAM]);
         $result = $response[self::RESULTS_PARAM];
+
+        Assert::string($result[self::RESULTS_QUERY_PARAM]);
+
         $this->query = $result[self::RESULTS_QUERY_PARAM];
         $this->correctedQuery = $result[self::RESULTS_CORRECTED_QUERY_PARAM] ?? null;
 
@@ -77,6 +82,7 @@ class SearchResponse
         $this->quickSearchHits = $this->prepareHits($result[self::RESULTS_QUICKSEARCH_HITS_PARAM]);
         $this->facets = $this->prepareFacets($result[self::RESULTS_FACETS_PARAM]);
 
+        Assert::numeric($result[self::RESULTS_TOTAL_HITS_PARAM]);
         $this->totalHits = (int) $result[self::RESULTS_TOTAL_HITS_PARAM];
         $this->currentSize = isset($result[self::RESULTS_OFFSET_PARAM]) ? (int) $result[self::RESULTS_OFFSET_PARAM] : $result[self::RESULTS_TOTAL_HITS_PARAM];
     }

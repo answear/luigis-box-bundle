@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Answear\LuigisBoxBundle\Response\Search;
 
+use Webmozart\Assert\Assert;
+
 class Facet
 {
     private const NAME_PARAM = 'name';
@@ -27,6 +29,10 @@ class Facet
 
     public function __construct(array $facetData)
     {
+        Assert::string($facetData[self::NAME_PARAM]);
+        Assert::string($facetData[self::TYPE_PARAM]);
+        Assert::isArray($facetData[self::VALUES_PARAM]);
+
         $this->name = $facetData[self::NAME_PARAM];
         $this->type = $facetData[self::TYPE_PARAM];
         $this->values = $facetData[self::VALUES_PARAM];

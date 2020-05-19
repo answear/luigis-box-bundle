@@ -53,6 +53,11 @@ class Hit
 
     public function __construct(array $hitArray)
     {
+        Assert::string($hitArray[self::URL_PARAM]);
+        Assert::isArray($hitArray[self::ATTRIBUTES_PARAM]);
+        Assert::isArray($hitArray[self::NESTED_PARAM]);
+        Assert::string($hitArray[self::TYPE_PARAM]);
+        Assert::isArray($hitArray[self::HIGHLIGHT_PARAM] ?? []);
         Assert::boolean($hitArray[self::EXACT_PARAM]);
         Assert::boolean($hitArray[self::ALTERNATIVE_PARAM]);
 
@@ -60,7 +65,7 @@ class Hit
         $this->attributes = $hitArray[self::ATTRIBUTES_PARAM];
         $this->nested = $hitArray[self::NESTED_PARAM];
         $this->type = $hitArray[self::TYPE_PARAM];
-        $this->highlight = $hitArray[self::HIGHLIGHT_PARAM];
+        $this->highlight = $hitArray[self::HIGHLIGHT_PARAM] ?? [];
         $this->exact = $hitArray[self::EXACT_PARAM];
         $this->alternative = $hitArray[self::ALTERNATIVE_PARAM];
     }
