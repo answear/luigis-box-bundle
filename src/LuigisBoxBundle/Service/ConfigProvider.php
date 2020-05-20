@@ -65,6 +65,11 @@ class ConfigProvider
         return $this->host;
     }
 
+    public function getPublicKey(): string
+    {
+        return $this->publicKey;
+    }
+
     public function getConnectionTimeout(): float
     {
         return $this->connectionTimeout;

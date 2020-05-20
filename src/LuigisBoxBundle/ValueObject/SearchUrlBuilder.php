@@ -42,11 +42,6 @@ class SearchUrlBuilder
     private $sort;
 
     /**
-     * @var string
-     */
-    private $trackerId;
-
-    /**
      * @var string|null
      */
     private $quicksearchTypes;
@@ -86,9 +81,8 @@ class SearchUrlBuilder
      */
     private $userId;
 
-    public function __construct(string $trackerId, int $page = 1)
+    public function __construct(int $page = 1)
     {
-        $this->trackerId = $trackerId;
         $this->page = $page;
     }
 
@@ -223,7 +217,6 @@ class SearchUrlBuilder
     {
         $queryFields = [
             'size' => $this->size,
-            'tracker_id' => $this->trackerId,
             'page' => $this->page,
         ];
 

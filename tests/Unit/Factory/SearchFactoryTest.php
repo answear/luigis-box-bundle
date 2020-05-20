@@ -23,7 +23,7 @@ class SearchFactoryTest extends TestCase
 
         $this->assertSame('GET', $request->getMethod());
         $this->assertSame('host/search', $request->getUri()->getPath());
-        $this->assertSame('size=10&tracker_id=tracker-id&page=34&q=query-string', $request->getUri()->getQuery());
+        $this->assertSame('tracker_id=key&size=10&page=34&q=query-string', $request->getUri()->getQuery());
 
         $this->assertSame('', $request->getBody()->getContents());
     }
@@ -37,7 +37,7 @@ class SearchFactoryTest extends TestCase
 
     private function getBuilderUrl(): SearchUrlBuilder
     {
-        $builder = new SearchUrlBuilder('tracker-id', 34);
+        $builder = new SearchUrlBuilder(34);
         $builder->setQuery('query-string');
 
         return $builder;
