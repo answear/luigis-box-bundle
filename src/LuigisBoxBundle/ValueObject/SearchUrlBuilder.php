@@ -302,7 +302,7 @@ class SearchUrlBuilder
             }
         }
 
-        return http_build_query($queryFields);
+        return preg_replace('/%5B(\d+)%5D=/', '%5B%5D=', http_build_query($queryFields));
     }
 
     public function __toString(): string
