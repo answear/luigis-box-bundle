@@ -128,8 +128,7 @@ try {
 
 ```
 
-Response
-------------
+#### Content response
 
 `\Answear\LuigisBoxBundle\Response\ApiResponse`:
 * (bool) `$success` - `true` if all documents will be passed successfully,
@@ -148,6 +147,62 @@ Response
 Note!
 
 `ApiResponse::$success` will be set to `false` if any of passed documents fails. Check `$okCount` if you want to know how many documents were updated and `$errors` to check exactly which documents failed.
+
+### Searching (documentation [here](https://live.luigisbox.com/#search-as-a-service))
+
+1. Request
+
+```php
+use Answear\LuigisBoxBundle\ValueObject\SearchUrlBuilder;
+
+// ...
+
+$page = 3;
+$urlBuilder = new SearchUrlBuilder('tracker-id', $page);
+$urlBuilder
+    ->setQuery('nice top')
+    ->addFilter('type', 'product')
+    ->addFilter('category', 'top')
+    ->addFilter('brand', 'Medicine')
+    ->addFilter('brand', 'Answear')
+    ->addPrefer('brand', 'Answear')
+    ->setSort('size', 'asc');
+
+//the above code produces a url query like `size=10&tracker_id=tracker-id&page=3&q=nice+top&f%5B0%5D=type%3Aproduct&f%5B1%5D=category%3Atop&f%5B2%5D=brand%3AMedicine&f%5B3%5D=brand%3AAnswear&sort=size%3Aasc&prefer%5B0%5D=brand%3AAnswear`
+
+/** @var \Answear\LuigisBoxBundle\Service\SearchRequest $request **/
+$searchResponse = $request->search($urlBuilder);
+
+```
+Check the Luigi's Box documentation to find out exact purpose of each field `SearchUrlBuilder` is exposing.
+
+2. Response
+
+`SearchRequest::search()` will return a `SearchResponse` object with following fields:
+* (string) $searchUrl
+* (string) $query
+* (string|null) $correctedQuery
+* (array) $filters
+* (Hit[]) $hits
+    
+    `Hit`:
+    * (string) $url;
+    * (array) $attributes;
+    * (array) $nested;
+    * (string) $type;
+    * (array) $highlight;
+    * (bool) $exact;
+    * (bool) $alternative;
+* (Hit[]) $quickSearchHits
+    * like above
+* (Facet[]) $facets
+    
+    `Facet`:
+    * (string) $name;
+    * (string) $type;
+    * (array) $values;
+* (int) $totalHits
+* (int) $currentSize
 
 
 Final notes
