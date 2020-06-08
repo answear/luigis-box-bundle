@@ -14,6 +14,7 @@ class SearchUrlBuilder
     public const ARRAY_ITEM_SEPARATOR = ':';
     public const LIST_SEPARATOR = ',';
     public const DEFAULT_SIZE = 10;
+    public const RANGE_SEPARATOR = '|';
     private const AVAILABLE_ORDER_DIRECTIONS = ['asc', 'desc'];
 
     /**
@@ -30,6 +31,11 @@ class SearchUrlBuilder
      * @var array|null
      */
     private $filters;
+
+    /**
+     * @var array|null
+     */
+    private $mustFilters;
 
     /**
      * @var int
@@ -119,10 +125,55 @@ class SearchUrlBuilder
 
     public function setFilters(array $filters): self
     {
+        if (\count($this->filters ?? []) > 0) {
+            throw new \LogicException('You already have the filters set. Use resetFilters() method to clear them first.');
+        }
+
         $keys = array_keys($filters);
         Assert::allString($keys, 'All filters keys must be string.');
 
         $this->filters = $filters;
+
+        return $this;
+    }
+
+    public function addMustFilter(string $key, string $value): self
+    {
+        $this->mustFilters[$key] = $this->mustFilters[$key] ?? [];
+        if (\is_string($this->mustFilters[$key])) {
+            $this->mustFilters[$key] = [$this->mustFilters[$key]];
+        }
+        $this->mustFilters[$key][] = $value;
+
+        $this->mustFilters[$key] = array_unique($this->mustFilters[$key]);
+
+        return $this;
+    }
+
+    public function setMustFilters(array $filters): self
+    {
+        if (\count($this->mustFilters ?? []) > 0) {
+            throw new \LogicException('You already have the must filters set. Use resetMustFilters() method to clear them first.');
+        }
+
+        $keys = array_keys($filters);
+        Assert::allString($keys, 'All must filters keys must be string.');
+
+        $this->mustFilters = $filters;
+
+        return $this;
+    }
+
+    public function resetFilters(): self
+    {
+        $this->filters = null;
+
+        return $this;
+    }
+
+    public function resetMustFilters(): self
+    {
+        $this->mustFilters = null;
 
         return $this;
     }
@@ -244,6 +295,20 @@ class SearchUrlBuilder
                 }
             }
             $queryFields['f'] = $filtersFields;
+        }
+
+        if (null !== $this->mustFilters) {
+            $filtersFields = [];
+            foreach ($this->mustFilters as $key => $values) {
+                if (\is_array($values)) {
+                    foreach ($values as $value) {
+                        $filtersFields[] = $key . self::ARRAY_ITEM_SEPARATOR . $value;
+                    }
+                } else {
+                    $filtersFields[] = $key . self::ARRAY_ITEM_SEPARATOR . $values;
+                }
+            }
+            $queryFields['f_must'] = $filtersFields;
         }
 
         if (null !== $this->sort) {
