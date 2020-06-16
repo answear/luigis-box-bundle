@@ -158,7 +158,7 @@ use Answear\LuigisBoxBundle\ValueObject\SearchUrlBuilder;
 // ...
 
 $page = 3;
-$urlBuilder = new SearchUrlBuilder('tracker-id', $page);
+$urlBuilder = new SearchUrlBuilder($page);
 $urlBuilder
     ->setQuery('nice top')
     ->addFilter('type', 'product')
@@ -168,7 +168,7 @@ $urlBuilder
     ->addPrefer('brand', 'Answear')
     ->setSort('size', 'asc');
 
-//the above code produces a url query like `size=10&tracker_id=tracker-id&page=3&q=nice+top&f%5B0%5D=type%3Aproduct&f%5B1%5D=category%3Atop&f%5B2%5D=brand%3AMedicine&f%5B3%5D=brand%3AAnswear&sort=size%3Aasc&prefer%5B0%5D=brand%3AAnswear`
+//the above code produces a url query like `size=10&page=3&q=nice+top&f%5B0%5D=type%3Aproduct&f%5B1%5D=category%3Atop&f%5B2%5D=brand%3AMedicine&f%5B3%5D=brand%3AAnswear&sort=size%3Aasc&prefer%5B0%5D=brand%3AAnswear`
 
 /** @var \Answear\LuigisBoxBundle\Service\SearchRequest $request **/
 $searchResponse = $request->search($urlBuilder);

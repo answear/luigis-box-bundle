@@ -44,7 +44,7 @@ class SearchRequestTest extends TestCase
     {
         $this->expectException(BadRequestException::class);
 
-        $urlBuilder = new SearchUrlBuilder('111111-222222', 2);
+        $urlBuilder = new SearchUrlBuilder(2);
         $context = new Context();
         $context->setGeoLocationField('geo_location');
         $urlBuilder->setContext($context);

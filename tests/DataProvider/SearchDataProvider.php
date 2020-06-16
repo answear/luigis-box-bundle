@@ -10,7 +10,7 @@ class SearchDataProvider
 {
     public static function provideSuccessObjects(): iterable
     {
-        $urlBuilder = new SearchUrlBuilder('111111-222222', 2);
+        $urlBuilder = new SearchUrlBuilder(2);
         $urlBuilder->addFilter('type', 'product');
         $urlBuilder->setQuicksearchTypes(['category']);
 
@@ -158,7 +158,7 @@ class SearchDataProvider
             ],
         ];
 
-        $urlBuilder = new SearchUrlBuilder('111111-222222');
+        $urlBuilder = new SearchUrlBuilder();
         $urlBuilder->setQuery('fila');
 
         yield [
@@ -198,7 +198,7 @@ class SearchDataProvider
             ],
         ];
 
-        $urlBuilder = new SearchUrlBuilder('111111-222222');
+        $urlBuilder = new SearchUrlBuilder();
         $urlBuilder->setQuery('fila');
         $urlBuilder->addFilter('price', '5|2');
 

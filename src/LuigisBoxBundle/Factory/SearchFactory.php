@@ -8,6 +8,7 @@ use Answear\LuigisBoxBundle\Service\ConfigProvider;
 use Answear\LuigisBoxBundle\ValueObject\SearchUrlBuilder;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Uri;
+use Webmozart\Assert\Assert;
 
 class SearchFactory
 {
@@ -25,9 +26,19 @@ class SearchFactory
 
     public function prepareRequest(SearchUrlBuilder $searchUrlBuilder): Request
     {
+        $urlQuery = $searchUrlBuilder->toUrlQuery();
+        Assert::notEmpty($urlQuery);
+
         return new Request(
             'GET',
-            new Uri($this->configProvider->getHost() . self::ENDPOINT . '?' . $searchUrlBuilder->toUrlQuery())
+            new Uri(
+                sprintf(
+                    '%s?tracker_id=%s&%s',
+                    $this->configProvider->getHost() . self::ENDPOINT,
+                    $this->configProvider->getPublicKey(),
+                    $urlQuery
+                )
+            )
         );
     }
 }
