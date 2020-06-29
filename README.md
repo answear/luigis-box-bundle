@@ -36,7 +36,7 @@ use Answear\LuigisBoxBundle\ValueObject\ContentUpdateCollection;
 
 $collection = new ContentUpdateCollection([new ContentUpdate('product title', 'product/url', 'object type', ['field' => 'field 1'])]);
 
-/** @var \Answear\LuigisBoxBundle\Service\Request $request **/
+/** @var \Answear\LuigisBoxBundle\Service\RequestInterface $request **/
 $apiResponse = $request->contentUpdate($collection);
 ```
 
@@ -51,7 +51,7 @@ use Answear\LuigisBoxBundle\ValueObject\PartialContentUpdate;
 
 $collection = new ContentUpdateCollection([new PartialContentUpdate('product/url', 'object type', ['title' => 'product title'])]);
 
-/** @var \Answear\LuigisBoxBundle\Service\Request $request **/
+/** @var \Answear\LuigisBoxBundle\Service\RequestInterface $request **/
 $apiResponse = $request->partialContentUpdate($collection);
 ```
 
@@ -64,7 +64,7 @@ use Answear\LuigisBoxBundle\ValueObject\ContentRemovalCollection;
 
 $collection = new ContentRemovalCollection([new ContentRemoval('product/url', 'product')]);
 
-/** @var \Answear\LuigisBoxBundle\Service\Request $request **/
+/** @var \Answear\LuigisBoxBundle\Service\RequestInterface $request **/
 $apiResponse = $request->contentRemoval($collection);
 ```
 
@@ -80,13 +80,13 @@ use Answear\LuigisBoxBundle\ValueObject\ContentAvailabilityCollection;
 $isAvailable = true;
 $collection = new ContentAvailabilityCollection([new ContentAvailability('product/url', $isAvailable)]);
 
-/** @var \Answear\LuigisBoxBundle\Service\Request $request **/
+/** @var \Answear\LuigisBoxBundle\Service\RequestInterface $request **/
 $apiResponse = $request->changeAvailability($collection);
 
 // ... or pass one object
 
 $isAvailable = true;
-/** @var \Answear\LuigisBoxBundle\Service\Request $request **/
+/** @var \Answear\LuigisBoxBundle\Service\RequestInterface $request **/
 $apiResponse = $request->changeAvailability(new ContentAvailability('product/url', $isAvailable));
 ```
 
@@ -170,7 +170,7 @@ $urlBuilder
 
 //the above code produces a url query like `size=10&page=3&q=nice+top&f%5B0%5D=type%3Aproduct&f%5B1%5D=category%3Atop&f%5B2%5D=brand%3AMedicine&f%5B3%5D=brand%3AAnswear&sort=size%3Aasc&prefer%5B0%5D=brand%3AAnswear`
 
-/** @var \Answear\LuigisBoxBundle\Service\SearchRequest $request **/
+/** @var \Answear\LuigisBoxBundle\Service\SearchRequestInterface $request **/
 $searchResponse = $request->search($urlBuilder);
 
 ```

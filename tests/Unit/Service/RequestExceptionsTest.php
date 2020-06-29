@@ -13,6 +13,7 @@ use Answear\LuigisBoxBundle\Factory\ContentUpdateFactory;
 use Answear\LuigisBoxBundle\Factory\PartialContentUpdateFactory;
 use Answear\LuigisBoxBundle\Service\Client;
 use Answear\LuigisBoxBundle\Service\Request;
+use Answear\LuigisBoxBundle\Service\RequestInterface;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdate;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdateCollection;
 use GuzzleHttp\Exception\TransferException;
@@ -96,7 +97,7 @@ class RequestExceptionsTest extends TestCase
         $service->contentUpdate($objects);
     }
 
-    private function getService(Response $expectedResponse): Request
+    private function getService(Response $expectedResponse): RequestInterface
     {
         $client = $this->createMock(Client::class);
         $client->expects($this->once())
@@ -110,7 +111,7 @@ class RequestExceptionsTest extends TestCase
         return new Request($client, $contentUpdateFactory, $partialContentUpdateFactory, $contentRemovalUpdateFactory);
     }
 
-    private function getServiceWithGuzzleException(): Request
+    private function getServiceWithGuzzleException(): RequestInterface
     {
         $client = $this->createMock(Client::class);
         $client->expects($this->once())

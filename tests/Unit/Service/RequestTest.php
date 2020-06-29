@@ -10,6 +10,7 @@ use Answear\LuigisBoxBundle\Factory\ContentUpdateFactory;
 use Answear\LuigisBoxBundle\Factory\PartialContentUpdateFactory;
 use Answear\LuigisBoxBundle\Service\Client;
 use Answear\LuigisBoxBundle\Service\Request;
+use Answear\LuigisBoxBundle\Service\RequestInterface;
 use Answear\LuigisBoxBundle\ValueObject\ContentRemovalCollection;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdate;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdateCollection;
@@ -148,7 +149,7 @@ class RequestTest extends TestCase
         );
     }
 
-    private function getRequestServiceForContentUpdate(ObjectsInterface $objects, array $apiResponse): Request
+    private function getRequestServiceForContentUpdate(ObjectsInterface $objects, array $apiResponse): RequestInterface
     {
         $guzzleRequest = new \GuzzleHttp\Psr7\Request(
             'POST',
@@ -180,7 +181,7 @@ class RequestTest extends TestCase
         return new Request($client, $contentUpdateFactory, $partialContentUpdateFactory, $contentRemovalUpdateFactory);
     }
 
-    private function getRequestServiceForPartialUpdate(ObjectsInterface $objects, array $apiResponse): Request
+    private function getRequestServiceForPartialUpdate(ObjectsInterface $objects, array $apiResponse): RequestInterface
     {
         $guzzleRequest = new \GuzzleHttp\Psr7\Request(
             'POST',
@@ -216,7 +217,7 @@ class RequestTest extends TestCase
         );
     }
 
-    private function getRequestServiceForRemoval(ObjectsInterface $objects, array $apiResponse): Request
+    private function getRequestServiceForRemoval(ObjectsInterface $objects, array $apiResponse): RequestInterface
     {
         $guzzleRequest = new \GuzzleHttp\Psr7\Request(
             'POST',
@@ -250,7 +251,7 @@ class RequestTest extends TestCase
         );
     }
 
-    private function getSimpleRequestService(): Request
+    private function getSimpleRequestService(): RequestInterface
     {
         return new Request(
             $this->createMock(Client::class),

@@ -11,6 +11,7 @@ use Answear\LuigisBoxBundle\Service\Client;
 use Answear\LuigisBoxBundle\Service\ConfigProvider;
 use Answear\LuigisBoxBundle\Service\LuigisBoxSerializer;
 use Answear\LuigisBoxBundle\Service\Request;
+use Answear\LuigisBoxBundle\Service\RequestInterface;
 use Answear\LuigisBoxBundle\ValueObject\ContentAvailability;
 use Answear\LuigisBoxBundle\ValueObject\ContentRemovalCollection;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdateCollection;
@@ -103,8 +104,11 @@ class RequestTest extends TestCase
         $this->assertSame([], $response->getErrors());
     }
 
-    private function getRequestService(string $httpMethod, string $expectedContent, array $apiResponse): Request
-    {
+    private function getRequestService(
+        string $httpMethod,
+        string $expectedContent,
+        array $apiResponse
+    ): RequestInterface {
         $endpoint = '/v1/content';
 
         $configProvider = new ConfigProvider('host', '', '', 5.0, 5.0);
