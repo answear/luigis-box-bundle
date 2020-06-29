@@ -24,7 +24,7 @@ use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Webmozart\Assert\Assert;
 
-class Request
+class Request implements RequestInterface
 {
     private const CONTENT_UPDATE_OBJECTS_LIMIT = 100;
     private const PARTIAL_CONTENT_UPDATE_OBJECTS_LIMIT = 50;

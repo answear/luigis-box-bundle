@@ -1,8 +1,12 @@
 v1.x
 ===================
 
-* 1.1.0 (?)
-  * (feature) Search
+* 1.2.0
+  * Added \Answear\LuigisBoxBundle\Service\RequestInterface for use instead of Request service
+  * Added \Answear\LuigisBoxBundle\Service\SearchRequestInterface for use instead of SearchRequest service
+
+* 1.1.0
+  * (feature) Searching
 
 * 1.0.0 (2020-05-08)
   * (feature) Content update

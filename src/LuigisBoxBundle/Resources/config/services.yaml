@@ -9,3 +9,9 @@ services:
 
     Answear\LuigisBoxBundle\Service\ConfigProvider: ~
 
+    Answear\LuigisBoxBundle\Service\RequestInterface:
+        class: Answear\LuigisBoxBundle\Service\Request
+
+    Answear\LuigisBoxBundle\Service\SearchRequestInterface:
+        class: Answear\LuigisBoxBundle\Service\SearchRequest
+

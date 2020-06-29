@@ -9,6 +9,7 @@ use Answear\LuigisBoxBundle\Factory\SearchFactory;
 use Answear\LuigisBoxBundle\Response\Search;
 use Answear\LuigisBoxBundle\Service\Client;
 use Answear\LuigisBoxBundle\Service\SearchRequest;
+use Answear\LuigisBoxBundle\Service\SearchRequestInterface;
 use Answear\LuigisBoxBundle\ValueObject\Search\Context;
 use Answear\LuigisBoxBundle\ValueObject\SearchUrlBuilder;
 use GuzzleHttp\Psr7\Response;
@@ -64,7 +65,7 @@ class SearchRequestTest extends TestCase
         SearchUrlBuilder $searchUrlBuilder,
         array $apiResponse,
         int $responseStatus = 200
-    ): SearchRequest {
+    ): SearchRequestInterface {
         $guzzleRequest = new \GuzzleHttp\Psr7\Request(
             'POST',
             new Uri('some.url'),

@@ -15,7 +15,7 @@ use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Webmozart\Assert\Assert;
 
-class SearchRequest
+class SearchRequest implements SearchRequestInterface
 {
     /**
      * @var Client
