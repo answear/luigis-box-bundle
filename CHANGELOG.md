@@ -1,6 +1,9 @@
 v1.x
 ===================
 
+* 1.3.0
+  * (feature) Update by query
+
 * 1.2.0
   * Added \Answear\LuigisBoxBundle\Service\RequestInterface for use instead of Request service
   * Added \Answear\LuigisBoxBundle\Service\SearchRequestInterface for use instead of SearchRequest service

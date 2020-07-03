@@ -1,18 +1,20 @@
 # Luigi's Box Bundle
-[Luigi's Box](https://www.luigisbox.com/) integration for Symfony.
-Luigi's Box documentation can be found here: https://live.luigisbox.com/.
 
-Installation
-------------
+[Luigi's Box](https://www.luigisbox.com/) integration for Symfony.
+Luigi's Box documentation can be found here: [https://live.luigisbox.com/](https://live.luigisbox.com/).
+
+## Installation
 
 * install with Composer
-```
+
+```bash
 composer require answear/luigis-box-bundle
 ```
 
-Setup
-------------
+## Setup
+
 * provide required config data: `publicKey` and `privateKey`
+
 ```yaml
 # config/packages/answear_luigis_box.yaml
 answear_luigis_box:
@@ -25,9 +27,12 @@ answear_luigis_box:
 
 config will be passed to `\Answear\LuigisBoxBundle\Service\ConfigProvider` class.
 
-Usage
-------------
+## Usage
+
+### Content requests
+
 1. Full [content update](https://live.luigisbox.com/?php#content-updates-content-update) document
+
 ```php
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdate;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdateCollection;
@@ -40,9 +45,10 @@ $collection = new ContentUpdateCollection([new ContentUpdate('product title', 'p
 $apiResponse = $request->contentUpdate($collection);
 ```
 
-First argument (`$title`) will be used as product's title in Luigi's Box unless a `title` field is present in the `$fields` argument. 
+First argument (`$title`) will be used as product's title in Luigi's Box unless a `title` field is present in the `$fields` argument.
 
-2. [Partial update](https://live.luigisbox.com/?php#content-updates-partial-content-update)
+1. [Partial update](https://live.luigisbox.com/?php#content-updates-partial-content-update)
+
 ```php
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdateCollection;
 use Answear\LuigisBoxBundle\ValueObject\PartialContentUpdate;
@@ -55,7 +61,8 @@ $collection = new ContentUpdateCollection([new PartialContentUpdate('product/url
 $apiResponse = $request->partialContentUpdate($collection);
 ```
 
-3. [Content removal](https://live.luigisbox.com/?php#content-updates-content-removal)
+1. [Content removal](https://live.luigisbox.com/?php#content-updates-content-removal)
+
 ```php
 use Answear\LuigisBoxBundle\ValueObject\ContentRemoval;
 use Answear\LuigisBoxBundle\ValueObject\ContentRemovalCollection;
@@ -68,9 +75,10 @@ $collection = new ContentRemovalCollection([new ContentRemoval('product/url', 'p
 $apiResponse = $request->contentRemoval($collection);
 ```
 
-4. Change availability
+1. Change availability
 
 Additional method to simply enable/disable objects - partial update will be used.
+
 ```php
 use Answear\LuigisBoxBundle\ValueObject\ContentAvailability;
 use Answear\LuigisBoxBundle\ValueObject\ContentAvailabilityCollection;
@@ -92,6 +100,7 @@ $apiResponse = $request->changeAvailability(new ContentAvailability('product/url
 
 ---
 In all request you can catch some exceptions:
+
 * `BadRequestException` - bad request,
 * `TooManyItemsException` - make request with fewer items,
 * `MalformedResponseException` - something went wrong with Luigi's Box api response,
@@ -99,6 +108,7 @@ In all request you can catch some exceptions:
 * `ServiceUnavailableException`
 
 Consider catching them separately:
+
 ```php
 
 use Answear\LuigisBoxBundle\Exception\BadRequestException;
@@ -117,7 +127,7 @@ try {
     //items limit reached
     $limit = $e->getLimit();
 } catch (MalformedResponseException $e){
-    //bad response 
+    //bad response
     $response = $e->getResponse();
 } catch (TooManyRequestsException $e){
     //repeat request after $retryAfter seconds
@@ -125,12 +135,12 @@ try {
 } catch (ServiceUnavailableException $e){
     //delay request
 }
-
 ```
 
-#### Content response
+### Content response
 
 `\Answear\LuigisBoxBundle\Response\ApiResponse`:
+
 * (bool) `$success` - `true` if all documents will be passed successfully,
 * (int) `$okCount` - number of successfully passed documents,
 * (int) `$errorsCount` - number of failed documents,
@@ -138,11 +148,11 @@ try {
 * (array) `$rawResponse` - decoded response from api.
 
 `ApiResponseError`:
+
 * (string) `$url` - url of document
 * (string) `$type` - type of error (ex. `malformed_input`)
 * (string) `$reason` - failure text (ex. `incorrect object format`)
 * (array|null) `$causedBy` - specific reason of error (ex. `["url": ["is missing"]]`)
-
 
 Note!
 
@@ -172,43 +182,82 @@ $urlBuilder
 
 /** @var \Answear\LuigisBoxBundle\Service\SearchRequestInterface $request **/
 $searchResponse = $request->search($urlBuilder);
-
 ```
+
 Check the Luigi's Box documentation to find out exact purpose of each field `SearchUrlBuilder` is exposing.
 
-2. Response
+1. Response
 
 `SearchRequest::search()` will return a `SearchResponse` object with following fields:
+
 * (string) $searchUrl
 * (string) $query
 * (string|null) $correctedQuery
 * (array) $filters
-* (Hit[]) $hits
-    
-    `Hit`:
-    * (string) $url;
-    * (array) $attributes;
-    * (array) $nested;
-    * (string) $type;
-    * (array) $highlight;
-    * (bool) $exact;
-    * (bool) $alternative;
+* (Hit[]) $hits.
+ `Hit`:
+  * (string) $url;
+  * (array) $attributes;
+  * (array) $nested;
+  * (string) $type;
+  * (array) $highlight;
+  * (bool) $exact;
+  * (bool) $alternative;
 * (Hit[]) $quickSearchHits
-    * like above
-* (Facet[]) $facets
-    
+  * like above
+* (Facet[]) $facets.
     `Facet`:
-    * (string) $name;
-    * (string) $type;
-    * (array) $values;
+  * (string) $name;
+  * (string) $type;
+  * (array) $values;
 * (int) $totalHits
 * (int) $currentSize
 
+### Update by query (documentation [here](https://live.luigisbox.com/#content-updates-update-by-query))
 
-Final notes
-------------
+1. Update
+
+```php
+use Answear\LuigisBoxBundle\ValueObject\UpdateByQuery;
+
+// ...
+$types = ['product'];
+$fields = ['color' => 'green'];
+$search = new UpdateByQuery\Search($types, $fields);
+
+$updateFields = ['color' => ['olive', 'emerald']];
+$update = new UpdateByQuery\Update($updateFields);
+
+$updateByQuery = new UpdateByQuery($search, $update);
+
+/** @var \Answear\LuigisBoxBundle\Service\UpdateByQueryRequest $request **/
+$response = $request->update($updateByQuery);
+
+$jobId = $response->getJobId();
+```
+
+1. Retrieve job status
+
+```php
+use Answear\LuigisBoxBundle\ValueObject\UpdateByQuery;
+
+$jobId = 1;
+
+/** @var \Answear\LuigisBoxBundle\Service\UpdateByQueryRequest $request **/
+$response = $request->getStatus($jobId);
+```
+
+`getStatus` will return `UpdateByQueryStatusResponse` with following fields:
+
+* (array) $rawResponse
+* (string) $trackerId
+* (bool) $completed
+* (int|null) $okCount - null if not completed
+* (int|null) $errorsCount - null if not completed
+* (ApiResponseError[]|null) $errors - null if not completed
+
+## Final notes
 
 Feel free to make pull requests with new features, improvements or bug fixes. The Answear team will be grateful for any comments.
 
-
-### Have fun!
+**Have fun!**
