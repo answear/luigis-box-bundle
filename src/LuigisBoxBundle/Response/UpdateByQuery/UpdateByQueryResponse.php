@@ -41,7 +41,7 @@ class UpdateByQueryResponse
         parse_str($statusUrl, $parsed);
         Assert::count($parsed, 1);
         $jobId = array_values($parsed);
-        Assert::numeric($jobId[0], sprintf('Job id is no numeric value. Got: %s.', $jobId[0]));
+        Assert::numeric($jobId[0], sprintf('Job id is no numeric. Got: %s.', $jobId[0]));
 
         return (int) $jobId[0];
     }

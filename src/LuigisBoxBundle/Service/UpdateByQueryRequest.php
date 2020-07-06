@@ -29,6 +29,9 @@ class UpdateByQueryRequest implements UpdateByQueryRequestInterface
      */
     private $factory;
 
+    /**
+     * @var UpdateByRequestStatusFactory
+     */
     private $statusFactory;
 
     public function __construct(
