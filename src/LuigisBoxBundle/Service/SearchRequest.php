@@ -45,8 +45,11 @@ class SearchRequest implements SearchRequestInterface
         try {
             $request = $this->searchFactory->prepareRequest($searchUrlBuilder);
 
+            $url = $searchUrlBuilder->toUrlQuery();
+            Assert::notEmpty($url);
+
             return new SearchResponse(
-                $searchUrlBuilder->toUrlQuery(),
+                $url . '&v=' . $this->getUniqueStamp(),
                 $this->handleResponse($request, $this->client->request($request))
             );
         } catch (GuzzleException $e) {
@@ -78,5 +81,10 @@ class SearchRequest implements SearchRequestInterface
         }
 
         return $decoded;
+    }
+
+    private function getUniqueStamp(): string
+    {
+        return (string) time();
     }
 }

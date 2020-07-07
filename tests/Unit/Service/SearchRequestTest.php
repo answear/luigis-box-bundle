@@ -22,12 +22,12 @@ class SearchRequestTest extends TestCase
      * @test
      * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\SearchDataProvider::provideSuccessObjects()
      */
-    public function contentUpdateWithSuccess(SearchUrlBuilder $urlBuilder, array $arrayRawResponse): void
+    public function searchWithSuccess(SearchUrlBuilder $urlBuilder, array $arrayRawResponse): void
     {
         $requestService = $this->getRequestService($urlBuilder, $arrayRawResponse);
         $response = $requestService->search($urlBuilder);
 
-        $this->assertSame($urlBuilder->toUrlQuery(), $response->getSearchUrl());
+        $this->assertSame($urlBuilder->toUrlQuery(), strstr($response->getSearchUrl(), '&v=', true));
         $rawResults = $arrayRawResponse['results'];
         $this->assertSame($rawResults['query'], $response->getQuery());
         $this->assertSame($rawResults['corrected_query'], $response->getCorrectedQuery());
