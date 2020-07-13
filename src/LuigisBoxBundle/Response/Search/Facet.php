@@ -23,9 +23,9 @@ class Facet
     private $type;
 
     /**
-     * @var array
+     * @var FacetValue[]
      */
-    private $values;
+    private $values = [];
 
     public function __construct(array $facetData)
     {
@@ -35,7 +35,9 @@ class Facet
 
         $this->name = $facetData[self::NAME_PARAM];
         $this->type = $facetData[self::TYPE_PARAM];
-        $this->values = $facetData[self::VALUES_PARAM];
+        foreach ($facetData[self::VALUES_PARAM] as $facetValueData) {
+            $this->values[] = new FacetValue($facetValueData);
+        }
     }
 
     public function getName(): string
@@ -48,6 +50,9 @@ class Facet
         return $this->type;
     }
 
+    /**
+     * @return FacetValue[]
+     */
     public function getValues(): array
     {
         return $this->values;

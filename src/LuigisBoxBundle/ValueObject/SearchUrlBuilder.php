@@ -110,13 +110,24 @@ class SearchUrlBuilder
         return $this;
     }
 
-    public function addFilter(string $key, string $value): self
+    /**
+     * @param bool|int|string $value
+     */
+    public function addFilter(string $key, $value): self
     {
+        if (!is_bool($value)
+            && !is_int($value)
+            && !is_string($value)) {
+            throw new \InvalidArgumentException(
+                sprintf('Value must be bool|int|string, %s provided.', gettype($value))
+            );
+        }
+
         $this->filters[$key] = $this->filters[$key] ?? [];
         if (\is_string($this->filters[$key])) {
             $this->filters[$key] = [$this->filters[$key]];
         }
-        $this->filters[$key][] = $value;
+        $this->filters[$key][] = (string) $value;
 
         $this->filters[$key] = array_unique($this->filters[$key]);
 
@@ -126,7 +137,9 @@ class SearchUrlBuilder
     public function setFilters(array $filters): self
     {
         if (\count($this->filters ?? []) > 0) {
-            throw new \LogicException('You already have the filters set. Use resetFilters() method to clear them first.');
+            throw new \LogicException(
+                'You already have the filters set. Use resetFilters() method to clear them first.'
+            );
         }
 
         $keys = array_keys($filters);
@@ -137,13 +150,24 @@ class SearchUrlBuilder
         return $this;
     }
 
-    public function addMustFilter(string $key, string $value): self
+    /**
+     * @param bool|int|string $value
+     */
+    public function addMustFilter(string $key, $value): self
     {
+        if (!is_bool($value)
+            && !is_int($value)
+            && !is_string($value)) {
+            throw new \InvalidArgumentException(
+                sprintf('Value must be bool|int|string, %s provided.', gettype($value))
+            );
+        }
+
         $this->mustFilters[$key] = $this->mustFilters[$key] ?? [];
         if (\is_string($this->mustFilters[$key])) {
             $this->mustFilters[$key] = [$this->mustFilters[$key]];
         }
-        $this->mustFilters[$key][] = $value;
+        $this->mustFilters[$key][] = (string) $value;
 
         $this->mustFilters[$key] = array_unique($this->mustFilters[$key]);
 
@@ -153,7 +177,9 @@ class SearchUrlBuilder
     public function setMustFilters(array $filters): self
     {
         if (\count($this->mustFilters ?? []) > 0) {
-            throw new \LogicException('You already have the must filters set. Use resetMustFilters() method to clear them first.');
+            throw new \LogicException(
+                'You already have the must filters set. Use resetMustFilters() method to clear them first.'
+            );
         }
 
         $keys = array_keys($filters);
