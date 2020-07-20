@@ -21,7 +21,7 @@ class PartialContentUpdate extends AbstractContentUpdate
 
     public function setNested(array $nested): void
     {
-        Assert::allIsInstanceOf($nested, PartialContentUpdate::class);
+        Assert::allIsInstanceOf($nested, AbstractContentUpdate::class);
         $this->nested = $nested;
     }
 }
