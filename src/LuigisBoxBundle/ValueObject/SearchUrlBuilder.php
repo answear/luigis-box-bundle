@@ -127,7 +127,7 @@ class SearchUrlBuilder
         if (\is_string($this->filters[$key])) {
             $this->filters[$key] = [$this->filters[$key]];
         }
-        $this->filters[$key][] = (string) $value;
+        $this->filters[$key][] = (string) (false === $value ? '0' : $value);
 
         $this->filters[$key] = array_unique($this->filters[$key]);
 
@@ -167,7 +167,7 @@ class SearchUrlBuilder
         if (\is_string($this->mustFilters[$key])) {
             $this->mustFilters[$key] = [$this->mustFilters[$key]];
         }
-        $this->mustFilters[$key][] = (string) $value;
+        $this->mustFilters[$key][] = (string) (false === $value ? '0' : $value);
 
         $this->mustFilters[$key] = array_unique($this->mustFilters[$key]);
 

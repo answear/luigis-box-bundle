@@ -49,6 +49,14 @@ class SearchUrlBuilderTest extends TestCase
         ];
         $this->assertOk($query, $searchBuilder);
 
+        $searchBuilder->addFilter('available', false);
+        $query['f[]'] = [
+            'category:Top & Top',
+            'category:Jeans',
+            'available:0',
+        ];
+        $this->assertOk($query, $searchBuilder);
+
         $searchBuilder->resetFilters();
         $searchBuilder->setFilters(
             [
