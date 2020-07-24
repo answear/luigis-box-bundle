@@ -130,6 +130,14 @@ abstract class AbstractContentUpdate
     }
 
     /**
+     * @return string|array|null
+     */
+    public function getField(string $fieldName)
+    {
+        return $this->fields[$fieldName] ?? null;
+    }
+
+    /**
      * @return AbstractContentUpdate[]|null
      */
     public function getNested(): ?array

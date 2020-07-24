@@ -83,7 +83,7 @@ class ContentUpdateTest extends TestCase
             $type,
             $fields
         );
-        $this->assertSame($title, $object->getTitle());
+        $this->assertSame($fields['title'], $object->getTitle());
         $this->assertSame($url, $object->getUrl());
         $this->assertSame($type, $object->getType());
         $this->assertSame($fields, $object->getFields());
