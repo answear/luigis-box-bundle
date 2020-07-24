@@ -7,8 +7,7 @@ namespace Answear\LuigisBoxBundle\Service;
 use Answear\LuigisBoxBundle\ValueObject\ObjectsInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
-use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Normalizer;
 use Symfony\Component\Serializer\Serializer;
 
 class LuigisBoxSerializer
@@ -18,14 +17,14 @@ class LuigisBoxSerializer
     public function serialize(ObjectsInterface $objects): string
     {
         $encoders = [new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer(null, new CamelCaseToSnakeCaseNameConverter())];
+        $normalizers = [new Normalizer\PropertyNormalizer(null, new CamelCaseToSnakeCaseNameConverter())];
 
         $serializer = new Serializer($normalizers, $encoders);
 
         return $serializer->serialize(
             $objects,
             self::SERIALIZE_FORMAT,
-            [AbstractObjectNormalizer::SKIP_NULL_VALUES => true]
+            [Normalizer\AbstractObjectNormalizer::SKIP_NULL_VALUES => true]
         );
     }
 }

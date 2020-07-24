@@ -19,7 +19,7 @@ class RequestDataProvider
         yield [
             'POST',
             new ContentUpdateCollection([new ContentUpdate('title', 'product/1', 'products', [])]),
-            '{"objects":[{"title":"title","url":"product\/1","type":"products","fields":{"title":"title"}}]}',
+            '{"objects":[{"url":"product\/1","type":"products","fields":{"title":"title"}}]}',
             [
                 'ok_count' => 1,
             ],
@@ -31,7 +31,7 @@ class RequestDataProvider
         yield [
             'POST',
             $collection,
-            '{"objects":[{"title":"title","url":"product\/1","type":"products","fields":{"availability":1,"title":"title"}}]}',
+            '{"objects":[{"url":"product\/1","type":"products","fields":{"availability":1,"title":"title"}}]}',
             [
                 'ok_count' => 1,
             ],
@@ -54,7 +54,7 @@ class RequestDataProvider
         yield [
             'POST',
             $collection,
-            '{"objects":[{"title":"title","url":"product\/2","type":"products","autocomplete_type":["categories","other"],"active_to":"2019-12-12 00:01:02","fields":{"availability":1,"title":"title"}},{"title":"title","url":"product\/1","type":"products","generation":"one","fields":{"availability":0,"title":"title"},"nested":[{"title":"title","url":"product\/2","type":"products","autocomplete_type":["categories","other"],"active_to":"2019-12-12 00:01:02","fields":{"availability":1,"title":"title"}}]}]}',
+            '{"objects":[{"url":"product\/2","type":"products","autocomplete_type":["categories","other"],"active_to":"2019-12-12 00:01:02","fields":{"availability":1,"title":"title"}},{"url":"product\/1","type":"products","generation":"one","fields":{"availability":0,"title":"title"},"nested":[{"url":"product\/2","type":"products","autocomplete_type":["categories","other"],"active_to":"2019-12-12 00:01:02","fields":{"availability":1,"title":"title"}}]}]}',
             [
                 'ok_count' => 2,
             ],
