@@ -2,8 +2,13 @@ includes:
     - vendor/phpstan/phpstan-webmozart-assert/extension.neon
 
 parameters:
+    level: 5
     treatPhpDocTypesAsCertain: false
-    autoload_files:
-        - vendor/autoload.php
+    paths:
+        - %rootDir%/../../../src
     excludes_analyse:
         - src/LuigisBoxBundle/Tests/*
+    ignoreErrors:
+        - message: '#.*NodeDefinition::children.*#'
+          path: ./src/LuigisBoxBundle/DependencyInjection
+

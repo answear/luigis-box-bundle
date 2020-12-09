@@ -20,7 +20,7 @@
     "symfony/phpunit-bridge": "^5.0",
     "phpro/grumphp": "^0.18.0",
     "friendsofphp/php-cs-fixer": "^2.16",
-    "phpstan/phpstan": "^0.12.13",
+    "phpstan/phpstan": "^0.12.32",
     "phpstan/phpstan-webmozart-assert": "^0.12.2"
   },
   "autoload": {
