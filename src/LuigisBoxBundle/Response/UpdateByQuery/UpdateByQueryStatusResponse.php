@@ -55,8 +55,8 @@ class UpdateByQueryStatusResponse
             $this->okCount = $response[self::UPDATES_COUNT];
             $this->errorsCount = $response[self::FAILURES_COUNT];
             $this->errors = [];
-            foreach ($response[self::FAILURES] as $urk => $failure) {
-                $this->errors[] = new ApiResponseError($urk, $failure);
+            foreach ($response[self::FAILURES] as $url => $failure) {
+                $this->errors[] = new ApiResponseError($url, $failure);
             }
         }
     }

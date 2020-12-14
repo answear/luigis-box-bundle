@@ -74,6 +74,9 @@ class SearchRequest implements SearchRequestInterface
         $responseText = $response->getBody()->getContents();
 
         try {
+            if (empty($responseText)) {
+                throw new \RuntimeException('Empty response.');
+            }
             $decoded = \json_decode($responseText, true, 512, JSON_THROW_ON_ERROR);
             Assert::isArray($decoded);
         } catch (\Throwable $e) {
