@@ -7,12 +7,13 @@ namespace Answear\LuigisBoxBundle\Service;
 use Answear\LuigisBoxBundle\Exception\BadRequestException;
 use Answear\LuigisBoxBundle\Exception\MalformedResponseException;
 use Answear\LuigisBoxBundle\Exception\ServiceUnavailableException;
+use Answear\LuigisBoxBundle\Exception\TooManyItemsException;
+use Answear\LuigisBoxBundle\Exception\TooManyRequestsException;
 use Answear\LuigisBoxBundle\Factory\UpdateByRequestFactory;
 use Answear\LuigisBoxBundle\Factory\UpdateByRequestStatusFactory;
 use Answear\LuigisBoxBundle\Response\UpdateByQuery\UpdateByQueryResponse;
 use Answear\LuigisBoxBundle\Response\UpdateByQuery\UpdateByQueryStatusResponse;
 use Answear\LuigisBoxBundle\ValueObject\UpdateByQuery;
-use GuzzleHttp\Exception\GuzzleException;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Webmozart\Assert\Assert;
@@ -46,29 +47,30 @@ class UpdateByQueryRequest implements UpdateByQueryRequestInterface
 
     /**
      * @throws BadRequestException
-     * @throws MalformedResponseException
+     * @throws TooManyRequestsException
+     * @throws TooManyItemsException
      * @throws ServiceUnavailableException
+     * @throws MalformedResponseException
      */
     public function update(UpdateByQuery $updateByQuery): UpdateByQueryResponse
     {
-        try {
-            $request = $this->factory->prepareRequest($updateByQuery);
+        $request = $this->factory->prepareRequest($updateByQuery);
 
-            return new UpdateByQueryResponse($this->handleResponse($request, $this->client->request($request)));
-        } catch (GuzzleException $e) {
-            throw new ServiceUnavailableException($e->getMessage(), $e->getCode(), $e);
-        }
+        return new UpdateByQueryResponse($this->handleResponse($request, $this->client->request($request)));
     }
 
+    /**
+     * @throws BadRequestException
+     * @throws TooManyRequestsException
+     * @throws TooManyItemsException
+     * @throws ServiceUnavailableException
+     * @throws MalformedResponseException
+     */
     public function getStatus(int $jobId): UpdateByQueryStatusResponse
     {
-        try {
-            $request = $this->statusFactory->prepareRequest($jobId);
+        $request = $this->statusFactory->prepareRequest($jobId);
 
-            return new UpdateByQueryStatusResponse($this->handleResponse($request, $this->client->request($request)));
-        } catch (GuzzleException $e) {
-            throw new ServiceUnavailableException($e->getMessage(), $e->getCode(), $e);
-        }
+        return new UpdateByQueryStatusResponse($this->handleResponse($request, $this->client->request($request)));
     }
 
     /**

@@ -7,10 +7,11 @@ namespace Answear\LuigisBoxBundle\Service;
 use Answear\LuigisBoxBundle\Exception\BadRequestException;
 use Answear\LuigisBoxBundle\Exception\MalformedResponseException;
 use Answear\LuigisBoxBundle\Exception\ServiceUnavailableException;
+use Answear\LuigisBoxBundle\Exception\TooManyItemsException;
+use Answear\LuigisBoxBundle\Exception\TooManyRequestsException;
 use Answear\LuigisBoxBundle\Factory\SearchFactory;
 use Answear\LuigisBoxBundle\Response\SearchResponse;
 use Answear\LuigisBoxBundle\ValueObject\SearchUrlBuilder;
-use GuzzleHttp\Exception\GuzzleException;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Webmozart\Assert\Assert;
@@ -36,29 +37,26 @@ class SearchRequest implements SearchRequestInterface
     }
 
     /**
+     * @throws BadRequestException
+     * @throws TooManyRequestsException
+     * @throws TooManyItemsException
      * @throws ServiceUnavailableException
      * @throws MalformedResponseException
-     * @throws BadRequestException
      */
     public function search(SearchUrlBuilder $searchUrlBuilder): SearchResponse
     {
-        try {
-            $request = $this->searchFactory->prepareRequest($searchUrlBuilder);
+        $request = $this->searchFactory->prepareRequest($searchUrlBuilder);
 
-            $url = $searchUrlBuilder->toUrlQuery();
-            Assert::notEmpty($url);
+        $url = $searchUrlBuilder->toUrlQuery();
+        Assert::notEmpty($url);
 
-            return new SearchResponse(
-                $url . '&v=' . $this->getUniqueStamp(),
-                $this->handleResponse($request, $this->client->request($request))
-            );
-        } catch (GuzzleException $e) {
-            throw new ServiceUnavailableException($e->getMessage(), $e->getCode(), $e);
-        }
+        return new SearchResponse(
+            $url . '&v=' . $this->getUniqueStamp(),
+            $this->handleResponse($request, $this->client->request($request))
+        );
     }
 
     /**
-     * @throws BadRequestException
      * @throws MalformedResponseException
      */
     private function handleResponse(\GuzzleHttp\Psr7\Request $request, ResponseInterface $response): array
