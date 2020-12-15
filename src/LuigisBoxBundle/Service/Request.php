@@ -19,9 +19,7 @@ use Answear\LuigisBoxBundle\ValueObject\ContentRemovalCollection;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdate;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdateCollection;
 use Answear\LuigisBoxBundle\ValueObject\PartialContentUpdate;
-use GuzzleHttp\Exception\GuzzleException;
 use Psr\Http\Message\ResponseInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Webmozart\Assert\Assert;
 
 class Request implements RequestInterface
@@ -62,6 +60,7 @@ class Request implements RequestInterface
     }
 
     /**
+     * @throws BadRequestException
      * @throws TooManyRequestsException
      * @throws TooManyItemsException
      * @throws ServiceUnavailableException
@@ -75,19 +74,16 @@ class Request implements RequestInterface
             throw new TooManyItemsException(\count($objects), self::CONTENT_UPDATE_OBJECTS_LIMIT);
         }
 
-        try {
-            $request = $this->contentUpdateFactory->prepareRequest($objects);
+        $request = $this->contentUpdateFactory->prepareRequest($objects);
 
-            return new ApiResponse(
-                \count($objects),
-                $this->handleResponse($request, $this->client->request($request))
-            );
-        } catch (GuzzleException $e) {
-            throw new ServiceUnavailableException($e->getMessage(), $e->getCode(), $e);
-        }
+        return new ApiResponse(
+            \count($objects),
+            $this->handleResponse($request, $this->client->request($request))
+        );
     }
 
     /**
+     * @throws BadRequestException
      * @throws TooManyRequestsException
      * @throws TooManyItemsException
      * @throws ServiceUnavailableException
@@ -101,19 +97,16 @@ class Request implements RequestInterface
             throw new TooManyItemsException(\count($objects), self::PARTIAL_CONTENT_UPDATE_OBJECTS_LIMIT);
         }
 
-        try {
-            $request = $this->partialContentUpdateFactory->prepareRequest($objects);
+        $request = $this->partialContentUpdateFactory->prepareRequest($objects);
 
-            return new ApiResponse(
-                \count($objects),
-                $this->handleResponse($request, $this->client->request($request))
-            );
-        } catch (GuzzleException $e) {
-            throw new ServiceUnavailableException($e->getMessage(), $e->getCode(), $e);
-        }
+        return new ApiResponse(
+            \count($objects),
+            $this->handleResponse($request, $this->client->request($request))
+        );
     }
 
     /**
+     * @throws BadRequestException
      * @throws TooManyRequestsException
      * @throws TooManyItemsException
      * @throws ServiceUnavailableException
@@ -121,38 +114,31 @@ class Request implements RequestInterface
      */
     public function contentRemoval(ContentRemovalCollection $objects): ApiResponse
     {
-        try {
-            $request = $this->contentRemovalFactory->prepareRequest($objects);
+        $request = $this->contentRemovalFactory->prepareRequest($objects);
 
-            return new ApiResponse(
-                \count($objects),
-                $this->handleResponse($request, $this->client->request($request))
-            );
-        } catch (GuzzleException $e) {
-            throw new ServiceUnavailableException($e->getMessage(), $e->getCode(), $e);
-        }
+        return new ApiResponse(
+            \count($objects),
+            $this->handleResponse($request, $this->client->request($request))
+        );
     }
 
     /**
      * @param ContentAvailabilityCollection|ContentAvailability $object
      *
+     * @throws BadRequestException
+     * @throws TooManyRequestsException
      * @throws TooManyItemsException
      * @throws ServiceUnavailableException
      * @throws MalformedResponseException
-     * @throws TooManyRequestsException
      */
     public function changeAvailability($object): ApiResponse
     {
-        try {
-            $request = $this->partialContentUpdateFactory->prepareRequestForAvailability($object);
+        $request = $this->partialContentUpdateFactory->prepareRequestForAvailability($object);
 
-            return new ApiResponse(
-                $object instanceof ContentAvailabilityCollection ? \count($object) : 1,
-                $this->handleResponse($request, $this->client->request($request))
-            );
-        } catch (GuzzleException $e) {
-            throw new ServiceUnavailableException($e->getMessage(), $e->getCode(), $e);
-        }
+        return new ApiResponse(
+            $object instanceof ContentAvailabilityCollection ? \count($object) : 1,
+            $this->handleResponse($request, $this->client->request($request))
+        );
     }
 
     public static function getContentUpdateLimit(): int
@@ -166,27 +152,10 @@ class Request implements RequestInterface
     }
 
     /**
-     * @throws BadRequestException
-     * @throws TooManyRequestsException
-     * @throws TooManyItemsException
      * @throws MalformedResponseException
      */
     private function handleResponse(\GuzzleHttp\Psr7\Request $request, ResponseInterface $response): array
     {
-        if (Response::HTTP_BAD_REQUEST === $response->getStatusCode()) {
-            throw new BadRequestException($response, $request);
-        }
-
-        if (Response::HTTP_TOO_MANY_REQUESTS === $response->getStatusCode()) {
-            $retryAfter = $response->getHeader('Retry-After');
-            $retryAfter = reset($retryAfter);
-            throw new TooManyRequestsException((int) $retryAfter, $response);
-        }
-
-        if (Response::HTTP_REQUEST_ENTITY_TOO_LARGE === $response->getStatusCode()) {
-            throw new TooManyItemsException(null, null, $response);
-        }
-
         if ($response->getBody()->isSeekable()) {
             $response->getBody()->rewind();
         }

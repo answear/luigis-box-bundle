@@ -12,6 +12,7 @@ use Answear\LuigisBoxBundle\Factory\ContentRemovalFactory;
 use Answear\LuigisBoxBundle\Factory\ContentUpdateFactory;
 use Answear\LuigisBoxBundle\Factory\PartialContentUpdateFactory;
 use Answear\LuigisBoxBundle\Service\Client;
+use Answear\LuigisBoxBundle\Service\ConfigProvider;
 use Answear\LuigisBoxBundle\Service\Request;
 use Answear\LuigisBoxBundle\Service\RequestInterface;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdate;
@@ -99,29 +100,39 @@ class RequestExceptionsTest extends TestCase
 
     private function getService(Response $expectedResponse): RequestInterface
     {
-        $client = $this->createMock(Client::class);
-        $client->expects($this->once())
-            ->method('request')
+        $guzzleClient = $this->createMock(\GuzzleHttp\Client::class);
+        $guzzleClient->expects(self::once())
+            ->method('send')
             ->willReturn($expectedResponse);
 
         $contentUpdateFactory = $this->createMock(ContentUpdateFactory::class);
         $partialContentUpdateFactory = $this->createMock(PartialContentUpdateFactory::class);
         $contentRemovalUpdateFactory = $this->createMock(ContentRemovalFactory::class);
 
-        return new Request($client, $contentUpdateFactory, $partialContentUpdateFactory, $contentRemovalUpdateFactory);
+        return new Request(
+            new Client($this->createMock(ConfigProvider::class), $guzzleClient),
+            $contentUpdateFactory,
+            $partialContentUpdateFactory,
+            $contentRemovalUpdateFactory
+        );
     }
 
     private function getServiceWithGuzzleException(): RequestInterface
     {
-        $client = $this->createMock(Client::class);
-        $client->expects($this->once())
-            ->method('request')
+        $guzzleClient = $this->createMock(\GuzzleHttp\Client::class);
+        $guzzleClient->expects(self::once())
+            ->method('send')
             ->willThrowException(new TransferException('bad transfer'));
 
         $contentUpdateFactory = $this->createMock(ContentUpdateFactory::class);
         $partialContentUpdateFactory = $this->createMock(PartialContentUpdateFactory::class);
         $contentRemovalUpdateFactory = $this->createMock(ContentRemovalFactory::class);
 
-        return new Request($client, $contentUpdateFactory, $partialContentUpdateFactory, $contentRemovalUpdateFactory);
+        return new Request(
+            new Client($this->createMock(ConfigProvider::class), $guzzleClient),
+            $contentUpdateFactory,
+            $partialContentUpdateFactory,
+            $contentRemovalUpdateFactory
+        );
     }
 }
