@@ -1,7 +1,6 @@
-parameters:
-    git_dir: .
-    bin_dir: "./vendor/bin"
+grumphp:
     process_timeout: 120
+    stop_on_failure: true
     ascii:
         failed: ~
         succeeded: ~
