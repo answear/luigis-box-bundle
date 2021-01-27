@@ -53,9 +53,14 @@ class SearchUrlBuilderTest extends TestCase
         $query['f[]'] = [
             'category:Top & Top',
             'category:Jeans',
-            'available:0',
+            'available:false',
         ];
         $this->assertOk($query, $searchBuilder);
+
+        $this->assertSame(
+            'size=10&page=3&q=to+search+query&qu=1&user_id=user-id&f%5B%5D=category%3ATop+%26+Top&f%5B%5D=category%3AJeans&f%5B%5D=available%3Afalse',
+            $searchBuilder->toUrlQuery()
+        );
 
         $searchBuilder->resetFilters();
         $searchBuilder->setFilters(
