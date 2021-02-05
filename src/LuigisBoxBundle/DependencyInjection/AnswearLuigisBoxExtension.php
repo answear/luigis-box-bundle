@@ -23,14 +23,18 @@ class AnswearLuigisBoxExtension extends Extension
         $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
 
+        if (empty($config['default_config']) && \count($config['configs']) > 1) {
+            throw new \InvalidArgumentException(
+                'Provide default_config name if more configs provided.'
+            );
+        }
+        $config['default_config'] = $config['default_config'] ?? array_key_first($config['configs']);
+
         $definition = $container->getDefinition(ConfigProvider::class);
         $definition->setArguments(
             [
-                rtrim($config['host'], '/'),
-                $config['publicKey'],
-                $config['privateKey'],
-                $config['connectionTimeout'],
-                $config['requestTimeout'],
+                $config['default_config'],
+                $config['configs'],
             ]
         );
     }

@@ -18,14 +18,33 @@ composer require answear/luigis-box-bundle
 ```yaml
 # config/packages/answear_luigis_box.yaml
 answear_luigis_box:
-    host: 'https://live.luigisbox.com' #default
-    publicKey: 'your_public_key'
-    privateKey: 'your_private_key'
-    connectionTimeout: 10.0 #default
-    requestTimeout: 10.0 #default
+    default_config: second_config_name
+    configs:
+        your_config_name:
+            host: 'https://live.luigisbox.com' #default
+            publicKey: 'your_public_key'
+            privateKey: 'your_private_key'
+            connectionTimeout: 4.0 #default
+            requestTimeout: 8.0 #default
+        second_config_name:
+            publicKey: 'your_public_key'
+            privateKey: 'your_private_key'
 ```
 
-config will be passed to `\Answear\LuigisBoxBundle\Service\ConfigProvider` class.
+If you have only one config you can omit `default_config` node.
+Configs will be passed to `\Answear\LuigisBoxBundle\Service\ConfigProvider` class.
+
+If you have more configurations you can change them as follows
+
+```php
+use Answear\LuigisBoxBundle\Service\ConfigProvider;
+
+/** @var ConfigProvider $configProvider **/
+
+$configProvider->setConfig('your_config_name');
+```
+
+and use application as before.
 
 ## Usage
 

@@ -111,7 +111,18 @@ class RequestTest extends TestCase
     ): RequestInterface {
         $endpoint = '/v1/content';
 
-        $configProvider = new ConfigProvider('host', '', '', 5.0, 5.0);
+        $configProvider = new ConfigProvider(
+            'config_name',
+            [
+                'config_name' => [
+                    'host' => 'host',
+                    'publicKey' => '',
+                    'privateKey' => '',
+                    'connectionTimeout' => 5.0,
+                    'requestTimeout' => 5.0,
+                ],
+            ]
+        );
 
         $expectedRequest = new \GuzzleHttp\Psr7\Request(
             $httpMethod,
