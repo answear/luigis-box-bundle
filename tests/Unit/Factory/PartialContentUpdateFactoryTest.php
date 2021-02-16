@@ -45,7 +45,19 @@ class PartialContentUpdateFactoryTest extends TestCase
 
     private function getFactory(): PartialContentUpdateFactory
     {
-        $configProvider = new ConfigProvider('host', 'key', 'key', 1, 1);
+        $configProvider = new ConfigProvider(
+            'config_name',
+            [
+                'config_name' => [
+                    'host' => 'host',
+                    'publicKey' => '',
+                    'privateKey' => '',
+                    'connectionTimeout' => 5.0,
+                    'requestTimeout' => 5.0,
+                ],
+            ]
+        );
+
         $serializer = $this->createMock(LuigisBoxSerializer::class);
         $serializer->expects($this->once())
             ->method('serialize')

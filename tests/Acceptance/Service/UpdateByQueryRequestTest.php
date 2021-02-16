@@ -74,7 +74,18 @@ class UpdateByQueryRequestTest extends TestCase
         string $expectedContent,
         array $apiResponse
     ): UpdateByQueryRequestInterface {
-        $configProvider = new ConfigProvider('host', '', '', 5.0, 5.0);
+        $configProvider = new ConfigProvider(
+            'config_name',
+            [
+                'config_name' => [
+                    'host' => 'host',
+                    'publicKey' => '',
+                    'privateKey' => '',
+                    'connectionTimeout' => 5.0,
+                    'requestTimeout' => 5.0,
+                ],
+            ]
+        );
 
         $expectedRequest = new \GuzzleHttp\Psr7\Request(
             $httpMethod,

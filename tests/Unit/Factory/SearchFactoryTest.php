@@ -30,7 +30,18 @@ class SearchFactoryTest extends TestCase
 
     private function getFactory(): SearchFactory
     {
-        $configProvider = new ConfigProvider('host', 'key', 'key', 1, 1);
+        $configProvider = new ConfigProvider(
+            'config_name',
+            [
+                'config_name' => [
+                    'host' => 'host',
+                    'publicKey' => 'key',
+                    'privateKey' => 'key',
+                    'connectionTimeout' => 5.0,
+                    'requestTimeout' => 5.0,
+                ],
+            ]
+        );
 
         return new SearchFactory($configProvider);
     }
