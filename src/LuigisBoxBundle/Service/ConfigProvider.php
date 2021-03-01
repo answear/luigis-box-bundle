@@ -31,13 +31,15 @@ class ConfigProvider
             Assert::keyExists($item, 'privateKey');
             Assert::keyExists($item, 'connectionTimeout');
             Assert::keyExists($item, 'requestTimeout');
+            Assert::keyExists($item, 'searchTimeout');
 
             $configsDTO[$configName] = new ConfigDTO(
                 rtrim($item['host'], '/'),
                 $item['publicKey'],
                 $item['privateKey'],
                 $item['connectionTimeout'],
-                $item['requestTimeout']
+                $item['requestTimeout'],
+                $item['searchTimeout']
             );
         }
 
@@ -101,6 +103,11 @@ class ConfigProvider
     public function getRequestTimeout(): float
     {
         return $this->getConfigDTO()->getRequestTimeout();
+    }
+
+    public function getSearchTimeout(): float
+    {
+        return $this->getConfigDTO()->getSearchTimeout();
     }
 
     private function getConfigDTO(): ConfigDTO

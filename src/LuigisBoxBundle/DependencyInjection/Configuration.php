@@ -11,7 +11,8 @@ class Configuration implements ConfigurationInterface
 {
     private const HOST = 'https://live.luigisbox.com';
     private const CONNECTION_TIMEOUT = 4.0;
-    private const REQUEST_TIMEOUT = 8.0;
+    private const REQUEST_TIMEOUT = 10.0;
+    private const SEARCH_TIMEOUT = 6.0;
 
     public function getConfigTreeBuilder(): TreeBuilder
     {
@@ -30,6 +31,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('privateKey')->isRequired()->cannotBeEmpty()->end()
                         ->floatNode('connectionTimeout')->defaultValue(self::CONNECTION_TIMEOUT)->end()
                         ->floatNode('requestTimeout')->defaultValue(self::REQUEST_TIMEOUT)->end()
+                        ->floatNode('searchTimeout')->defaultValue(self::SEARCH_TIMEOUT)->end()
                     ->end()
                     ->end()
                 ->end()

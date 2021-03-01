@@ -7,7 +7,7 @@ namespace Answear\LuigisBoxBundle\Tests\Unit\Service;
 use Answear\LuigisBoxBundle\Exception\BadRequestException;
 use Answear\LuigisBoxBundle\Factory\SearchFactory;
 use Answear\LuigisBoxBundle\Response\Search;
-use Answear\LuigisBoxBundle\Service\Client;
+use Answear\LuigisBoxBundle\Service\SearchClient;
 use Answear\LuigisBoxBundle\Service\SearchRequest;
 use Answear\LuigisBoxBundle\Service\SearchRequestInterface;
 use Answear\LuigisBoxBundle\ValueObject\Search\Context;
@@ -73,7 +73,7 @@ class SearchRequestTest extends TestCase
             'ss'
         );
 
-        $client = $this->createMock(Client::class);
+        $client = $this->createMock(SearchClient::class);
         $client->expects($this->once())
             ->method('request')
             ->with($guzzleRequest)

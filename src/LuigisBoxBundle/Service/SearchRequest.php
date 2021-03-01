@@ -19,7 +19,7 @@ use Webmozart\Assert\Assert;
 class SearchRequest implements SearchRequestInterface
 {
     /**
-     * @var Client
+     * @var SearchClient
      */
     private $client;
 
@@ -29,7 +29,7 @@ class SearchRequest implements SearchRequestInterface
     private $searchFactory;
 
     public function __construct(
-        Client $client,
+        SearchClient $client,
         SearchFactory $searchFactory
     ) {
         $this->client = $client;

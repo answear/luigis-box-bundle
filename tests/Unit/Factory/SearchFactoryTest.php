@@ -39,6 +39,7 @@ class SearchFactoryTest extends TestCase
                     'privateKey' => 'key',
                     'connectionTimeout' => 5.0,
                     'requestTimeout' => 5.0,
+                    'searchTimeout' => 2.0,
                 ],
             ]
         );
