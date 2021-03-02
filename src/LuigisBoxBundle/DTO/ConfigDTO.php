@@ -31,18 +31,25 @@ class ConfigDTO
      */
     private $requestTimeout;
 
+    /**
+     * @var float
+     */
+    private $searchTimeout;
+
     public function __construct(
         string $host,
         string $publicKey,
         string $privateKey,
         float $connectionTimeout,
-        float $requestTimeout
+        float $requestTimeout,
+        float $searchTimeout
     ) {
         $this->host = $host;
         $this->publicKey = $publicKey;
         $this->privateKey = $privateKey;
         $this->connectionTimeout = $connectionTimeout;
         $this->requestTimeout = $requestTimeout;
+        $this->searchTimeout = $searchTimeout;
     }
 
     public function getHost(): string
@@ -68,5 +75,10 @@ class ConfigDTO
     public function getRequestTimeout(): float
     {
         return $this->requestTimeout;
+    }
+
+    public function getSearchTimeout(): float
+    {
+        return $this->searchTimeout;
     }
 }

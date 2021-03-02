@@ -157,6 +157,7 @@ class ConfigurationTest extends TestCase
                             'privateKey' => 'private',
                             'connectionTimeout' => 23.2,
                             'requestTimeout' => 17,
+                            'searchTimeout' => 4,
                         ],
                         'other_config_name' => [
                             'publicKey' => 'public',

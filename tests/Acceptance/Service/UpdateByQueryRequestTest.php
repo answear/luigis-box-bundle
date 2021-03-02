@@ -83,6 +83,7 @@ class UpdateByQueryRequestTest extends TestCase
                     'privateKey' => '',
                     'connectionTimeout' => 5.0,
                     'requestTimeout' => 5.0,
+                    'searchTimeout' => 3.0,
                 ],
             ]
         );

@@ -25,7 +25,8 @@ answear_luigis_box:
             publicKey: 'your_public_key'
             privateKey: 'your_private_key'
             connectionTimeout: 4.0 #default
-            requestTimeout: 8.0 #default
+            requestTimeout: 10.0 #default
+            searchTimeout: 6.0 #default
         second_config_name:
             publicKey: 'your_public_key'
             privateKey: 'your_private_key'

@@ -1,5 +1,9 @@
 v2.x
 ===================
+* 2.1.0
+  * added `searchTimeout` option (default 6 seconds) to split timeouts between API updates and searching.
+  * revert default value for `requestTimeout` to 10 seconds
+
 * 2.0.0
   * [BC BREAK] change default connection timeout from 10s to 4s, request timeout from 10s to 8s
   * [BC BREAK] change bundle configuration:

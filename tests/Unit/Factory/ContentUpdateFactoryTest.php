@@ -46,6 +46,7 @@ class ContentUpdateFactoryTest extends TestCase
                     'privateKey' => '',
                     'connectionTimeout' => 5.0,
                     'requestTimeout' => 5.0,
+                    'searchTimeout' => 2.0,
                 ],
             ]
         );
