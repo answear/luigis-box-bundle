@@ -6,6 +6,9 @@ namespace Answear\LuigisBoxBundle\Util;
 
 class AuthenticationUtil
 {
+    public const HEADER_CONTENT_TYPE = 'Content-Type';
+    public const HEADER_DATE = 'date';
+    public const HEADER_AUTHORIZATION = 'Authorization';
     private const DATE_STRING = 'D, d M Y H:i:s T';
     private const CONTENT_TYPE = 'application/json; charset=utf-8';
 
@@ -19,9 +22,9 @@ class AuthenticationUtil
         $digest = self::digest($privateKey, $httpMethod, $endpoint, $date);
 
         return [
-            'Content-Type' => self::CONTENT_TYPE,
-            'date' => self::formatDate($date),
-            'Authorization' => "guzzle {$publicKey}:{$digest}",
+            self::HEADER_CONTENT_TYPE => self::CONTENT_TYPE,
+            self::HEADER_DATE => self::formatDate($date),
+            self::HEADER_AUTHORIZATION => "guzzle {$publicKey}:{$digest}",
         ];
     }
 

@@ -38,7 +38,8 @@ class SearchFactory
                     $this->configProvider->getPublicKey(),
                     $urlQuery
                 )
-            )
+            ),
+            $this->configProvider->getHeaders()
         );
     }
 }

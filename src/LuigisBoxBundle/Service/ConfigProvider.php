@@ -18,6 +18,11 @@ class ConfigProvider
     private $configName;
 
     /**
+     * @var string[]
+     */
+    private $headers = [];
+
+    /**
      * @var ConfigDTO[]
      */
     private $configs;
@@ -72,7 +77,43 @@ class ConfigProvider
         $this->configName = $configName;
     }
 
+    public function setHeader(string $name, string $value): void
+    {
+        $name = trim($name);
+        if (in_array(
+            $name,
+            [
+                AuthenticationUtil::HEADER_CONTENT_TYPE,
+                AuthenticationUtil::HEADER_DATE,
+                AuthenticationUtil::HEADER_AUTHORIZATION,
+            ],
+            true
+        )) {
+            throw new \BadMethodCallException('Reserved header name provided: ' . $name);
+        }
+
+        $this->headers[$name] = $value;
+    }
+
+    public function getHeaders(): array
+    {
+        return $this->headers;
+    }
+
+    public function resetHeaders(): void
+    {
+        $this->headers = [];
+    }
+
+    /**
+     * @deprecated use getAuthorizationHeaders method instead
+     */
     public function getRequestHeaders(string $httpMethod, string $endpoint, \DateTimeInterface $date): array
+    {
+        return $this->getAuthorizationHeaders($httpMethod, $endpoint, $date);
+    }
+
+    public function getAuthorizationHeaders(string $httpMethod, string $endpoint, \DateTimeInterface $date): array
     {
         $configDTO = $this->getConfigDTO();
 
