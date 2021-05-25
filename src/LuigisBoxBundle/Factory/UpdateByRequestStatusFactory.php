@@ -32,7 +32,7 @@ class UpdateByRequestStatusFactory
                 $this->configProvider->getHost() . self::ENDPOINT,
                 $jobId
             ),
-            $this->configProvider->getRequestHeaders('GET', self::ENDPOINT, $now)
+            $this->configProvider->getAuthorizationHeaders('GET', self::ENDPOINT, $now)
         );
     }
 }

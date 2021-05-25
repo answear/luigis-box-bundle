@@ -22,6 +22,30 @@ use PHPUnit\Framework\TestCase;
 class RequestTest extends TestCase
 {
     /**
+     * @var ConfigProvider
+     */
+    private $configProvider;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->configProvider = new ConfigProvider(
+            'config_name',
+            [
+                'config_name' => [
+                    'host' => 'host',
+                    'publicKey' => '',
+                    'privateKey' => '',
+                    'connectionTimeout' => 5.0,
+                    'requestTimeout' => 5.0,
+                    'searchTimeout' => 2.0,
+                ],
+            ]
+        );
+    }
+
+    /**
      * @test
      * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\RequestDataProvider::forContentUpdate()
      */
@@ -35,10 +59,10 @@ class RequestTest extends TestCase
             $collection
         );
 
-        $this->assertTrue($response->isSuccess());
-        $this->assertSame(\count($collection), $response->getOkCount());
-        $this->assertSame(0, $response->getErrorsCount());
-        $this->assertSame([], $response->getErrors());
+        self::assertTrue($response->isSuccess());
+        self::assertSame(\count($collection), $response->getOkCount());
+        self::assertSame(0, $response->getErrorsCount());
+        self::assertSame([], $response->getErrors());
     }
 
     /**
@@ -55,10 +79,10 @@ class RequestTest extends TestCase
             $collection
         );
 
-        $this->assertTrue($response->isSuccess());
-        $this->assertSame(\count($collection), $response->getOkCount());
-        $this->assertSame(0, $response->getErrorsCount());
-        $this->assertSame([], $response->getErrors());
+        self::assertTrue($response->isSuccess());
+        self::assertSame(\count($collection), $response->getOkCount());
+        self::assertSame(0, $response->getErrorsCount());
+        self::assertSame([], $response->getErrors());
     }
 
     /**
@@ -75,10 +99,10 @@ class RequestTest extends TestCase
             $collection
         );
 
-        $this->assertTrue($response->isSuccess());
-        $this->assertSame(\count($collection), $response->getOkCount());
-        $this->assertSame(0, $response->getErrorsCount());
-        $this->assertSame([], $response->getErrors());
+        self::assertTrue($response->isSuccess());
+        self::assertSame(\count($collection), $response->getOkCount());
+        self::assertSame(0, $response->getErrorsCount());
+        self::assertSame([], $response->getErrors());
     }
 
     /**
@@ -95,13 +119,13 @@ class RequestTest extends TestCase
             $collection
         );
 
-        $this->assertTrue($response->isSuccess());
-        $this->assertSame(
+        self::assertTrue($response->isSuccess());
+        self::assertSame(
             ($collection instanceof ContentAvailability) ? 1 : \count($collection),
             $response->getOkCount()
         );
-        $this->assertSame(0, $response->getErrorsCount());
-        $this->assertSame([], $response->getErrors());
+        self::assertSame(0, $response->getErrorsCount());
+        self::assertSame([], $response->getErrors());
     }
 
     private function getRequestService(
@@ -110,20 +134,6 @@ class RequestTest extends TestCase
         array $apiResponse
     ): RequestInterface {
         $endpoint = '/v1/content';
-
-        $configProvider = new ConfigProvider(
-            'config_name',
-            [
-                'config_name' => [
-                    'host' => 'host',
-                    'publicKey' => '',
-                    'privateKey' => '',
-                    'connectionTimeout' => 5.0,
-                    'requestTimeout' => 5.0,
-                    'searchTimeout' => 2.0,
-                ],
-            ]
-        );
 
         $expectedRequest = new \GuzzleHttp\Psr7\Request(
             $httpMethod,
@@ -138,10 +148,10 @@ class RequestTest extends TestCase
         $serializer = new LuigisBoxSerializer();
 
         $client = $this->createMock(Client::class);
-        $client->expects($this->once())
+        $client->expects(self::once())
             ->method('request')
             ->with(
-                $this->callback(
+                self::callback(
                     static function (\GuzzleHttp\Psr7\Request $currentRequest) use ($expectedRequest) {
                         $currentHeaders = $currentRequest->getHeaders();
                         $expectedHeaders = $expectedRequest->getHeaders();
@@ -177,9 +187,9 @@ class RequestTest extends TestCase
 
         return new Request(
             $client,
-            new ContentUpdateFactory($configProvider, $serializer),
-            new PartialContentUpdateFactory($configProvider, $serializer),
-            new ContentRemovalFactory($configProvider, $serializer),
+            new ContentUpdateFactory($this->configProvider, $serializer),
+            new PartialContentUpdateFactory($this->configProvider, $serializer),
+            new ContentRemovalFactory($this->configProvider, $serializer),
         );
     }
 }

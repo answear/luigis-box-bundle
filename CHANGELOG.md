@@ -1,5 +1,9 @@
 v2.x
 ===================
+* 2.2.0
+  * added `(array) $headers` to ConfigProvider. You can now pass some headers on searching.
+  * (Deprecated) `ConfigProvider::getRequestHeaders()` method. Use `ConfigProvider::getAuthorizationHeaders` if you need to. 
+
 * 2.1.0
   * added `searchTimeout` option (default 6 seconds) to split timeouts between API updates and searching.
   * revert default value for `requestTimeout` to 10 seconds

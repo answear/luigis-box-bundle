@@ -41,11 +41,22 @@ If you have more configurations you can change them as follows
 use Answear\LuigisBoxBundle\Service\ConfigProvider;
 
 /** @var ConfigProvider $configProvider **/
-
 $configProvider->setConfig('your_config_name');
 ```
 
 and use application as before.
+
+If you need to pass custom headers to search request do it as follows
+
+```php
+use Answear\LuigisBoxBundle\Service\ConfigProvider;
+
+/** @var ConfigProvider $configProvider **/
+$configProvider->setHeader('header-name', 'header-value');
+
+/* reset all headers */
+$configProvider->resetHeaders();
+```
 
 ## Usage
 
