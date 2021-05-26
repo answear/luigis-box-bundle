@@ -12,7 +12,7 @@
     "symfony/http-kernel": "^4.1",
     "php-http/guzzle6-adapter": "^1.1",
     "symfony/serializer": "^4.4",
-    "symfony/property-access": "^4.1"
+    "symfony/property-access": "^4.1 || ^5.2"
   },
   "require-dev": {
     "roave/security-advisories": "dev-master",
