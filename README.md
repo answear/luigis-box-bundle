@@ -14,6 +14,7 @@ composer require answear/luigis-box-bundle
 ## Setup
 
 * provide required config data: `publicKey` and `privateKey`
+* `searchCacheTtl` is time to live for Luigi cache request in seconds (max 300 seconds - this is Luigi's Box limit)
 
 ```yaml
 # config/packages/answear_luigis_box.yaml
@@ -27,6 +28,7 @@ answear_luigis_box:
             connectionTimeout: 4.0 #default
             requestTimeout: 10.0 #default
             searchTimeout: 6.0 #default
+            searchCacheTtl: 0 #default
         second_config_name:
             publicKey: 'your_public_key'
             privateKey: 'your_private_key'

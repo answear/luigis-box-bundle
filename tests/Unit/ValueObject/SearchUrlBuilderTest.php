@@ -6,7 +6,6 @@ namespace Answear\LuigisBoxBundle\Tests\Unit\ValueObject;
 
 use Answear\LuigisBoxBundle\ValueObject\Search\Context;
 use Answear\LuigisBoxBundle\ValueObject\SearchUrlBuilder;
-use function GuzzleHttp\Psr7\parse_query;
 use PHPUnit\Framework\TestCase;
 
 class SearchUrlBuilderTest extends TestCase
@@ -164,9 +163,33 @@ class SearchUrlBuilderTest extends TestCase
 
     private function assertOk(array $query, SearchUrlBuilder $searchBuilder): void
     {
-        $this->assertSame(
-            $query,
-            parse_query($searchBuilder->toUrlQuery())
-        );
+        $this->assertSame($query, $this->parse($searchBuilder->toUrlQuery()));
+    }
+
+    /**
+     * @see \GuzzleHttp\Psr7\Query::parse
+     */
+    private function parse(string $string): array
+    {
+        $decoder = function ($value) {
+            return rawurldecode(str_replace('+', ' ', (string) $value));
+        };
+
+        $result = [];
+        foreach (explode('&', $string) as $kvp) {
+            $parts = explode('=', $kvp, 2);
+            $key = $decoder($parts[0]);
+            $value = isset($parts[1]) ? $decoder($parts[1]) : null;
+            if (!isset($result[$key])) {
+                $result[$key] = $value;
+            } else {
+                if (!is_array($result[$key])) {
+                    $result[$key] = [$result[$key]];
+                }
+                $result[$key][] = $value;
+            }
+        }
+
+        return $result;
     }
 }

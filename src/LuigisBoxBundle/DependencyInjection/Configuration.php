@@ -32,6 +32,7 @@ class Configuration implements ConfigurationInterface
                         ->floatNode('connectionTimeout')->defaultValue(self::CONNECTION_TIMEOUT)->end()
                         ->floatNode('requestTimeout')->defaultValue(self::REQUEST_TIMEOUT)->end()
                         ->floatNode('searchTimeout')->defaultValue(self::SEARCH_TIMEOUT)->end()
+                        ->integerNode('searchCacheTtl')->defaultValue(0)->end()
                     ->end()
                     ->end()
                 ->end()

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Answear\LuigisBoxBundle\Tests\Unit\Factory;
 
 use Answear\LuigisBoxBundle\Factory\SearchFactory;
-use Answear\LuigisBoxBundle\Service\ConfigProvider;
+use Answear\LuigisBoxBundle\Tests\DataProvider\Faker\ExampleConfiguration;
 use Answear\LuigisBoxBundle\ValueObject\SearchUrlBuilder;
 use PHPUnit\Framework\TestCase;
 
@@ -23,28 +23,14 @@ class SearchFactoryTest extends TestCase
 
         $this->assertSame('GET', $request->getMethod());
         $this->assertSame('host/search', $request->getUri()->getPath());
-        $this->assertSame('tracker_id=key&size=10&page=34&q=query-string', $request->getUri()->getQuery());
+        $this->assertSame('tracker_id=public-key&size=10&page=34&q=query-string', $request->getUri()->getQuery());
 
         $this->assertSame('', $request->getBody()->getContents());
     }
 
     private function getFactory(): SearchFactory
     {
-        $configProvider = new ConfigProvider(
-            'config_name',
-            [
-                'config_name' => [
-                    'host' => 'host',
-                    'publicKey' => 'key',
-                    'privateKey' => 'key',
-                    'connectionTimeout' => 5.0,
-                    'requestTimeout' => 5.0,
-                    'searchTimeout' => 2.0,
-                ],
-            ]
-        );
-
-        return new SearchFactory($configProvider);
+        return new SearchFactory(ExampleConfiguration::provideDefaultConfig());
     }
 
     private function getBuilderUrl(): SearchUrlBuilder

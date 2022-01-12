@@ -8,6 +8,7 @@ use Answear\LuigisBoxBundle\Factory\SearchFactory;
 use Answear\LuigisBoxBundle\Service\ConfigProvider;
 use Answear\LuigisBoxBundle\Service\SearchClient;
 use Answear\LuigisBoxBundle\Service\SearchRequest;
+use Answear\LuigisBoxBundle\Tests\DataProvider\Faker\ExampleConfiguration;
 use Answear\LuigisBoxBundle\ValueObject\SearchUrlBuilder;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Uri;
@@ -24,19 +25,7 @@ class SearchRequestTest extends TestCase
     {
         parent::setUp();
 
-        $this->configProvider = new ConfigProvider(
-            'config_name',
-            [
-                'config_name' => [
-                    'host' => 'host',
-                    'publicKey' => '',
-                    'privateKey' => '',
-                    'connectionTimeout' => 5.0,
-                    'requestTimeout' => 5.0,
-                    'searchTimeout' => 2.0,
-                ],
-            ]
-        );
+        $this->configProvider = ExampleConfiguration::provideDefaultConfig();
     }
 
     /**
