@@ -42,4 +42,14 @@ class SearchFactory
             $this->configProvider->getHeaders()
         );
     }
+
+    public function prepareRequestCacheHash(): string
+    {
+        $requestTtl = $this->configProvider->getSearchCacheTtl();
+        if (0 === $requestTtl) {
+            return (string) time();
+        }
+
+        return (string) intdiv(time(), $requestTtl);
+    }
 }

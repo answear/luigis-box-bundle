@@ -37,6 +37,7 @@ class ConfigProvider
             Assert::keyExists($item, 'connectionTimeout');
             Assert::keyExists($item, 'requestTimeout');
             Assert::keyExists($item, 'searchTimeout');
+            Assert::keyExists($item, 'searchCacheTtl');
 
             $configsDTO[$configName] = new ConfigDTO(
                 rtrim($item['host'], '/'),
@@ -44,7 +45,8 @@ class ConfigProvider
                 $item['privateKey'],
                 $item['connectionTimeout'],
                 $item['requestTimeout'],
-                $item['searchTimeout']
+                $item['searchTimeout'],
+                $item['searchCacheTtl']
             );
         }
 
@@ -149,6 +151,11 @@ class ConfigProvider
     public function getSearchTimeout(): float
     {
         return $this->getConfigDTO()->getSearchTimeout();
+    }
+
+    public function getSearchCacheTtl(): int
+    {
+        return $this->getConfigDTO()->getSearchCacheTtl();
     }
 
     private function getConfigDTO(): ConfigDTO

@@ -109,6 +109,54 @@ class ConfigurationTest extends TestCase
             ],
             'The path "answear_luigis_box.configs.config_name.host" cannot contain an empty value, but got "".',
         ];
+
+        yield [
+            [
+                [
+                    'default_config' => 'other_config_name',
+                    'configs' => [
+                        'config_name' => [
+                            'host' => 'host',
+                            'publicKey' => 'public',
+                            'privateKey' => 'private',
+                            'connectionTimeout' => 23.2,
+                            'requestTimeout' => 17,
+                            'searchTimeout' => 4,
+                            'searchCacheTtl' => '8',
+                        ],
+                        'other_config_name' => [
+                            'publicKey' => 'public',
+                            'privateKey' => 'private',
+                        ],
+                    ],
+                ],
+            ],
+            'Invalid type for path "answear_luigis_box.configs.config_name.searchCacheTtl". Expected ',
+        ];
+
+        yield [
+            [
+                [
+                    'default_config' => 'other_config_name',
+                    'configs' => [
+                        'config_name' => [
+                            'host' => 'host',
+                            'publicKey' => 'public',
+                            'privateKey' => 'private',
+                            'connectionTimeout' => 23.2,
+                            'requestTimeout' => 17,
+                            'searchTimeout' => 4,
+                            'searchCacheTtl' => 8.5,
+                        ],
+                        'other_config_name' => [
+                            'publicKey' => 'public',
+                            'privateKey' => 'private',
+                        ],
+                    ],
+                ],
+            ],
+            'Invalid type for path "answear_luigis_box.configs.config_name.searchCacheTtl". Expected ',
+        ];
     }
 
     public function provideValidConfig(): iterable
@@ -158,6 +206,78 @@ class ConfigurationTest extends TestCase
                             'connectionTimeout' => 23.2,
                             'requestTimeout' => 17,
                             'searchTimeout' => 4,
+                        ],
+                        'other_config_name' => [
+                            'publicKey' => 'public',
+                            'privateKey' => 'private',
+                        ],
+                    ],
+                ],
+            ],
+            'other_config_name',
+        ];
+
+        yield [
+            [
+                [
+                    'default_config' => 'other_config_name',
+                    'configs' => [
+                        'config_name' => [
+                            'host' => 'host',
+                            'publicKey' => 'public',
+                            'privateKey' => 'private',
+                            'connectionTimeout' => 23.2,
+                            'requestTimeout' => 17,
+                            'searchTimeout' => 4,
+                            'searchCacheTtl' => 0,
+                        ],
+                        'other_config_name' => [
+                            'publicKey' => 'public',
+                            'privateKey' => 'private',
+                        ],
+                    ],
+                ],
+            ],
+            'other_config_name',
+        ];
+
+        yield [
+            [
+                [
+                    'default_config' => 'other_config_name',
+                    'configs' => [
+                        'config_name' => [
+                            'host' => 'host',
+                            'publicKey' => 'public',
+                            'privateKey' => 'private',
+                            'connectionTimeout' => 23.2,
+                            'requestTimeout' => 17,
+                            'searchTimeout' => 4,
+                            'searchCacheTtl' => 100,
+                        ],
+                        'other_config_name' => [
+                            'publicKey' => 'public',
+                            'privateKey' => 'private',
+                        ],
+                    ],
+                ],
+            ],
+            'other_config_name',
+        ];
+
+        yield [
+            [
+                [
+                    'default_config' => 'other_config_name',
+                    'configs' => [
+                        'config_name' => [
+                            'host' => 'host',
+                            'publicKey' => 'public',
+                            'privateKey' => 'private',
+                            'connectionTimeout' => 23.2,
+                            'requestTimeout' => 17,
+                            'searchTimeout' => 4,
+                            'searchCacheTtl' => 500,
                         ],
                         'other_config_name' => [
                             'publicKey' => 'public',

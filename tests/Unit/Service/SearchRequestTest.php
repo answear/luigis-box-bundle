@@ -18,6 +18,8 @@ use PHPUnit\Framework\TestCase;
 
 class SearchRequestTest extends TestCase
 {
+    private const CACHE_TTL = 'cache-ttl';
+
     /**
      * @test
      * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\SearchDataProvider::provideSuccessObjects()
@@ -27,6 +29,7 @@ class SearchRequestTest extends TestCase
         $requestService = $this->getRequestService($urlBuilder, $arrayRawResponse);
         $response = $requestService->search($urlBuilder);
 
+        $this->assertStringContainsString(self::CACHE_TTL, $response->getSearchUrl());
         $this->assertSame($urlBuilder->toUrlQuery(), strstr($response->getSearchUrl(), '&v=', true));
         $rawResults = $arrayRawResponse['results'];
         $this->assertSame($rawResults['query'], $response->getQuery());
@@ -89,6 +92,9 @@ class SearchRequestTest extends TestCase
         $searchFactory->expects($this->once())
             ->method('prepareRequest')
             ->with($searchUrlBuilder)->willReturn($guzzleRequest);
+        $searchFactory->expects($this->once())
+            ->method('prepareRequestCacheHash')
+            ->willReturn(self::CACHE_TTL);
 
         return new SearchRequest($client, $searchFactory);
     }

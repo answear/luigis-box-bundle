@@ -6,6 +6,8 @@ namespace Answear\LuigisBoxBundle\DTO;
 
 class ConfigDTO
 {
+    private const MAX_SEARCH_CACHE_TTL = 300;
+
     /**
      * @var string
      */
@@ -36,20 +38,31 @@ class ConfigDTO
      */
     private $searchTimeout;
 
+    /**
+     * @var int
+     */
+    private $searchCacheTtl;
+
     public function __construct(
         string $host,
         string $publicKey,
         string $privateKey,
         float $connectionTimeout,
         float $requestTimeout,
-        float $searchTimeout
+        float $searchTimeout,
+        int $searchCacheTtl
     ) {
+        if ($searchCacheTtl < 0) {
+            throw new \InvalidArgumentException('searchCacheTtl cannot be negative.');
+        }
+
         $this->host = $host;
         $this->publicKey = $publicKey;
         $this->privateKey = $privateKey;
         $this->connectionTimeout = $connectionTimeout;
         $this->requestTimeout = $requestTimeout;
         $this->searchTimeout = $searchTimeout;
+        $this->searchCacheTtl = min($searchCacheTtl, self::MAX_SEARCH_CACHE_TTL);
     }
 
     public function getHost(): string
@@ -80,5 +93,10 @@ class ConfigDTO
     public function getSearchTimeout(): float
     {
         return $this->searchTimeout;
+    }
+
+    public function getSearchCacheTtl(): int
+    {
+        return $this->searchCacheTtl;
     }
 }

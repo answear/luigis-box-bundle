@@ -1,5 +1,15 @@
 v2.x
 ===================
+
+* 2.5.0
+  * allowed change search cache ttl: added `searchCacheTtl` option with default 0 (no cache)
+
+* 2.4.0
+  * `guzzlehttp` is used instead of `guzzle adapter`
+
+* 2.3.0
+  * `symfony/*` dependency updated
+
 * 2.2.0
   * added `(array) $headers` to ConfigProvider. You can now pass some headers on searching.
   * (Deprecated) `ConfigProvider::getRequestHeaders()` method. Use `ConfigProvider::getAuthorizationHeaders` if you need to. 

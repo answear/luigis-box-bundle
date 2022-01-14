@@ -51,7 +51,7 @@ class SearchRequest implements SearchRequestInterface
         Assert::notEmpty($url);
 
         return new SearchResponse(
-            $url . '&v=' . $this->getUniqueStamp(),
+            $url . '&v=' . $this->searchFactory->prepareRequestCacheHash(),
             $this->handleResponse($request, $this->client->request($request))
         );
     }
@@ -82,10 +82,5 @@ class SearchRequest implements SearchRequestInterface
         }
 
         return $decoded;
-    }
-
-    private function getUniqueStamp(): string
-    {
-        return (string) time();
     }
 }

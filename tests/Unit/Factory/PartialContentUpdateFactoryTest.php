@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Answear\LuigisBoxBundle\Tests\Unit\Factory;
 
 use Answear\LuigisBoxBundle\Factory\PartialContentUpdateFactory;
-use Answear\LuigisBoxBundle\Service\ConfigProvider;
 use Answear\LuigisBoxBundle\Service\LuigisBoxSerializer;
+use Answear\LuigisBoxBundle\Tests\DataProvider\Faker\ExampleConfiguration;
 use Answear\LuigisBoxBundle\ValueObject\ContentAvailability;
 use Answear\LuigisBoxBundle\ValueObject\ContentAvailabilityCollection;
 use PHPUnit\Framework\TestCase;
@@ -45,25 +45,11 @@ class PartialContentUpdateFactoryTest extends TestCase
 
     private function getFactory(): PartialContentUpdateFactory
     {
-        $configProvider = new ConfigProvider(
-            'config_name',
-            [
-                'config_name' => [
-                    'host' => 'host',
-                    'publicKey' => '',
-                    'privateKey' => '',
-                    'connectionTimeout' => 5.0,
-                    'requestTimeout' => 5.0,
-                    'searchTimeout' => 2.0,
-                ],
-            ]
-        );
-
         $serializer = $this->createMock(LuigisBoxSerializer::class);
         $serializer->expects($this->once())
             ->method('serialize')
             ->willReturn('serialized');
 
-        return new PartialContentUpdateFactory($configProvider, $serializer);
+        return new PartialContentUpdateFactory(ExampleConfiguration::provideDefaultConfig(), $serializer);
     }
 }

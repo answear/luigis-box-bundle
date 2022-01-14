@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Answear\LuigisBoxBundle\Tests\Unit\Factory;
 
 use Answear\LuigisBoxBundle\Factory\ContentUpdateFactory;
-use Answear\LuigisBoxBundle\Service\ConfigProvider;
 use Answear\LuigisBoxBundle\Service\LuigisBoxSerializer;
+use Answear\LuigisBoxBundle\Tests\DataProvider\Faker\ExampleConfiguration;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdate;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdateCollection;
 use Answear\LuigisBoxBundle\ValueObject\ObjectsInterface;
@@ -37,27 +37,13 @@ class ContentUpdateFactoryTest extends TestCase
 
     private function getFactory(ObjectsInterface $objects): ContentUpdateFactory
     {
-        $configProvider = new ConfigProvider(
-            'config_name',
-            [
-                'config_name' => [
-                    'host' => 'host',
-                    'publicKey' => '',
-                    'privateKey' => '',
-                    'connectionTimeout' => 5.0,
-                    'requestTimeout' => 5.0,
-                    'searchTimeout' => 2.0,
-                ],
-            ]
-        );
-
         $serializer = $this->createMock(LuigisBoxSerializer::class);
         $serializer->expects($this->once())
             ->method('serialize')
             ->with($objects)
             ->willReturn('serialized');
 
-        return new ContentUpdateFactory($configProvider, $serializer);
+        return new ContentUpdateFactory(ExampleConfiguration::provideDefaultConfig(), $serializer);
     }
 
     private function getObjects(): ContentUpdateCollection

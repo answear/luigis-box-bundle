@@ -7,10 +7,10 @@ namespace Answear\LuigisBoxBundle\Tests\Acceptance\Service;
 use Answear\LuigisBoxBundle\Factory\UpdateByRequestFactory;
 use Answear\LuigisBoxBundle\Factory\UpdateByRequestStatusFactory;
 use Answear\LuigisBoxBundle\Service\Client;
-use Answear\LuigisBoxBundle\Service\ConfigProvider;
 use Answear\LuigisBoxBundle\Service\LuigisBoxSerializer;
 use Answear\LuigisBoxBundle\Service\UpdateByQueryRequest;
 use Answear\LuigisBoxBundle\Service\UpdateByQueryRequestInterface;
+use Answear\LuigisBoxBundle\Tests\DataProvider\Faker\ExampleConfiguration;
 use Answear\LuigisBoxBundle\ValueObject\UpdateByQuery;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Uri;
@@ -74,20 +74,6 @@ class UpdateByQueryRequestTest extends TestCase
         string $expectedContent,
         array $apiResponse
     ): UpdateByQueryRequestInterface {
-        $configProvider = new ConfigProvider(
-            'config_name',
-            [
-                'config_name' => [
-                    'host' => 'host',
-                    'publicKey' => '',
-                    'privateKey' => '',
-                    'connectionTimeout' => 5.0,
-                    'requestTimeout' => 5.0,
-                    'searchTimeout' => 3.0,
-                ],
-            ]
-        );
-
         $expectedRequest = new \GuzzleHttp\Psr7\Request(
             $httpMethod,
             new Uri('host' . $endpoint),
@@ -138,6 +124,8 @@ class UpdateByQueryRequestTest extends TestCase
                     json_encode($apiResponse, JSON_THROW_ON_ERROR, 512)
                 )
             );
+
+        $configProvider = ExampleConfiguration::provideDefaultConfig();
 
         return new UpdateByQueryRequest(
             $client,
