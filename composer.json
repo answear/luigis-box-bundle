@@ -4,24 +4,24 @@
   "type": "symfony-bundle",
   "license": "MIT",
   "require": {
-    "php": ">=7.3",
+    "php": ">=7.4|^8.0",
     "ext-json": "*",
     "marc-mabe/php-enum": "^3.0|^4.3",
     "webmozart/assert": "^1.3",
-    "symfony/validator": "^4.1 || ^5.0",
-    "symfony/http-kernel": "^4.1 || ^5.0",
+    "symfony/validator": "^5.4|^6.0",
+    "symfony/http-kernel": "^5.4|^6.0",
     "guzzlehttp/guzzle": "^6.0 || ^7.0",
-    "symfony/serializer": "^4.4 || ^5.0",
-    "symfony/property-access": "^4.1 || ^5.0"
+    "symfony/serializer": "^5.4|^6.0",
+    "symfony/property-access": "^5.4|^6.0"
   },
   "require-dev": {
     "roave/security-advisories": "dev-master",
-    "phpunit/phpunit": "^8.0",
-    "symfony/phpunit-bridge": "^5.0",
-    "phpro/grumphp": "^1.3.0",
-    "friendsofphp/php-cs-fixer": "^2.16",
-    "phpstan/phpstan": "^0.12.32",
-    "phpstan/phpstan-webmozart-assert": "^0.12.2",
+    "phpunit/phpunit": "^9.5",
+    "symfony/phpunit-bridge": "6.1.*",
+    "phpro/grumphp": "^1.5.0",
+    "friendsofphp/php-cs-fixer": "^3.4",
+    "phpstan/phpstan": "^1.4",
+    "phpstan/phpstan-webmozart-assert": "^1.0",
     "matthiasnoback/symfony-config-test": "^4.2"
   },
   "autoload": {
@@ -45,6 +45,11 @@
   "extra": {
     "grumphp": {
       "config-default-path": "grumphp.yaml"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "phpro/grumphp": true
     }
   }
 }
