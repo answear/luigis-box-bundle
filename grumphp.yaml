@@ -19,7 +19,7 @@ grumphp:
         phpcsfixer2:
             allow_risky: true
             cache_file: ~
-            config: './.php_cs'
+            config: './.php-cs-fixer.php'
             using_cache: true
             verbose: true
         phpstan:
