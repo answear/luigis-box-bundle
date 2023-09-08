@@ -58,6 +58,11 @@ class SearchUrlBuilder
     private $facets;
 
     /**
+     * @var int|null
+     */
+    private $dynamicFacetsSize;
+
+    /**
      * @var int
      */
     private $page;
@@ -250,6 +255,13 @@ class SearchUrlBuilder
         return $this;
     }
 
+    public function setDynamicFacetsSize(int $size): self
+    {
+        $this->dynamicFacetsSize = $size;
+
+        return $this;
+    }
+
     public function setFixits(bool $fixits): self
     {
         $this->useFixits = $fixits;
@@ -357,6 +369,10 @@ class SearchUrlBuilder
 
         if (null !== $this->facets) {
             $queryFields['facets'] = $this->facets;
+        }
+
+        if (null !== $this->dynamicFacetsSize) {
+            $queryFields['dynamic_facets_size'] = $this->dynamicFacetsSize;
         }
 
         if (null !== $this->useFixits) {

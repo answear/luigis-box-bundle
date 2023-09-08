@@ -111,6 +111,10 @@ class SearchUrlBuilderTest extends TestCase
         $query['facets'] = 'brand,attribute';
         $this->assertOk($query, $searchBuilder);
 
+        $searchBuilder->setDynamicFacetsSize(5);
+        $query['dynamic_facets_size'] = '5';
+        $this->assertOk($query, $searchBuilder);
+
         $searchBuilder->setFixits(false);
         $query['use_fixits'] = '0';
         $this->assertOk($query, $searchBuilder);
@@ -154,9 +158,9 @@ class SearchUrlBuilderTest extends TestCase
         $query['context[freshness_field]'] = 'freshness';
         $this->assertOk($query, $searchBuilder);
 
-        //simply check url string
+        // simply check url string
         $this->assertSame(
-            'size=13&page=3&q=to+search+query&qu=1&user_id=user-id&f%5B%5D=brand%3AElo+%26+Hot16&f%5B%5D=category%3ATop&f%5B%5D=category%3AJeans&f%5B%5D=price%3A5%7C2&f_must%5B%5D=brand%3ABrand16&f_must%5B%5D=category%3AGeorge&f_must%5B%5D=category%3APrince&sort=price%3Aasc&quicksearch_types=price%2Ctitle&facets=brand%2Cattribute&use_fixits=0&prefer%5B%5D=category%3AGadgets&prefer%5B%5D=type%3AProducts&prefer%5B%5D=type%3ACategory&hit_fields=brand%2Cattribute&context%5Bgeo_location%5D=12.31%2C24.271&context%5Bgeo_location_field%5D=geolocation&context%5Bavailability_field%5D=availability&context%5Bboost_field%5D=boost&context%5Bfreshness_field%5D=freshness',
+            'size=13&page=3&q=to+search+query&qu=1&user_id=user-id&f%5B%5D=brand%3AElo+%26+Hot16&f%5B%5D=category%3ATop&f%5B%5D=category%3AJeans&f%5B%5D=price%3A5%7C2&f_must%5B%5D=brand%3ABrand16&f_must%5B%5D=category%3AGeorge&f_must%5B%5D=category%3APrince&sort=price%3Aasc&quicksearch_types=price%2Ctitle&facets=brand%2Cattribute&dynamic_facets_size=5&use_fixits=0&prefer%5B%5D=category%3AGadgets&prefer%5B%5D=type%3AProducts&prefer%5B%5D=type%3ACategory&hit_fields=brand%2Cattribute&context%5Bgeo_location%5D=12.31%2C24.271&context%5Bgeo_location_field%5D=geolocation&context%5Bavailability_field%5D=availability&context%5Bboost_field%5D=boost&context%5Bfreshness_field%5D=freshness',
             $searchBuilder->toUrlQuery()
         );
     }
