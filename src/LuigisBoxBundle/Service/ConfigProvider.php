@@ -40,9 +40,9 @@ class ConfigProvider
             Assert::keyExists($item, 'searchCacheTtl');
 
             $configsDTO[$configName] = new ConfigDTO(
-                rtrim($item['host'], '/'),
                 $item['publicKey'],
                 $item['privateKey'],
+                rtrim($item['host'], '/'),
                 $item['connectionTimeout'],
                 $item['requestTimeout'],
                 $item['searchTimeout'],
@@ -63,6 +63,20 @@ class ConfigProvider
 
         $this->configName = $defaultConfigName;
         $this->configs = $configsDTO;
+    }
+
+    public function addConfig(string $configName, ConfigDTO $configDTO): void
+    {
+        Assert::keyNotExists(
+            $this->configs,
+            $configName,
+            sprintf(
+                'Configuration with key "%s" already exists.',
+                $configName,
+            )
+        );
+
+        $this->configs[$configName] = $configDTO;
     }
 
     public function setConfig(string $configName): void

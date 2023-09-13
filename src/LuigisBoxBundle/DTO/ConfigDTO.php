@@ -44,13 +44,13 @@ class ConfigDTO
     private $searchCacheTtl;
 
     public function __construct(
-        string $host,
         string $publicKey,
         string $privateKey,
-        float $connectionTimeout,
-        float $requestTimeout,
-        float $searchTimeout,
-        int $searchCacheTtl
+        string $host = 'https://live.luigisbox.com',
+        float $connectionTimeout = 4.0,
+        float $requestTimeout = 10.0,
+        float $searchTimeout = 6.0,
+        int $searchCacheTtl = 0
     ) {
         if ($searchCacheTtl < 0) {
             throw new \InvalidArgumentException('searchCacheTtl cannot be negative.');
