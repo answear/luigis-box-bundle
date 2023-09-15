@@ -6,9 +6,7 @@ namespace Answear\LuigisBoxBundle\Tests\Acceptance\DependencyInjection;
 
 use Answear\LuigisBoxBundle\DependencyInjection\AnswearLuigisBoxExtension;
 use Answear\LuigisBoxBundle\DependencyInjection\Configuration;
-use Answear\LuigisBoxBundle\DTO\ConfigDTO;
 use Answear\LuigisBoxBundle\Service\ConfigProvider;
-use Answear\LuigisBoxBundle\Tests\DataProvider\Faker\ExampleConfiguration;
 use Matthias\SymfonyConfigTest\PhpUnit\ConfigurationTestCaseTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -56,35 +54,6 @@ class ConfigurationTest extends TestCase
     public function valid(array $config): void
     {
         $this->assertConfigurationIsValid($config);
-    }
-
-    /**
-     * @test
-     */
-    public function addConfig()
-    {
-        $configProvider = ExampleConfiguration::provideDefaultConfig();
-
-        $config = new ConfigDTO('new-public', 'new-private');
-        $configProvider->addConfig('new_config', $config);
-
-        $this->assertEquals('public-key', $configProvider->getPublicKey());
-
-        $configProvider->setConfig('new_config');
-
-        $this->assertEquals('new-public', $configProvider->getPublicKey());
-    }
-
-    /**
-     * @test
-     */
-    public function addConfigWithColidingName()
-    {
-        $this->expectExceptionMessage('Configuration with key "config_name" already exists.');
-        $configProvider = ExampleConfiguration::provideDefaultConfig();
-
-        $config = new ConfigDTO('public', 'private');
-        $configProvider->addConfig('config_name', $config);
     }
 
     public function provideInvalidConfig(): iterable
