@@ -60,6 +60,18 @@ $configProvider->setHeader('header-name', 'header-value');
 $configProvider->resetHeaders();
 ```
 
+### Dynamic configurations
+
+You can pass additional configuration.
+
+```php
+use Answear\LuigisBoxBundle\DTO\ConfigDTO;
+use Answear\LuigisBoxBundle\Service\ConfigProvider;
+
+/** @var ConfigProvider $configProvider **/
+$configProvider->addConfig('your_config_name', new ConfigDTO(...));
+```
+
 ## Usage
 
 ### Content requests
