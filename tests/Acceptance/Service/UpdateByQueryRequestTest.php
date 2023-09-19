@@ -106,7 +106,7 @@ class UpdateByQueryRequestTest extends TestCase
                             case $currentRequest->getUri()->getQuery() !== $expectedRequest->getUri()->getQuery():
                             case $currentHeaders !== $expectedHeaders:
                             case $currentContent !== $expectedContent:
-                                //check equals for showing difference
+                                // check equals for showing difference
                                 self::assertEquals($expectedContent, $currentContent);
                                 self::assertEquals($expectedRequest, $currentRequest);
 

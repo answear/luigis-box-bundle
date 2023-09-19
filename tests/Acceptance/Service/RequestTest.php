@@ -155,7 +155,7 @@ class RequestTest extends TestCase
                             case $currentRequest->getUri()->getPath() !== $expectedRequest->getUri()->getPath():
                             case $currentHeaders !== $expectedHeaders:
                             case $currentContent !== $expectedContent:
-                                //check equals for showing difference
+                                // check equals for showing difference
                                 self::assertEquals($expectedContent, $currentContent);
                                 self::assertEquals($expectedRequest, $currentRequest);
 

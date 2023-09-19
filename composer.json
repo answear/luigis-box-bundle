@@ -16,13 +16,13 @@
   },
   "require-dev": {
     "roave/security-advisories": "dev-master",
-    "phpunit/phpunit": "^9.5",
+    "phpunit/phpunit": "^9.5.23",
     "symfony/phpunit-bridge": "6.1.*",
-    "phpro/grumphp": "^1.5.0",
-    "friendsofphp/php-cs-fixer": "^3.4",
-    "phpstan/phpstan": "^1.4",
-    "phpstan/phpstan-webmozart-assert": "^1.0",
-    "matthiasnoback/symfony-config-test": "^4.2"
+    "phpro/grumphp": "1.13.x",
+    "friendsofphp/php-cs-fixer": "^3.9.5",
+    "phpstan/phpstan": "^1.10.34",
+    "phpstan/phpstan-webmozart-assert": "^1.2.4",
+    "matthiasnoback/symfony-config-test": "^4.3"
   },
   "autoload": {
     "psr-4": {
