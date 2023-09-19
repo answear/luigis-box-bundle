@@ -17,7 +17,6 @@ class ConfigurationTest extends TestCase
 
     /**
      * @test
-     *
      * @dataProvider provideValidConfig
      */
     public function validTest(array $configs, string $expectedConfigName): void
@@ -35,10 +34,9 @@ class ConfigurationTest extends TestCase
 
     /**
      * @test
-     *
      * @dataProvider provideInvalidConfig
      */
-    public function invalid(array $config, string $expectedMessage = null): void
+    public function invalid(array $config, ?string $expectedMessage = null): void
     {
         $this->assertConfigurationIsInvalid(
             $config,
@@ -48,7 +46,6 @@ class ConfigurationTest extends TestCase
 
     /**
      * @test
-     *
      * @dataProvider provideValidConfig
      */
     public function valid(array $config): void
