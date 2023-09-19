@@ -19,7 +19,7 @@ class MalformedResponseException extends \RuntimeException
      */
     private $request;
 
-    public function __construct(string $message, ResponseInterface $response, Request $request, \Throwable $previous = null)
+    public function __construct(string $message, ResponseInterface $response, Request $request, ?\Throwable $previous = null)
     {
         parent::__construct($message, 0, $previous);
 
