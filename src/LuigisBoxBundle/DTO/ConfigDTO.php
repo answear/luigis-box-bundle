@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Answear\LuigisBoxBundle\DTO;
 
+use Answear\LuigisBoxBundle\DependencyInjection\Configuration;
+
 class ConfigDTO
 {
     private const MAX_SEARCH_CACHE_TTL = 300;
@@ -44,13 +46,13 @@ class ConfigDTO
     private $searchCacheTtl;
 
     public function __construct(
-        string $host,
         string $publicKey,
         string $privateKey,
-        float $connectionTimeout,
-        float $requestTimeout,
-        float $searchTimeout,
-        int $searchCacheTtl
+        string $host = Configuration::HOST,
+        float $connectionTimeout = Configuration::CONNECTION_TIMEOUT,
+        float $requestTimeout = Configuration::REQUEST_TIMEOUT,
+        float $searchTimeout = Configuration::SEARCH_TIMEOUT,
+        int $searchCacheTtl = Configuration::SEARCH_CACHE_TIMEOUT
     ) {
         if ($searchCacheTtl < 0) {
             throw new \InvalidArgumentException('searchCacheTtl cannot be negative.');

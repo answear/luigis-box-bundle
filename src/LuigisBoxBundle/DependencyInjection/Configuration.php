@@ -9,10 +9,11 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
-    private const HOST = 'https://live.luigisbox.com';
-    private const CONNECTION_TIMEOUT = 4.0;
-    private const REQUEST_TIMEOUT = 10.0;
-    private const SEARCH_TIMEOUT = 6.0;
+    public const HOST = 'https://live.luigisbox.com';
+    public const CONNECTION_TIMEOUT = 4.0;
+    public const REQUEST_TIMEOUT = 10.0;
+    public const SEARCH_TIMEOUT = 6.0;
+    public const SEARCH_CACHE_TIMEOUT = 0;
 
     public function getConfigTreeBuilder(): TreeBuilder
     {
@@ -32,7 +33,7 @@ class Configuration implements ConfigurationInterface
                         ->floatNode('connectionTimeout')->defaultValue(self::CONNECTION_TIMEOUT)->end()
                         ->floatNode('requestTimeout')->defaultValue(self::REQUEST_TIMEOUT)->end()
                         ->floatNode('searchTimeout')->defaultValue(self::SEARCH_TIMEOUT)->end()
-                        ->integerNode('searchCacheTtl')->defaultValue(0)->end()
+                        ->integerNode('searchCacheTtl')->defaultValue(self::SEARCH_CACHE_TIMEOUT)->end()
                     ->end()
                     ->end()
                 ->end()
