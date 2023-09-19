@@ -1,3 +1,14 @@
+v3.x
+===================
+
+* 3.1.0
+  * allow dynamic configuration
+  * add support for dynamic facets
+
+* 3.0.0
+  * drop Support for Symfony < 5.4
+  * add support for Symfony 6
+
 v2.x
 ===================
 
