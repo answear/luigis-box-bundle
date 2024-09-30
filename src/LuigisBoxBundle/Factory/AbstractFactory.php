@@ -12,20 +12,10 @@ use GuzzleHttp\Psr7\Uri;
 
 abstract class AbstractFactory
 {
-    /**
-     * @var ConfigProvider
-     */
-    private $configProvider;
-
-    /**
-     * @var LuigisBoxSerializer
-     */
-    private $serializer;
-
-    public function __construct(ConfigProvider $configProvider, LuigisBoxSerializer $serializer)
-    {
-        $this->configProvider = $configProvider;
-        $this->serializer = $serializer;
+    public function __construct(
+        private ConfigProvider $configProvider,
+        private LuigisBoxSerializer $serializer,
+    ) {
     }
 
     public function prepareRequest(ObjectsInterface $bodyObject): Request

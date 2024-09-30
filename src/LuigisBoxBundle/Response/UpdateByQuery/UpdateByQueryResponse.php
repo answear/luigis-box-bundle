@@ -10,30 +10,14 @@ class UpdateByQueryResponse
 {
     private const STATUS_URL = 'status_url';
 
-    /**
-     * @var array
-     */
-    private $rawResponse;
+    public readonly array $rawResponse;
 
-    /**
-     * @var int
-     */
-    private $jobId;
+    public readonly int $jobId;
 
     public function __construct(array $response)
     {
         $this->rawResponse = $response;
         $this->jobId = $this->getJobIdFromStatusUrl($response[self::STATUS_URL]);
-    }
-
-    public function getRawResponse(): array
-    {
-        return $this->rawResponse;
-    }
-
-    public function getJobId(): int
-    {
-        return $this->jobId;
     }
 
     private function getJobIdFromStatusUrl(string $statusUrl): int

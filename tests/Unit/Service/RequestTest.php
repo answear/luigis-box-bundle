@@ -11,65 +11,124 @@ use Answear\LuigisBoxBundle\Factory\PartialContentUpdateFactory;
 use Answear\LuigisBoxBundle\Service\Client;
 use Answear\LuigisBoxBundle\Service\Request;
 use Answear\LuigisBoxBundle\Service\RequestInterface;
+use Answear\LuigisBoxBundle\ValueObject\ContentRemoval;
 use Answear\LuigisBoxBundle\ValueObject\ContentRemovalCollection;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdate;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdateCollection;
 use Answear\LuigisBoxBundle\ValueObject\ObjectsInterface;
+use Answear\LuigisBoxBundle\ValueObject\PartialContentUpdate;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Uri;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class RequestTest extends TestCase
 {
-    /**
-     * @test
-     * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\ContentUpdateDataProvider::provideSuccessContentUpdateObjects()
-     */
+    #[Test]
+    #[DataProvider('provideSuccessContentUpdateObjects')]
     public function contentUpdateWithSuccess(ContentUpdateCollection $objects, array $apiResponse): void
     {
         $requestService = $this->getRequestServiceForContentUpdate($objects, $apiResponse);
         $response = $requestService->contentUpdate($objects);
 
         $this->assertTrue($response->isSuccess());
-        $this->assertSame(\count($objects), $response->getOkCount());
-        $this->assertSame(0, $response->getErrorsCount());
-        $this->assertSame([], $response->getErrors());
+        $this->assertSame(\count($objects), $response->okCount);
+        $this->assertSame(0, $response->errorsCount);
+        $this->assertSame([], $response->errors);
     }
 
-    /**
-     * @test
-     * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\ContentUpdateDataProvider::provideSuccessPartialContentUpdateObjects()
-     */
+    public static function provideSuccessContentUpdateObjects(): iterable
+    {
+        $objects = [
+            new ContentUpdate(
+                'test url title',
+                'test.url',
+                'products',
+                [],
+            ),
+            new ContentUpdate(
+                'test url title',
+                'test.url2',
+                'categories',
+                []
+            ),
+        ];
+
+        yield [
+            new ContentUpdateCollection($objects),
+            [
+                'ok_count' => 2,
+            ],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('provideSuccessPartialContentUpdateObjects')]
     public function partialContentUpdateWithSuccess(ContentUpdateCollection $objects, array $apiResponse): void
     {
         $requestService = $this->getRequestServiceForPartialUpdate($objects, $apiResponse);
         $response = $requestService->partialContentUpdate($objects);
 
         $this->assertTrue($response->isSuccess());
-        $this->assertSame(\count($objects), $response->getOkCount());
-        $this->assertSame(0, $response->getErrorsCount());
-        $this->assertSame([], $response->getErrors());
+        $this->assertSame(\count($objects), $response->okCount);
+        $this->assertSame(0, $response->errorsCount);
+        $this->assertSame([], $response->errors);
     }
 
-    /**
-     * @test
-     * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\ContentUpdateDataProvider::provideContentRemovalObjects()
-     */
+    public static function provideSuccessPartialContentUpdateObjects(): iterable
+    {
+        $objects = [
+            new PartialContentUpdate(
+                'test.url',
+                'products',
+                [],
+            ),
+            new PartialContentUpdate(
+                'test.url2',
+                'categories',
+                []
+            ),
+        ];
+
+        yield [
+            new ContentUpdateCollection($objects),
+            [
+                'ok_count' => 2,
+            ],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('provideContentRemovalObjects')]
     public function contentRemovalWithSuccess(ContentRemovalCollection $objects, array $apiResponse): void
     {
         $requestService = $this->getRequestServiceForRemoval($objects, $apiResponse);
         $response = $requestService->contentRemoval($objects);
 
         $this->assertTrue($response->isSuccess());
-        $this->assertSame(\count($objects), $response->getOkCount());
-        $this->assertSame(0, $response->getErrorsCount());
-        $this->assertSame([], $response->getErrors());
+        $this->assertSame(\count($objects), $response->okCount);
+        $this->assertSame(0, $response->errorsCount);
+        $this->assertSame([], $response->errors);
     }
 
-    /**
-     * @test
-     * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\ContentUpdateDataProvider::provideAboveLimitContentUpdateObjects()
-     */
+    public static function provideContentRemovalObjects(): iterable
+    {
+        $objects = [
+            new ContentRemoval('test.url', 'product'),
+            new ContentRemoval('test.url2', 'product'),
+        ];
+
+        yield [
+            new ContentRemovalCollection($objects),
+            [
+                'ok_count' => 2,
+            ],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('provideAboveLimitContentUpdateObjects')]
     public function contentUpdateWithExceededLimit(ContentUpdateCollection $objects): void
     {
         $this->expectException(TooManyItemsException::class);
@@ -79,10 +138,23 @@ class RequestTest extends TestCase
         $requestService->contentUpdate($objects);
     }
 
-    /**
-     * @test
-     * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\ContentUpdateDataProvider::provideAboveLimitPartialContentUpdateObjects()
-     */
+    public static function provideAboveLimitContentUpdateObjects(): iterable
+    {
+        $objects = [];
+        for ($i = 0; $i <= Request::getContentUpdateLimit(); ++$i) {
+            $objects[] = new ContentUpdate(
+                'test url title' . $i,
+                'test.url' . $i,
+                'products',
+                []
+            );
+        }
+
+        yield [new ContentUpdateCollection($objects)];
+    }
+
+    #[Test]
+    #[DataProvider('provideAboveLimitPartialContentUpdateObjects')]
     public function partialContentUpdateWithExceededLimit(ContentUpdateCollection $objects): void
     {
         $this->expectException(TooManyItemsException::class);
@@ -92,9 +164,21 @@ class RequestTest extends TestCase
         $requestService->partialContentUpdate($objects);
     }
 
-    /**
-     * @test
-     */
+    public static function provideAboveLimitPartialContentUpdateObjects(): iterable
+    {
+        $objects = [];
+        for ($i = 0; $i <= Request::getPartialContentUpdateLimit(); ++$i) {
+            $objects[] = new PartialContentUpdate(
+                'test.url' . $i,
+                'products',
+                []
+            );
+        }
+
+        yield [new ContentUpdateCollection($objects)];
+    }
+
+    #[Test]
     public function contentUpdateWithErrors(): void
     {
         $objects = new ContentUpdateCollection(
@@ -133,19 +217,19 @@ class RequestTest extends TestCase
         $response = $requestService->contentUpdate($objects);
 
         $this->assertFalse($response->isSuccess());
-        $this->assertSame(1, $response->getOkCount());
-        $this->assertSame(1, $response->getErrorsCount());
-        $this->assertCount(1, $response->getErrors());
+        $this->assertSame(1, $response->okCount);
+        $this->assertSame(1, $response->errorsCount);
+        $this->assertCount(1, $response->errors);
 
-        $apiResponseError = $response->getErrors()[0];
-        $this->assertSame('test.url2', $apiResponseError->getUrl());
-        $this->assertSame('malformed_input', $apiResponseError->getType());
-        $this->assertSame('incorrect object format', $apiResponseError->getReason());
+        $apiResponseError = $response->errors[0];
+        $this->assertSame('test.url2', $apiResponseError->url);
+        $this->assertSame('malformed_input', $apiResponseError->type);
+        $this->assertSame('incorrect object format', $apiResponseError->reason);
         $this->assertSame(
             [
                 'title' => ['must be filled'],
             ],
-            $apiResponseError->getCausedBy()
+            $apiResponseError->causedBy
         );
     }
 

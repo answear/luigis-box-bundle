@@ -27,36 +27,12 @@ class Request implements RequestInterface
     private const CONTENT_UPDATE_OBJECTS_LIMIT = 100;
     private const PARTIAL_CONTENT_UPDATE_OBJECTS_LIMIT = 50;
 
-    /**
-     * @var Client
-     */
-    private $client;
-
-    /**
-     * @var ContentUpdateFactory
-     */
-    private $contentUpdateFactory;
-
-    /**
-     * @var PartialContentUpdateFactory
-     */
-    private $partialContentUpdateFactory;
-
-    /**
-     * @var ContentRemovalFactory
-     */
-    private $contentRemovalFactory;
-
     public function __construct(
-        Client $client,
-        ContentUpdateFactory $contentUpdateFactory,
-        PartialContentUpdateFactory $partialContentUpdateFactory,
-        ContentRemovalFactory $contentRemovalFactory
+        private Client $client,
+        private ContentUpdateFactory $contentUpdateFactory,
+        private PartialContentUpdateFactory $partialContentUpdateFactory,
+        private ContentRemovalFactory $contentRemovalFactory,
     ) {
-        $this->client = $client;
-        $this->contentUpdateFactory = $contentUpdateFactory;
-        $this->partialContentUpdateFactory = $partialContentUpdateFactory;
-        $this->contentRemovalFactory = $contentRemovalFactory;
     }
 
     /**
@@ -68,7 +44,7 @@ class Request implements RequestInterface
      */
     public function contentUpdate(ContentUpdateCollection $objects): ApiResponse
     {
-        Assert::allIsInstanceOf($objects->getObjects(), ContentUpdate::class);
+        Assert::allIsInstanceOf($objects->objects, ContentUpdate::class);
 
         if (\count($objects) > self::CONTENT_UPDATE_OBJECTS_LIMIT) {
             throw new TooManyItemsException(\count($objects), self::CONTENT_UPDATE_OBJECTS_LIMIT);
@@ -91,7 +67,7 @@ class Request implements RequestInterface
      */
     public function partialContentUpdate(ContentUpdateCollection $objects): ApiResponse
     {
-        Assert::allIsInstanceOf($objects->getObjects(), PartialContentUpdate::class);
+        Assert::allIsInstanceOf($objects->objects, PartialContentUpdate::class);
 
         if (\count($objects) > self::PARTIAL_CONTENT_UPDATE_OBJECTS_LIMIT) {
             throw new TooManyItemsException(\count($objects), self::PARTIAL_CONTENT_UPDATE_OBJECTS_LIMIT);

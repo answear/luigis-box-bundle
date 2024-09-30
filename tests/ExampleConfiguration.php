@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Answear\LuigisBoxBundle\Tests\DataProvider\Faker;
+namespace Answear\LuigisBoxBundle\Tests;
 
 use Answear\LuigisBoxBundle\Service\ConfigProvider;
 

@@ -9,31 +9,10 @@ use Psr\Http\Message\ResponseInterface;
 
 class BadRequestException extends \RuntimeException
 {
-    /**
-     * @var ResponseInterface
-     */
-    private $response;
-
-    /**
-     * @var Request
-     */
-    private $request;
-
-    public function __construct(ResponseInterface $response, Request $request)
-    {
+    public function __construct(
+        public readonly ResponseInterface $response,
+        public readonly Request $request,
+    ) {
         parent::__construct('Bad request.');
-
-        $this->response = $response;
-        $this->request = $request;
-    }
-
-    public function getResponse(): ResponseInterface
-    {
-        return $this->response;
-    }
-
-    public function getRequest(): Request
-    {
-        return $this->request;
     }
 }

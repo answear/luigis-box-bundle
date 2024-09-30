@@ -164,20 +164,20 @@ use Answear\LuigisBoxBundle\Exception\ServiceUnavailableException;
 
 try {
     // ... request
-} catch (BadRequestException $e){
+} catch (BadRequestException $exception){
     //bad request
-    $request = $e->getRequest();
-    $response = $e->getResponse();
-} catch (TooManyItemsException $e){
+    $request = $exception->request;
+    $response = $exception->response;
+} catch (TooManyItemsException $exception){
     //items limit reached
-    $limit = $e->getLimit();
-} catch (MalformedResponseException $e){
+    $limit = $exception->limit;
+} catch (MalformedResponseException $exception){
     //bad response
-    $response = $e->getResponse();
-} catch (TooManyRequestsException $e){
+    $response = $exception->response;
+} catch (TooManyRequestsException $exception){
     //repeat request after $retryAfter seconds
-    $retryAfter = $e->getRetryAfterSeconds();
-} catch (ServiceUnavailableException $e){
+    $retryAfter = $exception->retryAfterSeconds;
+} catch (ServiceUnavailableException $exception){
     //delay request
 }
 ```

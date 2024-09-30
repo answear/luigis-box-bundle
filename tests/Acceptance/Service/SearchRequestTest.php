@@ -8,18 +8,17 @@ use Answear\LuigisBoxBundle\Factory\SearchFactory;
 use Answear\LuigisBoxBundle\Service\ConfigProvider;
 use Answear\LuigisBoxBundle\Service\SearchClient;
 use Answear\LuigisBoxBundle\Service\SearchRequest;
-use Answear\LuigisBoxBundle\Tests\DataProvider\Faker\ExampleConfiguration;
+use Answear\LuigisBoxBundle\Tests\ExampleConfiguration;
 use Answear\LuigisBoxBundle\ValueObject\SearchUrlBuilder;
+use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Uri;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class SearchRequestTest extends TestCase
 {
-    /**
-     * @var ConfigProvider
-     */
-    private $configProvider;
+    private ConfigProvider $configProvider;
 
     protected function setUp(): void
     {
@@ -28,9 +27,7 @@ class SearchRequestTest extends TestCase
         $this->configProvider = ExampleConfiguration::provideDefaultConfig();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function additionalHeadersTest(): void
     {
         $expectedContent = '';
@@ -49,16 +46,16 @@ class SearchRequestTest extends TestCase
             new SearchUrlBuilder()
         );
 
-        self::assertSame('', $response->getQuery());
+        self::assertSame('', $response->query);
     }
 
     private function getSearchService(
         string $expectedContent,
-        array $apiResponse
+        array $apiResponse,
     ): SearchRequest {
         $endpoint = '/search';
 
-        $expectedRequest = new \GuzzleHttp\Psr7\Request(
+        $expectedRequest = new Request(
             'GET',
             new Uri('host' . $endpoint),
             [
@@ -72,7 +69,7 @@ class SearchRequestTest extends TestCase
             ->method('request')
             ->with(
                 self::callback(
-                    static function (\GuzzleHttp\Psr7\Request $currentRequest) use ($expectedRequest) {
+                    static function (Request $currentRequest) use ($expectedRequest) {
                         $currentHeaders = $currentRequest->getHeaders();
                         $expectedHeaders = $expectedRequest->getHeaders();
 

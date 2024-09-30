@@ -6,40 +6,28 @@ namespace Answear\LuigisBoxBundle\ValueObject;
 
 use Webmozart\Assert\Assert;
 
-class ContentUpdateCollection implements ObjectsInterface, \Countable
+readonly class ContentUpdateCollection implements ObjectsInterface, \Countable
 {
     /**
-     * @var AbstractContentUpdate[]
+     * @param AbstractContentUpdate[] $objects
      */
-    private $objects;
-
-    public function __construct(array $objects)
+    public function __construct(public array $objects)
     {
         Assert::allIsInstanceOf($objects, AbstractContentUpdate::class);
-
-        $this->objects = $objects;
     }
 
     public static function fromContentAvailabilityObjects(ContentAvailabilityCollection $objects): self
     {
         $contentUpdateObjects = [];
-        foreach ($objects->getObjects() as $object) {
+        foreach ($objects->objects as $object) {
             $contentUpdateObjects[] = PartialContentUpdate::fromContentAvailability($object);
         }
 
         return new self($contentUpdateObjects);
     }
 
-    /**
-     * @return AbstractContentUpdate[]
-     */
-    public function getObjects(): array
-    {
-        return $this->objects;
-    }
-
     public function count(): int
     {
-        return \count($this->getObjects());
+        return \count($this->objects);
     }
 }

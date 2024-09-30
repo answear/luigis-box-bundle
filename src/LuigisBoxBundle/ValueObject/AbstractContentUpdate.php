@@ -9,65 +9,40 @@ use Webmozart\Assert\Assert;
 abstract class AbstractContentUpdate
 {
     /**
-     * @var string
+     * @var ?string[]
      */
-    protected $url;
+    protected ?array $autocompleteType;
 
-    /**
-     * @var string|null
-     */
-    protected $type;
-
-    /**
-     * @var string[]|null
-     */
-    protected $autocompleteType;
-
-    /**
-     * @var string|null
-     */
-    protected $generation;
+    protected ?string $generation;
 
     /**
      * The date/time must be formatted in the ISO 8601 format, e.g. 2019-05-17T21:12:35+00:00
-     *
-     * @var string|null
      */
-    protected $activeFrom;
+    protected ?string $activeFrom;
 
     /**
      * The date/time must be formatted in the ISO 8601 format, e.g. 2019-05-17T21:12:35+00:00
-     *
-     * @var string|null
      */
-    protected $activeTo;
+    protected ?string $activeTo;
 
     /**
-     * @var array
+     * @var ?AbstractContentUpdate[]
      */
-    protected $fields;
+    protected ?array $nested;
 
-    /**
-     * @var AbstractContentUpdate[]|null
-     */
-    protected $nested;
-
-    public function __construct(string $url, ?string $type, array $fields)
-    {
+    public function __construct(
+        protected string $url,
+        protected ?string $type,
+        protected array $fields,
+    ) {
         if (isset($fields['availability'])) {
             Assert::oneOf($fields['availability'], [0, 1], 'Field availability must be one of [0, 1]');
         }
 
         if (isset($fields['availability_rank'])) {
             Assert::integer($fields['availability_rank'], 'Field availability_rank must be integer');
-            if ($fields['availability_rank'] < 1 || $fields['availability_rank'] > 15) {
-                throw new \InvalidArgumentException('Field availability_rank must be between 1 and 15');
-            }
+            Assert::range($fields['availability_rank'], 1, 15, 'Field availability_rank must be between 1 and 15');
         }
-
-        $this->url = $url;
-        $this->type = $type;
-        $this->fields = $fields;
     }
 
     public function getUrl(): string
@@ -129,10 +104,7 @@ abstract class AbstractContentUpdate
         return $this->fields;
     }
 
-    /**
-     * @return string|array|null
-     */
-    public function getField(string $fieldName)
+    public function getField(string $fieldName): array|string|null
     {
         return $this->fields[$fieldName] ?? null;
     }

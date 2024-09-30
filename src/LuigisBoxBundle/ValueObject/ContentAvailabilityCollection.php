@@ -6,30 +6,18 @@ namespace Answear\LuigisBoxBundle\ValueObject;
 
 use Webmozart\Assert\Assert;
 
-class ContentAvailabilityCollection implements \Countable
+readonly class ContentAvailabilityCollection implements \Countable
 {
     /**
-     * @var ContentAvailability[]
+     * @param ContentAvailability[] $objects
      */
-    private $objects;
-
-    public function __construct(array $objects)
+    public function __construct(public array $objects)
     {
         Assert::allIsInstanceOf($objects, ContentAvailability::class);
-
-        $this->objects = $objects;
-    }
-
-    /**
-     * @return ContentAvailability[]
-     */
-    public function getObjects(): array
-    {
-        return $this->objects;
     }
 
     public function count(): int
     {
-        return \count($this->getObjects());
+        return \count($this->objects);
     }
 }

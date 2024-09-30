@@ -6,34 +6,21 @@ namespace Answear\LuigisBoxBundle\ValueObject\UpdateByQuery;
 
 use Webmozart\Assert\Assert;
 
-class Search
+readonly class Search
 {
-    /**
-     * @var string[]
-     */
-    private $types;
+    public array $partial;
 
     /**
-     * @var array
+     * @param string[] $types
      */
-    private $partial = ['fields' => []];
-
-    public function __construct(array $types, array $fields)
-    {
+    public function __construct(
+        public array $types,
+        array $fields = [],
+    ) {
         Assert::allString($types);
         Assert::notEmpty($fields);
 
-        $this->types = $types;
-        $this->partial['fields'] = $fields;
-    }
-
-    public function getTypes(): array
-    {
-        return $this->types;
-    }
-
-    public function getPartial(): array
-    {
-        return $this->partial;
+        $partial['fields'] = $fields;
+        $this->partial = $partial;
     }
 }

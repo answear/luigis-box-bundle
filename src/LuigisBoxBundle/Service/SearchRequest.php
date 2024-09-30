@@ -18,22 +18,10 @@ use Webmozart\Assert\Assert;
 
 class SearchRequest implements SearchRequestInterface
 {
-    /**
-     * @var SearchClient
-     */
-    private $client;
-
-    /**
-     * @var SearchFactory
-     */
-    private $searchFactory;
-
     public function __construct(
-        SearchClient $client,
-        SearchFactory $searchFactory
+        private SearchClient $client,
+        private SearchFactory $searchFactory,
     ) {
-        $this->client = $client;
-        $this->searchFactory = $searchFactory;
     }
 
     /**

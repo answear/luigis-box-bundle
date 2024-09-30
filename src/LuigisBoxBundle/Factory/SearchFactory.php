@@ -14,14 +14,8 @@ class SearchFactory
 {
     private const ENDPOINT = '/search';
 
-    /**
-     * @var ConfigProvider
-     */
-    private $configProvider;
-
-    public function __construct(ConfigProvider $configProvider)
+    public function __construct(private ConfigProvider $configProvider)
     {
-        $this->configProvider = $configProvider;
     }
 
     public function prepareRequest(SearchUrlBuilder $searchUrlBuilder): Request
@@ -39,7 +33,7 @@ class SearchFactory
                     $urlQuery
                 )
             ),
-            $this->configProvider->getHeaders()
+            $this->configProvider->headers
         );
     }
 

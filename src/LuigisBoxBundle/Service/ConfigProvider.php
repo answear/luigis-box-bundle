@@ -12,23 +12,22 @@ class ConfigProvider
 {
     public const API_VERSION = 'v1';
 
-    /**
-     * @var string
-     */
-    private $configName;
+    private string $configName;
 
     /**
      * @var string[]
      */
-    private $headers = [];
+    public array $headers = [];
 
     /**
      * @var ConfigDTO[]
      */
-    private $configs;
+    private array $configs;
 
-    public function __construct(string $defaultConfigName, array $configs)
-    {
+    public function __construct(
+        string $defaultConfigName,
+        array $configs,
+    ) {
         $configsDTO = [];
         foreach ($configs as $configName => $item) {
             Assert::keyExists($item, 'host');
@@ -111,22 +110,9 @@ class ConfigProvider
         $this->headers[$name] = $value;
     }
 
-    public function getHeaders(): array
-    {
-        return $this->headers;
-    }
-
     public function resetHeaders(): void
     {
         $this->headers = [];
-    }
-
-    /**
-     * @deprecated use getAuthorizationHeaders method instead
-     */
-    public function getRequestHeaders(string $httpMethod, string $endpoint, \DateTimeInterface $date): array
-    {
-        return $this->getAuthorizationHeaders($httpMethod, $endpoint, $date);
     }
 
     public function getAuthorizationHeaders(string $httpMethod, string $endpoint, \DateTimeInterface $date): array
@@ -134,8 +120,8 @@ class ConfigProvider
         $configDTO = $this->getConfigDTO();
 
         return AuthenticationUtil::getRequestHeaders(
-            $configDTO->getPublicKey(),
-            $configDTO->getPrivateKey(),
+            $configDTO->publicKey,
+            $configDTO->privateKey,
             $httpMethod,
             $endpoint,
             $date
@@ -144,32 +130,32 @@ class ConfigProvider
 
     public function getHost(): string
     {
-        return $this->getConfigDTO()->getHost();
+        return $this->getConfigDTO()->host;
     }
 
     public function getPublicKey(): string
     {
-        return $this->getConfigDTO()->getPublicKey();
+        return $this->getConfigDTO()->publicKey;
     }
 
     public function getConnectionTimeout(): float
     {
-        return $this->getConfigDTO()->getConnectionTimeout();
+        return $this->getConfigDTO()->connectionTimeout;
     }
 
     public function getRequestTimeout(): float
     {
-        return $this->getConfigDTO()->getRequestTimeout();
+        return $this->getConfigDTO()->requestTimeout;
     }
 
     public function getSearchTimeout(): float
     {
-        return $this->getConfigDTO()->getSearchTimeout();
+        return $this->getConfigDTO()->searchTimeout;
     }
 
     public function getSearchCacheTtl(): int
     {
-        return $this->getConfigDTO()->getSearchCacheTtl();
+        return $this->getConfigDTO()->searchCacheTtl;
     }
 
     private function getConfigDTO(): ConfigDTO
