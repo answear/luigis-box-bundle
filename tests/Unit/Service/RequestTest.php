@@ -11,22 +11,21 @@ use Answear\LuigisBoxBundle\Factory\PartialContentUpdateFactory;
 use Answear\LuigisBoxBundle\Service\Client;
 use Answear\LuigisBoxBundle\Service\Request;
 use Answear\LuigisBoxBundle\Service\RequestInterface;
-use Answear\LuigisBoxBundle\ValueObject\ContentRemoval;
+use Answear\LuigisBoxBundle\Tests\DataProvider\ContentUpdateDataProvider;
 use Answear\LuigisBoxBundle\ValueObject\ContentRemovalCollection;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdate;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdateCollection;
 use Answear\LuigisBoxBundle\ValueObject\ObjectsInterface;
-use Answear\LuigisBoxBundle\ValueObject\PartialContentUpdate;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Uri;
-use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class RequestTest extends TestCase
 {
     #[Test]
-    #[DataProvider('provideSuccessContentUpdateObjects')]
+    #[DataProviderExternal(ContentUpdateDataProvider::class, 'provideSuccessContentUpdateObjects')]
     public function contentUpdateWithSuccess(ContentUpdateCollection $objects, array $apiResponse): void
     {
         $requestService = $this->getRequestServiceForContentUpdate($objects, $apiResponse);
@@ -38,33 +37,8 @@ class RequestTest extends TestCase
         $this->assertSame([], $response->errors);
     }
 
-    public static function provideSuccessContentUpdateObjects(): iterable
-    {
-        $objects = [
-            new ContentUpdate(
-                'test url title',
-                'test.url',
-                'products',
-                [],
-            ),
-            new ContentUpdate(
-                'test url title',
-                'test.url2',
-                'categories',
-                []
-            ),
-        ];
-
-        yield [
-            new ContentUpdateCollection($objects),
-            [
-                'ok_count' => 2,
-            ],
-        ];
-    }
-
     #[Test]
-    #[DataProvider('provideSuccessPartialContentUpdateObjects')]
+    #[DataProviderExternal(ContentUpdateDataProvider::class, 'provideSuccessPartialContentUpdateObjects')]
     public function partialContentUpdateWithSuccess(ContentUpdateCollection $objects, array $apiResponse): void
     {
         $requestService = $this->getRequestServiceForPartialUpdate($objects, $apiResponse);
@@ -76,31 +50,8 @@ class RequestTest extends TestCase
         $this->assertSame([], $response->errors);
     }
 
-    public static function provideSuccessPartialContentUpdateObjects(): iterable
-    {
-        $objects = [
-            new PartialContentUpdate(
-                'test.url',
-                'products',
-                [],
-            ),
-            new PartialContentUpdate(
-                'test.url2',
-                'categories',
-                []
-            ),
-        ];
-
-        yield [
-            new ContentUpdateCollection($objects),
-            [
-                'ok_count' => 2,
-            ],
-        ];
-    }
-
     #[Test]
-    #[DataProvider('provideContentRemovalObjects')]
+    #[DataProviderExternal(ContentUpdateDataProvider::class, 'provideContentRemovalObjects')]
     public function contentRemovalWithSuccess(ContentRemovalCollection $objects, array $apiResponse): void
     {
         $requestService = $this->getRequestServiceForRemoval($objects, $apiResponse);
@@ -112,23 +63,8 @@ class RequestTest extends TestCase
         $this->assertSame([], $response->errors);
     }
 
-    public static function provideContentRemovalObjects(): iterable
-    {
-        $objects = [
-            new ContentRemoval('test.url', 'product'),
-            new ContentRemoval('test.url2', 'product'),
-        ];
-
-        yield [
-            new ContentRemovalCollection($objects),
-            [
-                'ok_count' => 2,
-            ],
-        ];
-    }
-
     #[Test]
-    #[DataProvider('provideAboveLimitContentUpdateObjects')]
+    #[DataProviderExternal(ContentUpdateDataProvider::class, 'provideAboveLimitContentUpdateObjects')]
     public function contentUpdateWithExceededLimit(ContentUpdateCollection $objects): void
     {
         $this->expectException(TooManyItemsException::class);
@@ -138,23 +74,8 @@ class RequestTest extends TestCase
         $requestService->contentUpdate($objects);
     }
 
-    public static function provideAboveLimitContentUpdateObjects(): iterable
-    {
-        $objects = [];
-        for ($i = 0; $i <= Request::getContentUpdateLimit(); ++$i) {
-            $objects[] = new ContentUpdate(
-                'test url title' . $i,
-                'test.url' . $i,
-                'products',
-                []
-            );
-        }
-
-        yield [new ContentUpdateCollection($objects)];
-    }
-
     #[Test]
-    #[DataProvider('provideAboveLimitPartialContentUpdateObjects')]
+    #[DataProviderExternal(ContentUpdateDataProvider::class, 'provideAboveLimitPartialContentUpdateObjects')]
     public function partialContentUpdateWithExceededLimit(ContentUpdateCollection $objects): void
     {
         $this->expectException(TooManyItemsException::class);
@@ -162,20 +83,6 @@ class RequestTest extends TestCase
 
         $requestService = $this->getSimpleRequestService();
         $requestService->partialContentUpdate($objects);
-    }
-
-    public static function provideAboveLimitPartialContentUpdateObjects(): iterable
-    {
-        $objects = [];
-        for ($i = 0; $i <= Request::getPartialContentUpdateLimit(); ++$i) {
-            $objects[] = new PartialContentUpdate(
-                'test.url' . $i,
-                'products',
-                []
-            );
-        }
-
-        yield [new ContentUpdateCollection($objects)];
     }
 
     #[Test]

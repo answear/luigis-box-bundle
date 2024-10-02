@@ -13,8 +13,8 @@ class MalformedResponseException extends \RuntimeException
         string $message,
         public readonly ResponseInterface $response,
         public readonly Request $request,
-        ?\Throwable $previous = null)
-    {
+        ?\Throwable $previous = null,
+    ) {
         parent::__construct($message, 0, $previous);
     }
 }

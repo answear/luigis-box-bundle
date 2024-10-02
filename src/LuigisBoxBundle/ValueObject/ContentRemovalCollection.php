@@ -8,6 +8,9 @@ use Webmozart\Assert\Assert;
 
 readonly class ContentRemovalCollection implements ObjectsInterface, \Countable
 {
+    /**
+     * @param ContentRemoval[] $objects
+     */
     public function __construct(public array $objects)
     {
         Assert::allIsInstanceOf($objects, ContentRemoval::class);

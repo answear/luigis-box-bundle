@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace Answear\LuigisBoxBundle\Tests\Unit\ValueObject;
 
+use Answear\LuigisBoxBundle\Tests\DataProvider\ValueObjectDataProvider;
 use Answear\LuigisBoxBundle\ValueObject\ContentRemoval;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdate;
-use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class ContentUpdateTest extends TestCase
 {
     #[Test]
-    #[DataProvider('provideContentUpdateObjects')]
+    #[DataProviderExternal(ValueObjectDataProvider::class, 'provideContentUpdateObjects')]
     public function createObjectSuccessfully(
         string $url,
         ?string $type,
@@ -33,68 +34,6 @@ class ContentUpdateTest extends TestCase
         $this->assertSame($autocompleteType, $object->getAutocompleteType());
         $this->assertSame($generation, $object->getGeneration());
         $this->assertSame($nested ?? [], $object->getNested());
-    }
-
-    public static function provideContentUpdateObjects(): iterable
-    {
-        yield [
-            'test.url',
-            'products',
-            [
-                'title' => 'test url title',
-            ],
-        ];
-
-        yield [
-            'test.url2',
-            'categories',
-            [
-                'title' => 'test url title',
-                'availability' => 0,
-                'availability_rank' => 14,
-            ],
-        ];
-
-        yield [
-            'test.url2',
-            'categories',
-            [
-                'title' => 'test url title',
-                'availability' => 0,
-                'availability_rank' => 14,
-            ],
-        ];
-
-        yield [
-            'test.url2',
-            null,
-            [
-                'title' => 'test url title',
-            ],
-        ];
-
-        yield [
-            'test.url2',
-            'categories',
-            [
-                'title' => 'test url title',
-                'availability' => 0,
-                'availability_rank' => 14,
-            ],
-            [
-                'categories',
-                'autocomplete type 2',
-            ],
-            'generation 1',
-            [
-                new ContentUpdate(
-                    'title',
-                    's',
-                    'products',
-                    []
-                ),
-            ],
-        ];
     }
 
     #[Test]
@@ -149,7 +88,7 @@ class ContentUpdateTest extends TestCase
     }
 
     #[Test]
-    #[DataProvider('provideContentUpdateObjectsForException')]
+    #[DataProviderExternal(ValueObjectDataProvider::class, 'provideContentUpdateObjectsForException')]
     public function createObjectWithFailure(
         string $expectedExceptionMessage,
         string $url,

@@ -10,8 +10,8 @@ class ApiErrorException extends \RuntimeException
 {
     public function __construct(
         string $message,
-        public readonly Request $request)
-    {
+        public readonly Request $request,
+    ) {
         parent::__construct($message);
     }
 }

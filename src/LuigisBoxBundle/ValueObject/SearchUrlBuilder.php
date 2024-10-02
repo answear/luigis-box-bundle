@@ -103,14 +103,6 @@ class SearchUrlBuilder
 
     public function addMustFilter(string $key, bool|int|string $value): self
     {
-        if (!is_bool($value)
-            && !is_int($value)
-            && !is_string($value)) {
-            throw new \InvalidArgumentException(
-                sprintf('Value must be bool|int|string, %s provided.', gettype($value))
-            );
-        }
-
         $this->mustFilters[$key] = $this->mustFilters[$key] ?? [];
         if (\is_string($this->mustFilters[$key])) {
             $this->mustFilters[$key] = [$this->mustFilters[$key]];
