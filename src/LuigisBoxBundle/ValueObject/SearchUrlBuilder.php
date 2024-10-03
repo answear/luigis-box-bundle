@@ -17,84 +17,36 @@ class SearchUrlBuilder
     public const RANGE_SEPARATOR = '|';
     private const AVAILABLE_ORDER_DIRECTIONS = ['asc', 'desc'];
 
-    /**
-     * @var string|null
-     */
-    private $query;
+    private ?string $query = null;
 
-    /**
-     * @var bool|null
-     */
-    private $queryUnderstanding;
+    private ?bool $queryUnderstanding = null;
 
-    /**
-     * @var array|null
-     */
-    private $filters;
+    private ?array $filters = null;
 
-    /**
-     * @var array|null
-     */
-    private $mustFilters;
+    private ?array $mustFilters = null;
 
-    /**
-     * @var int
-     */
-    private $size = self::DEFAULT_SIZE;
+    private int $size = self::DEFAULT_SIZE;
 
-    /**
-     * @var string|null
-     */
-    private $sort;
+    private ?string $sort = null;
 
-    /**
-     * @var string|null
-     */
-    private $quicksearchTypes;
+    private ?string $quicksearchTypes = null;
 
-    /**
-     * @var string|null
-     */
-    private $facets;
+    private ?string $facets = null;
 
-    /**
-     * @var int|null
-     */
-    private $dynamicFacetsSize;
+    private ?int $dynamicFacetsSize = null;
 
-    /**
-     * @var int
-     */
-    private $page;
+    private ?bool $useFixits = null;
 
-    /**
-     * @var bool|null
-     */
-    private $useFixits;
+    private ?array $prefer = null;
 
-    /**
-     * @var array|null
-     */
-    private $prefer;
+    private ?string $hitFields = null;
 
-    /**
-     * @var string|null
-     */
-    private $hitFields;
+    private ?Search\Context $context = null;
 
-    /**
-     * @var Search\Context|null
-     */
-    private $context;
+    private ?string $userId = null;
 
-    /**
-     * @var string|null
-     */
-    private $userId;
-
-    public function __construct(int $page = 1)
+    public function __construct(private readonly int $page = 1)
     {
-        $this->page = $page;
     }
 
     public function setQuery(string $query): self
@@ -115,19 +67,8 @@ class SearchUrlBuilder
         return $this;
     }
 
-    /**
-     * @param bool|int|string $value
-     */
-    public function addFilter(string $key, $value): self
+    public function addFilter(string $key, bool|int|string $value): self
     {
-        if (!is_bool($value)
-            && !is_int($value)
-            && !is_string($value)) {
-            throw new \InvalidArgumentException(
-                sprintf('Value must be bool|int|string, %s provided.', gettype($value))
-            );
-        }
-
         $this->filters[$key] = $this->filters[$key] ?? [];
         if (\is_string($this->filters[$key])) {
             $this->filters[$key] = [$this->filters[$key]];
@@ -160,19 +101,8 @@ class SearchUrlBuilder
         return $this;
     }
 
-    /**
-     * @param bool|int|string $value
-     */
-    public function addMustFilter(string $key, $value): self
+    public function addMustFilter(string $key, bool|int|string $value): self
     {
-        if (!is_bool($value)
-            && !is_int($value)
-            && !is_string($value)) {
-            throw new \InvalidArgumentException(
-                sprintf('Value must be bool|int|string, %s provided.', gettype($value))
-            );
-        }
-
         $this->mustFilters[$key] = $this->mustFilters[$key] ?? [];
         if (\is_string($this->mustFilters[$key])) {
             $this->mustFilters[$key] = [$this->mustFilters[$key]];

@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace Answear\LuigisBoxBundle\Tests\Acceptance\DependencyInjection;
 
 use Answear\LuigisBoxBundle\DTO\ConfigDTO;
-use Answear\LuigisBoxBundle\Tests\DataProvider\Faker\ExampleConfiguration;
+use Answear\LuigisBoxBundle\Tests\ExampleConfiguration;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class ConfigDTOTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function addConfig()
+    #[Test]
+    public function addConfig(): void
     {
         $configProvider = ExampleConfiguration::provideDefaultConfig();
 
@@ -27,10 +26,8 @@ class ConfigDTOTest extends TestCase
         $this->assertEquals('new-public', $configProvider->getPublicKey());
     }
 
-    /**
-     * @test
-     */
-    public function addConfigWithColidingName()
+    #[Test]
+    public function addConfigWithColidingName(): void
     {
         $this->expectExceptionMessage('Configuration with key "config_name" already exists.');
         $configProvider = ExampleConfiguration::provideDefaultConfig();

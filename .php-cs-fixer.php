@@ -21,7 +21,7 @@ return $config
             'strict_param' => false,
             'array_syntax' => ['syntax' => 'short'],
             'concat_space' => ['spacing' => 'one'],
-            'phpdoc_align' => [],
+            'phpdoc_align' => ['align' => 'left'],
             'phpdoc_summary' => false,
             'void_return' => false,
             'phpdoc_var_without_name' => false,

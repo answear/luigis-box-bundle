@@ -8,6 +8,8 @@ use Answear\LuigisBoxBundle\DependencyInjection\AnswearLuigisBoxExtension;
 use Answear\LuigisBoxBundle\DependencyInjection\Configuration;
 use Answear\LuigisBoxBundle\Service\ConfigProvider;
 use Matthias\SymfonyConfigTest\PhpUnit\ConfigurationTestCaseTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -15,10 +17,8 @@ class ConfigurationTest extends TestCase
 {
     use ConfigurationTestCaseTrait;
 
-    /**
-     * @test
-     * @dataProvider provideValidConfig
-     */
+    #[Test]
+    #[DataProvider('provideValidConfig')]
     public function validTest(array $configs, string $expectedConfigName): void
     {
         $extension = $this->getExtension();
@@ -32,10 +32,8 @@ class ConfigurationTest extends TestCase
         self::assertIsArray($configProviderDefinition->getArgument(1));
     }
 
-    /**
-     * @test
-     * @dataProvider provideInvalidConfig
-     */
+    #[Test]
+    #[DataProvider('provideInvalidConfig')]
     public function invalid(array $config, ?string $expectedMessage = null): void
     {
         $this->assertConfigurationIsInvalid(
@@ -44,16 +42,14 @@ class ConfigurationTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @dataProvider provideValidConfig
-     */
+    #[Test]
+    #[DataProvider('provideValidConfig')]
     public function valid(array $config): void
     {
         $this->assertConfigurationIsValid($config);
     }
 
-    public function provideInvalidConfig(): iterable
+    public static function provideInvalidConfig(): iterable
     {
         yield [
             [
@@ -159,7 +155,7 @@ class ConfigurationTest extends TestCase
         ];
     }
 
-    public function provideValidConfig(): iterable
+    public static function provideValidConfig(): iterable
     {
         yield [
             [

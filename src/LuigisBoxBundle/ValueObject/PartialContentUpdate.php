@@ -11,10 +11,10 @@ class PartialContentUpdate extends AbstractContentUpdate
     public static function fromContentAvailability(ContentAvailability $object): self
     {
         return new self(
-            $object->getUrl(),
+            $object->url,
             null,
             [
-                'availability' => $object->isAvailable() ? 1 : 0,
+                'availability' => $object->available ? 1 : 0,
             ]
         );
     }

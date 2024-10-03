@@ -8,30 +8,15 @@ use Answear\LuigisBoxBundle\ValueObject\SearchUrlBuilder;
 
 class Context
 {
-    /**
-     * @var string|null
-     */
-    private $geoLocation;
+    private ?string $geoLocation = null;
 
-    /**
-     * @var string|null
-     */
-    private $geoLocationField;
+    private ?string $geoLocationField = null;
 
-    /**
-     * @var string|null
-     */
-    private $availabilityField;
+    private ?string $availabilityField = null;
 
-    /**
-     * @var string|null
-     */
-    private $boostField;
+    private ?string $boostField = null;
 
-    /**
-     * @var string|null
-     */
-    private $freshnessField;
+    private ?string $freshnessField = null;
 
     public function getGeoLocation(): ?string
     {

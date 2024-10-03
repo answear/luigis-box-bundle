@@ -6,17 +6,16 @@ namespace Answear\LuigisBoxBundle\Tests\Unit\Factory;
 
 use Answear\LuigisBoxBundle\Factory\ContentUpdateFactory;
 use Answear\LuigisBoxBundle\Service\LuigisBoxSerializer;
-use Answear\LuigisBoxBundle\Tests\DataProvider\Faker\ExampleConfiguration;
+use Answear\LuigisBoxBundle\Tests\ExampleConfiguration;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdate;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdateCollection;
 use Answear\LuigisBoxBundle\ValueObject\ObjectsInterface;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class ContentUpdateFactoryTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function prepareRequestSuccessfully(): void
     {
         $objects = $this->getObjects();

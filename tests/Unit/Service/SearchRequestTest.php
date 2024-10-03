@@ -10,40 +10,39 @@ use Answear\LuigisBoxBundle\Response\Search;
 use Answear\LuigisBoxBundle\Service\SearchClient;
 use Answear\LuigisBoxBundle\Service\SearchRequest;
 use Answear\LuigisBoxBundle\Service\SearchRequestInterface;
+use Answear\LuigisBoxBundle\Tests\DataProvider\SearchDataProvider;
 use Answear\LuigisBoxBundle\ValueObject\Search\Context;
 use Answear\LuigisBoxBundle\ValueObject\SearchUrlBuilder;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Uri;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class SearchRequestTest extends TestCase
 {
     private const CACHE_TTL = 'cache-ttl';
 
-    /**
-     * @test
-     * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\SearchDataProvider::provideSuccessObjects()
-     */
+    #[Test]
+    #[DataProviderExternal(SearchDataProvider::class, 'provideSuccessObjects')]
     public function searchWithSuccess(SearchUrlBuilder $urlBuilder, array $arrayRawResponse): void
     {
         $requestService = $this->getRequestService($urlBuilder, $arrayRawResponse);
         $response = $requestService->search($urlBuilder);
 
-        $this->assertStringContainsString(self::CACHE_TTL, $response->getSearchUrl());
-        $this->assertSame($urlBuilder->toUrlQuery(), strstr($response->getSearchUrl(), '&v=', true));
+        $this->assertStringContainsString(self::CACHE_TTL, $response->searchUrl);
+        $this->assertSame($urlBuilder->toUrlQuery(), strstr($response->searchUrl, '&v=', true));
         $rawResults = $arrayRawResponse['results'];
-        $this->assertSame($rawResults['query'], $response->getQuery());
-        $this->assertSame($rawResults['corrected_query'], $response->getCorrectedQuery());
-        $this->assertFiltersSame($rawResults['filters'], $response->getFilters());
-        $this->assertHitsSame($rawResults['hits'], $response->getHits());
-        $this->assertHitsSame($rawResults['quicksearch_hits'], $response->getQuickSearchHits());
-        $this->assertFacetsSame($rawResults['facets'], $response->getFacets());
-        $this->assertSame($rawResults['total_hits'], $response->getTotalHits());
+        $this->assertSame($rawResults['query'], $response->query);
+        $this->assertSame($rawResults['corrected_query'], $response->correctedQuery);
+        $this->assertFiltersSame($rawResults['filters'], $response->filters);
+        $this->assertHitsSame($rawResults['hits'], $response->hits);
+        $this->assertHitsSame($rawResults['quicksearch_hits'], $response->quickSearchHits);
+        $this->assertFacetsSame($rawResults['facets'], $response->facets);
+        $this->assertSame($rawResults['total_hits'], $response->totalHits);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function searchWithErrors(): void
     {
         $this->expectException(BadRequestException::class);
@@ -67,7 +66,7 @@ class SearchRequestTest extends TestCase
     private function getRequestService(
         SearchUrlBuilder $searchUrlBuilder,
         array $apiResponse,
-        int $responseStatus = 200
+        int $responseStatus = 200,
     ): SearchRequestInterface {
         $guzzleRequest = new \GuzzleHttp\Psr7\Request(
             'POST',
@@ -123,12 +122,12 @@ class SearchRequestTest extends TestCase
         foreach ($rawHits as $key => $rawHit) {
             $searchHit = $hits[$key];
 
-            $this->assertSame($rawHit['url'], $searchHit->getUrl());
-            $this->assertSame($rawHit['attributes'], $searchHit->getAttributes());
-            $this->assertSame($rawHit['nested'], $searchHit->getNested());
-            $this->assertSame($rawHit['type'], $searchHit->getType());
-            $this->assertSame($rawHit['exact'], $searchHit->isExact());
-            $this->assertSame($rawHit['alternative'], $searchHit->isAlternative());
+            $this->assertSame($rawHit['url'], $searchHit->url);
+            $this->assertSame($rawHit['attributes'], $searchHit->attributes);
+            $this->assertSame($rawHit['nested'], $searchHit->nested);
+            $this->assertSame($rawHit['type'], $searchHit->type);
+            $this->assertSame($rawHit['exact'], $searchHit->exact);
+            $this->assertSame($rawHit['alternative'], $searchHit->alternative);
         }
     }
 
@@ -142,9 +141,9 @@ class SearchRequestTest extends TestCase
         foreach ($rawFacets as $key => $rawFacet) {
             $searchFacet = $facets[$key];
 
-            $this->assertSame($rawFacet['name'], $searchFacet->getName());
-            $this->assertSame('string', $searchFacet->getType());
-            $this->assertSame([], $searchFacet->getValues());
+            $this->assertSame($rawFacet['name'], $searchFacet->name);
+            $this->assertSame('string', $searchFacet->type);
+            $this->assertSame([], $searchFacet->values);
         }
     }
 }

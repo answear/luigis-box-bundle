@@ -14,7 +14,7 @@ use Answear\LuigisBoxBundle\ValueObject\PartialContentUpdate;
 
 class RequestDataProvider
 {
-    public function forContentUpdate(): iterable
+    public static function forContentUpdate(): iterable
     {
         yield [
             'POST',
@@ -54,14 +54,14 @@ class RequestDataProvider
         yield [
             'POST',
             $collection,
-            '{"objects":[{"url":"product\/2","type":"products","autocomplete_type":["categories","other"],"active_to":"2019-12-12 00:01:02","fields":{"availability":1,"title":"title"}},{"url":"product\/1","type":"products","generation":"one","fields":{"availability":0,"title":"title"},"nested":[{"url":"product\/2","type":"products","autocomplete_type":["categories","other"],"active_to":"2019-12-12 00:01:02","fields":{"availability":1,"title":"title"}}]}]}',
+            '{"objects":[{"autocomplete_type":["categories","other"],"active_to":"2019-12-12 00:01:02","url":"product\/2","type":"products","fields":{"availability":1,"title":"title"}},{"generation":"one","nested":[{"autocomplete_type":["categories","other"],"active_to":"2019-12-12 00:01:02","url":"product\/2","type":"products","fields":{"availability":1,"title":"title"}}],"url":"product\/1","type":"products","fields":{"availability":0,"title":"title"}}]}',
             [
                 'ok_count' => 2,
             ],
         ];
     }
 
-    public function forPartialContentUpdate(): iterable
+    public static function forPartialContentUpdate(): iterable
     {
         yield [
             'PATCH',
@@ -104,14 +104,14 @@ class RequestDataProvider
         yield [
             'PATCH',
             $collection,
-            '{"objects":[{"url":"product\/2","type":"products","active_to":"2019-12-12 00:01:02","fields":{"title":"title","availability":1}},{"url":"product\/1","type":"products","generation":"one","fields":{"title":"title","availability":0},"nested":[{"url":"product\/2","type":"products","active_to":"2019-12-12 00:01:02","fields":{"title":"title","availability":1}}]}]}',
+            '{"objects":[{"active_to":"2019-12-12 00:01:02","url":"product\/2","type":"products","fields":{"title":"title","availability":1}},{"generation":"one","nested":[{"active_to":"2019-12-12 00:01:02","url":"product\/2","type":"products","fields":{"title":"title","availability":1}}],"url":"product\/1","type":"products","fields":{"title":"title","availability":0}}]}',
             [
                 'ok_count' => 2,
             ],
         ];
     }
 
-    public function forContentRemoval(): iterable
+    public static function forContentRemoval(): iterable
     {
         yield [
             'DELETE',
@@ -123,7 +123,7 @@ class RequestDataProvider
         ];
     }
 
-    public function forChangeAvailability(): iterable
+    public static function forChangeAvailability(): iterable
     {
         yield [
             'PATCH',

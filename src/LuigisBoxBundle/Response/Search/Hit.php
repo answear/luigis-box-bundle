@@ -16,40 +16,19 @@ class Hit
     private const ATTRIBUTES_PARAM = 'attributes';
     private const URL_PARAM = 'url';
 
-    /**
-     * @var string
-     */
-    private $url;
+    public readonly string $url;
 
-    /**
-     * @var array
-     */
-    private $attributes;
+    public readonly array $attributes;
 
-    /**
-     * @var array
-     */
-    private $nested;
+    public readonly array $nested;
 
-    /**
-     * @var string
-     */
-    private $type;
+    public readonly string $type;
 
-    /**
-     * @var array
-     */
-    private $highlight;
+    public readonly array $highlight;
 
-    /**
-     * @var bool
-     */
-    private $exact;
+    public readonly bool $exact;
 
-    /**
-     * @var bool
-     */
-    private $alternative;
+    public readonly bool $alternative;
 
     public function __construct(array $hitArray)
     {
@@ -68,40 +47,5 @@ class Hit
         $this->highlight = $hitArray[self::HIGHLIGHT_PARAM] ?? [];
         $this->exact = $hitArray[self::EXACT_PARAM];
         $this->alternative = $hitArray[self::ALTERNATIVE_PARAM];
-    }
-
-    public function getUrl(): string
-    {
-        return $this->url;
-    }
-
-    public function getAttributes(): array
-    {
-        return $this->attributes;
-    }
-
-    public function getNested(): array
-    {
-        return $this->nested;
-    }
-
-    public function getType(): string
-    {
-        return $this->type;
-    }
-
-    public function getHighlight(): array
-    {
-        return $this->highlight;
-    }
-
-    public function isExact(): bool
-    {
-        return $this->exact;
-    }
-
-    public function isAlternative(): bool
-    {
-        return $this->alternative;
     }
 }

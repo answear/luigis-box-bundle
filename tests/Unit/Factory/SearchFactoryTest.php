@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace Answear\LuigisBoxBundle\Tests\Unit\Factory;
 
 use Answear\LuigisBoxBundle\Factory\SearchFactory;
-use Answear\LuigisBoxBundle\Tests\DataProvider\Faker\ExampleConfiguration;
+use Answear\LuigisBoxBundle\Tests\ExampleConfiguration;
 use Answear\LuigisBoxBundle\ValueObject\SearchUrlBuilder;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class SearchFactoryTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function prepareRequestSuccessfully(): void
     {
         $builderUrl = $this->getBuilderUrl();

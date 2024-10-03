@@ -19,13 +19,12 @@ use Answear\LuigisBoxBundle\ValueObject\ContentUpdate;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdateCollection;
 use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class RequestExceptionsTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function tooManyItemsExceptionThrows(): void
     {
         $this->expectException(TooManyItemsException::class);
@@ -42,9 +41,7 @@ class RequestExceptionsTest extends TestCase
         $service->contentUpdate($objects);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function tooManyRequestsExceptionThrows(): void
     {
         $this->expectException(TooManyRequestsException::class);
@@ -63,9 +60,7 @@ class RequestExceptionsTest extends TestCase
         $service->contentUpdate($objects);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function malformedResponseThrows(): void
     {
         $this->expectException(MalformedResponseException::class);
@@ -84,9 +79,7 @@ class RequestExceptionsTest extends TestCase
         $service->contentUpdate($objects);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function serviceUnavailableThrows(): void
     {
         $this->expectException(ServiceUnavailableException::class);

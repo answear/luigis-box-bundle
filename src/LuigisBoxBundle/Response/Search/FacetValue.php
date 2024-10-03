@@ -11,15 +11,9 @@ class FacetValue
     private const VALUE_PARAM = 'value';
     private const HITS_COUNT_PARAM = 'hits_count';
 
-    /**
-     * @var string
-     */
-    private $value;
+    public readonly string $value;
 
-    /**
-     * @var int
-     */
-    private $hitsCount;
+    public readonly int $hitsCount;
 
     public function __construct(array $facetValueData)
     {
@@ -28,15 +22,5 @@ class FacetValue
 
         $this->value = $facetValueData[self::VALUE_PARAM];
         $this->hitsCount = $facetValueData[self::HITS_COUNT_PARAM];
-    }
-
-    public function getValue(): string
-    {
-        return $this->value;
-    }
-
-    public function getHitsCount(): int
-    {
-        return $this->hitsCount;
     }
 }

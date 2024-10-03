@@ -8,8 +8,12 @@ use Webmozart\Assert\Assert;
 
 class ContentUpdate extends AbstractContentUpdate
 {
-    public function __construct(string $title, string $url, ?string $type, array $fields)
-    {
+    public function __construct(
+        string $title,
+        string $url,
+        ?string $type,
+        array $fields,
+    ) {
         $fields['title'] = $fields['title'] ?? $title;
         Assert::notEmpty($fields['title'], 'Field title can not be empty');
 

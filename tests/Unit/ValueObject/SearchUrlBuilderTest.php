@@ -6,13 +6,12 @@ namespace Answear\LuigisBoxBundle\Tests\Unit\ValueObject;
 
 use Answear\LuigisBoxBundle\ValueObject\Search\Context;
 use Answear\LuigisBoxBundle\ValueObject\SearchUrlBuilder;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class SearchUrlBuilderTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function buildValidUrlTest(): void
     {
         $query = [
@@ -175,7 +174,7 @@ class SearchUrlBuilderTest extends TestCase
      */
     private function parse(string $string): array
     {
-        $decoder = function ($value) {
+        $decoder = static function ($value) {
             return rawurldecode(str_replace('+', ' ', (string) $value));
         };
 

@@ -11,14 +11,8 @@ class UpdateByRequestStatusFactory
 {
     private const ENDPOINT = '/' . ConfigProvider::API_VERSION . '/update_by_query';
 
-    /**
-     * @var ConfigProvider
-     */
-    private $configProvider;
-
-    public function __construct(ConfigProvider $configProvider)
+    public function __construct(private ConfigProvider $configProvider)
     {
-        $this->configProvider = $configProvider;
     }
 
     public function prepareRequest(int $jobId): Request

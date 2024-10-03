@@ -19,55 +19,35 @@ class SearchResponse
     private const RESULTS_QUERY_PARAM = 'query';
     private const RESULTS_PARAM = 'results';
 
-    /**
-     * @var string
-     */
-    private $searchUrl;
+    public readonly string $query;
 
-    /**
-     * @var string
-     */
-    private $query;
+    public readonly ?string $correctedQuery;
 
-    /**
-     * @var string|null
-     */
-    private $correctedQuery;
-
-    /**
-     * @var array
-     */
-    private $filters;
+    public readonly array $filters;
 
     /**
      * @var Search\Hit[]
      */
-    private $hits;
+    public readonly array $hits;
 
     /**
      * @var Search\Hit[]
      */
-    private $quickSearchHits;
+    public readonly array $quickSearchHits;
 
     /**
      * @var Search\Facet[]
      */
-    private $facets;
+    public readonly array $facets;
 
-    /**
-     * @var int
-     */
-    private $totalHits;
+    public readonly int $totalHits;
 
-    /**
-     * @var int
-     */
-    private $currentSize;
+    public readonly int $currentSize;
 
-    public function __construct(string $searchUrl, array $response)
-    {
-        $this->searchUrl = $searchUrl;
-
+    public function __construct(
+        public readonly string $searchUrl,
+        array $response,
+    ) {
         Assert::isArray($response[self::RESULTS_PARAM]);
         $result = $response[self::RESULTS_PARAM];
 
@@ -85,60 +65,6 @@ class SearchResponse
         Assert::numeric($result[self::RESULTS_TOTAL_HITS_PARAM]);
         $this->totalHits = (int) $result[self::RESULTS_TOTAL_HITS_PARAM];
         $this->currentSize = isset($result[self::RESULTS_OFFSET_PARAM]) ? (int) $result[self::RESULTS_OFFSET_PARAM] : $result[self::RESULTS_TOTAL_HITS_PARAM];
-    }
-
-    public function getSearchUrl(): string
-    {
-        return $this->searchUrl;
-    }
-
-    public function getQuery(): string
-    {
-        return $this->query;
-    }
-
-    public function getCorrectedQuery(): ?string
-    {
-        return $this->correctedQuery;
-    }
-
-    public function getFilters(): array
-    {
-        return $this->filters;
-    }
-
-    /**
-     * @return Search\Hit[]
-     */
-    public function getHits(): array
-    {
-        return $this->hits;
-    }
-
-    /**
-     * @return Search\Hit[]
-     */
-    public function getQuickSearchHits(): array
-    {
-        return $this->quickSearchHits;
-    }
-
-    /**
-     * @return Search\Facet[]
-     */
-    public function getFacets(): array
-    {
-        return $this->facets;
-    }
-
-    public function getTotalHits(): int
-    {
-        return $this->totalHits;
-    }
-
-    public function getCurrentSize(): int
-    {
-        return $this->currentSize;
     }
 
     private function prepareFilters(array $filtersArray): array

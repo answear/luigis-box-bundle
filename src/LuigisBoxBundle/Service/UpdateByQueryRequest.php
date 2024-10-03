@@ -20,29 +20,11 @@ use Webmozart\Assert\Assert;
 
 class UpdateByQueryRequest implements UpdateByQueryRequestInterface
 {
-    /**
-     * @var Client
-     */
-    private $client;
-
-    /**
-     * @var UpdateByRequestFactory
-     */
-    private $factory;
-
-    /**
-     * @var UpdateByRequestStatusFactory
-     */
-    private $statusFactory;
-
     public function __construct(
-        Client $client,
-        UpdateByRequestFactory $factory,
-        UpdateByRequestStatusFactory $statusFactory
+        private Client $client,
+        private UpdateByRequestFactory $factory,
+        private UpdateByRequestStatusFactory $statusFactory,
     ) {
-        $this->client = $client;
-        $this->factory = $factory;
-        $this->statusFactory = $statusFactory;
     }
 
     /**

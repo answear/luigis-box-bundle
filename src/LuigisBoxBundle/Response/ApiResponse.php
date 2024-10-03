@@ -10,77 +10,43 @@ class ApiResponse
     private const ERRORS_COUNT_PARAM = 'errors_count';
     private const ERRORS_PARAM = 'errors';
 
-    /**
-     * @var bool
-     */
-    private $success = false;
+    public readonly bool $success;
 
-    /**
-     * @var int
-     */
-    private $okCount;
+    public readonly int $okCount;
 
-    /**
-     * @var int
-     */
-    private $errorsCount;
+    public readonly int $errorsCount;
 
     /**
      * @var ApiResponseError[]
      */
-    private $errors = [];
+    public readonly array $errors;
 
-    /**
-     * @var array
-     */
-    private $rawResponse;
+    public readonly array $rawResponse;
 
-    public function __construct(int $allCount, array $response)
-    {
+    public function __construct(
+        int $allCount,
+        array $response,
+    ) {
         $this->rawResponse = $response;
         $this->okCount = (int) $response[self::OK_COUNT_PARAM];
         $this->errorsCount = (int) ($response[self::ERRORS_COUNT_PARAM] ?? 0);
 
+        $success = false;
         if ($this->okCount === $allCount) {
-            $this->success = true;
+            $success = true;
         }
+        $this->success = $success;
 
-        $errors = $response[self::ERRORS_PARAM] ?? [];
-        foreach ($errors as $url => $error) {
-            $this->addError(new ApiResponseError($url, $error));
+        $responseErrors = $response[self::ERRORS_PARAM] ?? [];
+        $errors = [];
+        foreach ($responseErrors as $url => $error) {
+            $errors[] = new ApiResponseError($url, $error);
         }
-    }
-
-    public function getRawResponse(): array
-    {
-        return $this->rawResponse;
+        $this->errors = $errors;
     }
 
     public function isSuccess(): bool
     {
         return $this->success;
-    }
-
-    public function getOkCount(): int
-    {
-        return $this->okCount;
-    }
-
-    public function getErrorsCount(): int
-    {
-        return $this->errorsCount;
-    }
-
-    /**
-     * @return ApiResponseError[]
-     */
-    public function getErrors(): array
-    {
-        return $this->errors;
-    }
-
-    private function addError(ApiResponseError $apiResponseError): void
-    {
-        $this->errors[] = $apiResponseError;
     }
 }

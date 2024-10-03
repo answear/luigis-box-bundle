@@ -12,20 +12,14 @@ class Facet
     private const TYPE_PARAM = 'type';
     private const VALUES_PARAM = 'values';
 
-    /**
-     * @var string
-     */
-    private $name;
+    public readonly string $name;
 
-    /**
-     * @var string
-     */
-    private $type;
+    public readonly string $type;
 
     /**
      * @var FacetValue[]
      */
-    private $values = [];
+    public readonly array $values;
 
     public function __construct(array $facetData)
     {
@@ -35,26 +29,11 @@ class Facet
 
         $this->name = $facetData[self::NAME_PARAM];
         $this->type = $facetData[self::TYPE_PARAM];
+
+        $values = [];
         foreach ($facetData[self::VALUES_PARAM] as $facetValueData) {
-            $this->values[] = new FacetValue($facetValueData);
+            $values[] = new FacetValue($facetValueData);
         }
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function getType(): string
-    {
-        return $this->type;
-    }
-
-    /**
-     * @return FacetValue[]
-     */
-    public function getValues(): array
-    {
-        return $this->values;
+        $this->values = $values;
     }
 }

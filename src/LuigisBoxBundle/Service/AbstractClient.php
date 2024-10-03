@@ -16,18 +16,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 abstract class AbstractClient
 {
-    /**
-     * @var ConfigProvider
-     */
-    protected $configProvider;
-    /**
-     * @var \GuzzleHttp\Client
-     */
-    protected $client;
-
-    public function __construct(ConfigProvider $configProvider, ?\GuzzleHttp\Client $client = null)
-    {
-        $this->configProvider = $configProvider;
+    public function __construct(
+        protected ConfigProvider $configProvider,
+        protected ?\GuzzleHttp\Client $client = null,
+    ) {
         $this->client = $client ?? $this->getGuzzleClient();
     }
 

@@ -12,20 +12,20 @@ use Answear\LuigisBoxBundle\Service\ConfigProvider;
 use Answear\LuigisBoxBundle\Service\LuigisBoxSerializer;
 use Answear\LuigisBoxBundle\Service\Request;
 use Answear\LuigisBoxBundle\Service\RequestInterface;
-use Answear\LuigisBoxBundle\Tests\DataProvider\Faker\ExampleConfiguration;
+use Answear\LuigisBoxBundle\Tests\DataProvider\RequestDataProvider;
+use Answear\LuigisBoxBundle\Tests\ExampleConfiguration;
 use Answear\LuigisBoxBundle\ValueObject\ContentAvailability;
 use Answear\LuigisBoxBundle\ValueObject\ContentRemovalCollection;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdateCollection;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Uri;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class RequestTest extends TestCase
 {
-    /**
-     * @var ConfigProvider
-     */
-    private $configProvider;
+    private ConfigProvider $configProvider;
 
     protected function setUp(): void
     {
@@ -34,75 +34,67 @@ class RequestTest extends TestCase
         $this->configProvider = ExampleConfiguration::provideDefaultConfig();
     }
 
-    /**
-     * @test
-     * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\RequestDataProvider::forContentUpdate()
-     */
+    #[Test]
+    #[DataProviderExternal(RequestDataProvider::class, 'forContentUpdate')]
     public function contentUpdateRequestPassed(
         string $httpMethod,
         ContentUpdateCollection $collection,
         string $expectedContent,
-        array $apiResponse
+        array $apiResponse,
     ): void {
         $response = $this->getRequestService($httpMethod, $expectedContent, $apiResponse)->contentUpdate(
             $collection
         );
 
         self::assertTrue($response->isSuccess());
-        self::assertSame(\count($collection), $response->getOkCount());
-        self::assertSame(0, $response->getErrorsCount());
-        self::assertSame([], $response->getErrors());
+        self::assertSame(\count($collection), $response->okCount);
+        self::assertSame(0, $response->errorsCount);
+        self::assertSame([], $response->errors);
     }
 
-    /**
-     * @test
-     * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\RequestDataProvider::forPartialContentUpdate()
-     */
+    #[Test]
+    #[DataProviderExternal(RequestDataProvider::class, 'forPartialContentUpdate')]
     public function partialContentUpdateRequestPassed(
         string $httpMethod,
         ContentUpdateCollection $collection,
         string $expectedContent,
-        array $apiResponse
+        array $apiResponse,
     ): void {
         $response = $this->getRequestService($httpMethod, $expectedContent, $apiResponse)->partialContentUpdate(
             $collection
         );
 
         self::assertTrue($response->isSuccess());
-        self::assertSame(\count($collection), $response->getOkCount());
-        self::assertSame(0, $response->getErrorsCount());
-        self::assertSame([], $response->getErrors());
+        self::assertSame(\count($collection), $response->okCount);
+        self::assertSame(0, $response->errorsCount);
+        self::assertSame([], $response->errors);
     }
 
-    /**
-     * @test
-     * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\RequestDataProvider::forContentRemoval()
-     */
+    #[Test]
+    #[DataProviderExternal(RequestDataProvider::class, 'forContentRemoval')]
     public function contentRemovalRequestPassed(
         string $httpMethod,
         ContentRemovalCollection $collection,
         string $expectedContent,
-        array $apiResponse
+        array $apiResponse,
     ): void {
         $response = $this->getRequestService($httpMethod, $expectedContent, $apiResponse)->contentRemoval(
             $collection
         );
 
         self::assertTrue($response->isSuccess());
-        self::assertSame(\count($collection), $response->getOkCount());
-        self::assertSame(0, $response->getErrorsCount());
-        self::assertSame([], $response->getErrors());
+        self::assertSame(\count($collection), $response->okCount);
+        self::assertSame(0, $response->errorsCount);
+        self::assertSame([], $response->errors);
     }
 
-    /**
-     * @test
-     * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\RequestDataProvider::forChangeAvailability()
-     */
+    #[Test]
+    #[DataProviderExternal(RequestDataProvider::class, 'forChangeAvailability')]
     public function changeAvailabilityRequestPassed(
         string $httpMethod,
         $collection,
         string $expectedContent,
-        array $apiResponse
+        array $apiResponse,
     ): void {
         $response = $this->getRequestService($httpMethod, $expectedContent, $apiResponse)->changeAvailability(
             $collection
@@ -111,16 +103,16 @@ class RequestTest extends TestCase
         self::assertTrue($response->isSuccess());
         self::assertSame(
             ($collection instanceof ContentAvailability) ? 1 : \count($collection),
-            $response->getOkCount()
+            $response->okCount
         );
-        self::assertSame(0, $response->getErrorsCount());
-        self::assertSame([], $response->getErrors());
+        self::assertSame(0, $response->errorsCount);
+        self::assertSame([], $response->errors);
     }
 
     private function getRequestService(
         string $httpMethod,
         string $expectedContent,
-        array $apiResponse
+        array $apiResponse,
     ): RequestInterface {
         $endpoint = '/v1/content';
 

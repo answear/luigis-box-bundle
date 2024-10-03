@@ -6,17 +6,17 @@ namespace Answear\LuigisBoxBundle\Tests\Unit\Factory;
 
 use Answear\LuigisBoxBundle\Factory\PartialContentUpdateFactory;
 use Answear\LuigisBoxBundle\Service\LuigisBoxSerializer;
-use Answear\LuigisBoxBundle\Tests\DataProvider\Faker\ExampleConfiguration;
+use Answear\LuigisBoxBundle\Tests\ExampleConfiguration;
 use Answear\LuigisBoxBundle\ValueObject\ContentAvailability;
 use Answear\LuigisBoxBundle\ValueObject\ContentAvailabilityCollection;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class PartialContentUpdateFactoryTest extends TestCase
 {
-    /**
-     * @test
-     * @dataProvider provideAvailabilityObjects
-     */
+    #[Test]
+    #[DataProvider('provideAvailabilityObjects')]
     public function prepareRequestSuccessfully($objects): void
     {
         $factory = $this->getFactory();
@@ -34,7 +34,7 @@ class PartialContentUpdateFactoryTest extends TestCase
         $this->assertSame('serialized', $request->getBody()->getContents());
     }
 
-    public function provideAvailabilityObjects(): iterable
+    public static function provideAvailabilityObjects(): iterable
     {
         yield [new ContentAvailability('url', true)];
 

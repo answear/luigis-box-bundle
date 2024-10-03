@@ -10,69 +10,68 @@ use Answear\LuigisBoxBundle\Service\Client;
 use Answear\LuigisBoxBundle\Service\LuigisBoxSerializer;
 use Answear\LuigisBoxBundle\Service\UpdateByQueryRequest;
 use Answear\LuigisBoxBundle\Service\UpdateByQueryRequestInterface;
-use Answear\LuigisBoxBundle\Tests\DataProvider\Faker\ExampleConfiguration;
+use Answear\LuigisBoxBundle\Tests\DataProvider\UpdateByQueryRequestDataProvider;
+use Answear\LuigisBoxBundle\Tests\ExampleConfiguration;
 use Answear\LuigisBoxBundle\ValueObject\UpdateByQuery;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Uri;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class UpdateByQueryRequestTest extends TestCase
 {
-    /**
-     * @test
-     * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\UpdateByQueryRequestDataProvider::forUpdate()
-     */
+    #[Test]
+    #[DataProviderExternal(UpdateByQueryRequestDataProvider::class, 'forUpdate')]
     public function updatePassed(
         UpdateByQuery $updateByQuery,
         string $expectedContent,
         array $apiResponse,
-        int $jobId
+        int $jobId,
     ): void {
         $response = $this->getService('PATCH', '/v1/update_by_query', $expectedContent, $apiResponse)->update(
             $updateByQuery
         );
 
-        $this->assertSame($apiResponse, $response->getRawResponse());
-        $this->assertSame($jobId, $response->getJobId());
+        $this->assertSame($apiResponse, $response->rawResponse);
+        $this->assertSame($jobId, $response->jobId);
     }
 
-    /**
-     * @test
-     * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\UpdateByQueryRequestDataProvider::forUpdateStatus()
-     */
+    #[Test]
+    #[DataProviderExternal(UpdateByQueryRequestDataProvider::class, 'forUpdateStatus')]
     public function updateStatusPassed(
         int $jobId,
-        array $apiResponse
+        array $apiResponse,
     ): void {
         $response = $this->getService('GET', '/v1/update_by_query?job_id=' . $jobId, '', $apiResponse)
             ->getStatus($jobId);
 
         $this->assertSame('complete' === $apiResponse['status'], $response->isCompleted());
-        $this->assertSame($apiResponse['tracker_id'], $response->getTrackerId());
-        $this->assertSame($apiResponse['updates_count'] ?? null, $response->getOkCount());
-        $this->assertSame($apiResponse['failures_count'] ?? null, $response->getErrorsCount());
+        $this->assertSame($apiResponse['tracker_id'], $response->trackerId);
+        $this->assertSame($apiResponse['updates_count'] ?? null, $response->okCount);
+        $this->assertSame($apiResponse['failures_count'] ?? null, $response->errorsCount);
 
         if (!isset($apiResponse['failures'])) {
-            $this->assertNull($response->getErrors());
+            $this->assertNull($response->errors);
         } else {
-            foreach ($response->getErrors() as $error) {
-                $failure = $apiResponse['failures'][$error->getUrl()];
+            foreach ($response->errors as $error) {
+                $failure = $apiResponse['failures'][$error->url];
 
                 $this->assertNotEmpty($failure);
-                $this->assertSame($failure['type'], $error->getType());
-                $this->assertSame($failure['reason'], $error->getReason());
-                $this->assertSame($failure['caused_by'], $error->getCausedBy());
+                $this->assertSame($failure['type'], $error->type);
+                $this->assertSame($failure['reason'], $error->reason);
+                $this->assertSame($failure['caused_by'], $error->causedBy);
             }
         }
 
-        $this->assertSame($apiResponse, $response->getRawResponse());
+        $this->assertSame($apiResponse, $response->rawResponse);
     }
 
     private function getService(
         string $httpMethod,
         string $endpoint,
         string $expectedContent,
-        array $apiResponse
+        array $apiResponse,
     ): UpdateByQueryRequestInterface {
         $expectedRequest = new \GuzzleHttp\Psr7\Request(
             $httpMethod,

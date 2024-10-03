@@ -11,65 +11,60 @@ use Answear\LuigisBoxBundle\Factory\PartialContentUpdateFactory;
 use Answear\LuigisBoxBundle\Service\Client;
 use Answear\LuigisBoxBundle\Service\Request;
 use Answear\LuigisBoxBundle\Service\RequestInterface;
+use Answear\LuigisBoxBundle\Tests\DataProvider\ContentUpdateDataProvider;
 use Answear\LuigisBoxBundle\ValueObject\ContentRemovalCollection;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdate;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdateCollection;
 use Answear\LuigisBoxBundle\ValueObject\ObjectsInterface;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Uri;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class RequestTest extends TestCase
 {
-    /**
-     * @test
-     * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\ContentUpdateDataProvider::provideSuccessContentUpdateObjects()
-     */
+    #[Test]
+    #[DataProviderExternal(ContentUpdateDataProvider::class, 'provideSuccessContentUpdateObjects')]
     public function contentUpdateWithSuccess(ContentUpdateCollection $objects, array $apiResponse): void
     {
         $requestService = $this->getRequestServiceForContentUpdate($objects, $apiResponse);
         $response = $requestService->contentUpdate($objects);
 
         $this->assertTrue($response->isSuccess());
-        $this->assertSame(\count($objects), $response->getOkCount());
-        $this->assertSame(0, $response->getErrorsCount());
-        $this->assertSame([], $response->getErrors());
+        $this->assertSame(\count($objects), $response->okCount);
+        $this->assertSame(0, $response->errorsCount);
+        $this->assertSame([], $response->errors);
     }
 
-    /**
-     * @test
-     * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\ContentUpdateDataProvider::provideSuccessPartialContentUpdateObjects()
-     */
+    #[Test]
+    #[DataProviderExternal(ContentUpdateDataProvider::class, 'provideSuccessPartialContentUpdateObjects')]
     public function partialContentUpdateWithSuccess(ContentUpdateCollection $objects, array $apiResponse): void
     {
         $requestService = $this->getRequestServiceForPartialUpdate($objects, $apiResponse);
         $response = $requestService->partialContentUpdate($objects);
 
         $this->assertTrue($response->isSuccess());
-        $this->assertSame(\count($objects), $response->getOkCount());
-        $this->assertSame(0, $response->getErrorsCount());
-        $this->assertSame([], $response->getErrors());
+        $this->assertSame(\count($objects), $response->okCount);
+        $this->assertSame(0, $response->errorsCount);
+        $this->assertSame([], $response->errors);
     }
 
-    /**
-     * @test
-     * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\ContentUpdateDataProvider::provideContentRemovalObjects()
-     */
+    #[Test]
+    #[DataProviderExternal(ContentUpdateDataProvider::class, 'provideContentRemovalObjects')]
     public function contentRemovalWithSuccess(ContentRemovalCollection $objects, array $apiResponse): void
     {
         $requestService = $this->getRequestServiceForRemoval($objects, $apiResponse);
         $response = $requestService->contentRemoval($objects);
 
         $this->assertTrue($response->isSuccess());
-        $this->assertSame(\count($objects), $response->getOkCount());
-        $this->assertSame(0, $response->getErrorsCount());
-        $this->assertSame([], $response->getErrors());
+        $this->assertSame(\count($objects), $response->okCount);
+        $this->assertSame(0, $response->errorsCount);
+        $this->assertSame([], $response->errors);
     }
 
-    /**
-     * @test
-     * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\ContentUpdateDataProvider::provideAboveLimitContentUpdateObjects()
-     */
+    #[Test]
+    #[DataProviderExternal(ContentUpdateDataProvider::class, 'provideAboveLimitContentUpdateObjects')]
     public function contentUpdateWithExceededLimit(ContentUpdateCollection $objects): void
     {
         $this->expectException(TooManyItemsException::class);
@@ -79,10 +74,8 @@ class RequestTest extends TestCase
         $requestService->contentUpdate($objects);
     }
 
-    /**
-     * @test
-     * @dataProvider \Answear\LuigisBoxBundle\Tests\DataProvider\ContentUpdateDataProvider::provideAboveLimitPartialContentUpdateObjects()
-     */
+    #[Test]
+    #[DataProviderExternal(ContentUpdateDataProvider::class, 'provideAboveLimitPartialContentUpdateObjects')]
     public function partialContentUpdateWithExceededLimit(ContentUpdateCollection $objects): void
     {
         $this->expectException(TooManyItemsException::class);
@@ -92,9 +85,7 @@ class RequestTest extends TestCase
         $requestService->partialContentUpdate($objects);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function contentUpdateWithErrors(): void
     {
         $objects = new ContentUpdateCollection(
@@ -133,19 +124,19 @@ class RequestTest extends TestCase
         $response = $requestService->contentUpdate($objects);
 
         $this->assertFalse($response->isSuccess());
-        $this->assertSame(1, $response->getOkCount());
-        $this->assertSame(1, $response->getErrorsCount());
-        $this->assertCount(1, $response->getErrors());
+        $this->assertSame(1, $response->okCount);
+        $this->assertSame(1, $response->errorsCount);
+        $this->assertCount(1, $response->errors);
 
-        $apiResponseError = $response->getErrors()[0];
-        $this->assertSame('test.url2', $apiResponseError->getUrl());
-        $this->assertSame('malformed_input', $apiResponseError->getType());
-        $this->assertSame('incorrect object format', $apiResponseError->getReason());
+        $apiResponseError = $response->errors[0];
+        $this->assertSame('test.url2', $apiResponseError->url);
+        $this->assertSame('malformed_input', $apiResponseError->type);
+        $this->assertSame('incorrect object format', $apiResponseError->reason);
         $this->assertSame(
             [
                 'title' => ['must be filled'],
             ],
-            $apiResponseError->getCausedBy()
+            $apiResponseError->causedBy
         );
     }
 

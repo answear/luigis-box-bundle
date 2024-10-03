@@ -15,35 +15,20 @@ class UpdateByQueryStatusResponse
     private const FAILURES = 'failures';
     private const STATUS_COMPLETED = 'complete';
 
-    /**
-     * @var array
-     */
-    private $rawResponse;
+    public readonly array $rawResponse;
+
+    public readonly string $trackerId;
+
+    public readonly bool $completed;
+
+    public readonly ?int $okCount;
+
+    public readonly ?int $errorsCount;
 
     /**
-     * @var string
+     * @var ?ApiResponseError[]
      */
-    private $trackerId;
-
-    /**
-     * @var bool
-     */
-    private $completed;
-
-    /**
-     * @var int|null
-     */
-    private $okCount;
-
-    /**
-     * @var int|null
-     */
-    private $errorsCount;
-
-    /**
-     * @var ApiResponseError[]|null
-     */
-    private $errors;
+    public readonly ?array $errors;
 
     public function __construct(array $response)
     {
@@ -51,43 +36,26 @@ class UpdateByQueryStatusResponse
         $this->trackerId = $response[self::TRACKER_ID];
         $this->completed = self::STATUS_COMPLETED === $response[self::STATUS];
 
+        $okCount = null;
+        $errorsCount = null;
+        $errors = null;
+
         if ($this->completed) {
-            $this->okCount = $response[self::UPDATES_COUNT];
-            $this->errorsCount = $response[self::FAILURES_COUNT];
-            $this->errors = [];
+            $okCount = $response[self::UPDATES_COUNT];
+            $errorsCount = $response[self::FAILURES_COUNT];
+            $errors = [];
             foreach ($response[self::FAILURES] as $url => $failure) {
-                $this->errors[] = new ApiResponseError($url, $failure);
+                $errors[] = new ApiResponseError($url, $failure);
             }
         }
-    }
 
-    public function getRawResponse(): array
-    {
-        return $this->rawResponse;
-    }
-
-    public function getTrackerId(): string
-    {
-        return $this->trackerId;
+        $this->okCount = $okCount;
+        $this->errorsCount = $errorsCount;
+        $this->errors = $errors;
     }
 
     public function isCompleted(): bool
     {
         return $this->completed;
-    }
-
-    public function getOkCount(): ?int
-    {
-        return $this->okCount;
-    }
-
-    public function getErrorsCount(): ?int
-    {
-        return $this->errorsCount;
-    }
-
-    public function getErrors(): ?array
-    {
-        return $this->errors;
     }
 }
