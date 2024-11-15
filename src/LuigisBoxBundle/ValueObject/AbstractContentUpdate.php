@@ -11,24 +11,24 @@ abstract class AbstractContentUpdate
     /**
      * @var ?string[]
      */
-    protected ?array $autocompleteType;
+    protected ?array $autocompleteType = null;
 
-    protected ?string $generation;
-
-    /**
-     * The date/time must be formatted in the ISO 8601 format, e.g. 2019-05-17T21:12:35+00:00
-     */
-    protected ?string $activeFrom;
+    protected ?string $generation = null;
 
     /**
      * The date/time must be formatted in the ISO 8601 format, e.g. 2019-05-17T21:12:35+00:00
      */
-    protected ?string $activeTo;
+    protected ?string $activeFrom = null;
+
+    /**
+     * The date/time must be formatted in the ISO 8601 format, e.g. 2019-05-17T21:12:35+00:00
+     */
+    protected ?string $activeTo = null;
 
     /**
      * @var ?AbstractContentUpdate[]
      */
-    protected ?array $nested;
+    protected ?array $nested = null;
 
     public function __construct(
         protected string $url,
