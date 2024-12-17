@@ -8,6 +8,7 @@ use Answear\LuigisBoxBundle\Exception\TooManyItemsException;
 use Answear\LuigisBoxBundle\Factory\ContentRemovalFactory;
 use Answear\LuigisBoxBundle\Factory\ContentUpdateFactory;
 use Answear\LuigisBoxBundle\Factory\PartialContentUpdateFactory;
+use Answear\LuigisBoxBundle\Factory\RecommendationsFactory;
 use Answear\LuigisBoxBundle\Service\Client;
 use Answear\LuigisBoxBundle\Service\Request;
 use Answear\LuigisBoxBundle\Service\RequestInterface;
@@ -169,7 +170,7 @@ class RequestTest extends TestCase
         $partialContentUpdateFactory = $this->createMock(PartialContentUpdateFactory::class);
         $contentRemovalUpdateFactory = $this->createMock(ContentRemovalFactory::class);
 
-        return new Request($client, $contentUpdateFactory, $partialContentUpdateFactory, $contentRemovalUpdateFactory);
+        return new Request($client, $contentUpdateFactory, $partialContentUpdateFactory, $contentRemovalUpdateFactory, $this->createMock(RecommendationsFactory::class));
     }
 
     private function getRequestServiceForPartialUpdate(ObjectsInterface $objects, array $apiResponse): RequestInterface
@@ -204,7 +205,8 @@ class RequestTest extends TestCase
             $client,
             $this->createMock(ContentUpdateFactory::class),
             $partialContentUpdateFactory,
-            $contentRemovalUpdateFactory
+            $contentRemovalUpdateFactory,
+            $this->createMock(RecommendationsFactory::class),
         );
     }
 
@@ -238,7 +240,8 @@ class RequestTest extends TestCase
             $client,
             $this->createMock(ContentUpdateFactory::class),
             $this->createMock(PartialContentUpdateFactory::class),
-            $contentRemovalUpdateFactory
+            $contentRemovalUpdateFactory,
+            $this->createMock(RecommendationsFactory::class),
         );
     }
 
@@ -248,7 +251,8 @@ class RequestTest extends TestCase
             $this->createMock(Client::class),
             $this->createMock(ContentUpdateFactory::class),
             $this->createMock(PartialContentUpdateFactory::class),
-            $this->createMock(ContentRemovalFactory::class)
+            $this->createMock(ContentRemovalFactory::class),
+            $this->createMock(RecommendationsFactory::class),
         );
     }
 }

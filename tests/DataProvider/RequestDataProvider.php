@@ -11,6 +11,8 @@ use Answear\LuigisBoxBundle\ValueObject\ContentRemovalCollection;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdate;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdateCollection;
 use Answear\LuigisBoxBundle\ValueObject\PartialContentUpdate;
+use Answear\LuigisBoxBundle\ValueObject\Recommendation;
+use Answear\LuigisBoxBundle\ValueObject\RecommendationsCollection;
 
 class RequestDataProvider
 {
@@ -151,6 +153,65 @@ class RequestDataProvider
             '{"objects":[{"url":"product\/1","fields":{"availability":1}}]}',
             [
                 'ok_count' => 1,
+            ],
+        ];
+    }
+
+    public static function forRecommendationsRequest(): iterable
+    {
+        yield [
+            'POST',
+            new RecommendationsCollection([new Recommendation('user_conversion_based', '1234')]),
+            '[{"recommendation_type":"user_conversion_based","user_id":"1234"}]',
+            [
+                [
+                    'generated_at' => '2024-12-16T15:18:36.434588',
+                    'hits' => [
+                        [
+                            'attributes' => [
+                                'title' => 'Title',
+                            ],
+                            'nested' => [],
+                            'type' => 'product',
+                            'url' => '/p/title-id',
+                        ],
+                    ],
+                    'model_version' => null,
+                    'recommendation_id' => '111',
+                    'recommendation_type' => 'user_conversion_based',
+                    'recommender' => 'user_conversion_based',
+                    'recommender_client_identifier' => 'user_conversion_based',
+                    'recommender_version' => '111',
+                    'user_id' => '1234',
+                ],
+            ],
+        ];
+
+        yield [
+            'POST',
+            new RecommendationsCollection([new Recommendation('user_conversion_based', '1234', hitFields: ['url', 'title'])]),
+            '[{"recommendation_type":"user_conversion_based","user_id":"1234","hit_fields":["url","title"]}]',
+            [
+                [
+                    'generated_at' => '2024-12-16T15:18:36.434588',
+                    'hits' => [
+                        [
+                            'attributes' => [
+                                'title' => 'title 2',
+                            ],
+                            'nested' => [],
+                            'type' => 'product',
+                            'url' => '/p/title-2-id',
+                        ],
+                    ],
+                    'model_version' => null,
+                    'recommendation_id' => '111',
+                    'recommendation_type' => 'user_conversion_based',
+                    'recommender' => 'user_conversion_based',
+                    'recommender_client_identifier' => 'user_conversion_based',
+                    'recommender_version' => '111',
+                    'user_id' => '1234',
+                ],
             ],
         ];
     }
