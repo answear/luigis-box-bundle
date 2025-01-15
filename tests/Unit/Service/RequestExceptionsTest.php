@@ -11,6 +11,7 @@ use Answear\LuigisBoxBundle\Exception\TooManyRequestsException;
 use Answear\LuigisBoxBundle\Factory\ContentRemovalFactory;
 use Answear\LuigisBoxBundle\Factory\ContentUpdateFactory;
 use Answear\LuigisBoxBundle\Factory\PartialContentUpdateFactory;
+use Answear\LuigisBoxBundle\Factory\RecommendationsFactory;
 use Answear\LuigisBoxBundle\Service\Client;
 use Answear\LuigisBoxBundle\Service\ConfigProvider;
 use Answear\LuigisBoxBundle\Service\Request;
@@ -106,7 +107,8 @@ class RequestExceptionsTest extends TestCase
             new Client($this->createMock(ConfigProvider::class), $guzzleClient),
             $contentUpdateFactory,
             $partialContentUpdateFactory,
-            $contentRemovalUpdateFactory
+            $contentRemovalUpdateFactory,
+            $this->createMock(RecommendationsFactory::class)
         );
     }
 
@@ -125,7 +127,8 @@ class RequestExceptionsTest extends TestCase
             new Client($this->createMock(ConfigProvider::class), $guzzleClient),
             $contentUpdateFactory,
             $partialContentUpdateFactory,
-            $contentRemovalUpdateFactory
+            $contentRemovalUpdateFactory,
+            $this->createMock(RecommendationsFactory::class)
         );
     }
 }

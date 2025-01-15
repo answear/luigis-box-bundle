@@ -28,7 +28,7 @@ class ApiResponse
         array $response,
     ) {
         $this->rawResponse = $response;
-        $this->okCount = (int) $response[self::OK_COUNT_PARAM];
+        $this->okCount = (int) ($response[self::OK_COUNT_PARAM] ?? 0);
         $this->errorsCount = (int) ($response[self::ERRORS_COUNT_PARAM] ?? 0);
 
         $success = false;

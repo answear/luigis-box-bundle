@@ -12,6 +12,7 @@ use Answear\LuigisBoxBundle\Exception\TooManyRequestsException;
 use Answear\LuigisBoxBundle\Factory\ContentRemovalFactory;
 use Answear\LuigisBoxBundle\Factory\ContentUpdateFactory;
 use Answear\LuigisBoxBundle\Factory\PartialContentUpdateFactory;
+use Answear\LuigisBoxBundle\Factory\RecommendationsFactory;
 use Answear\LuigisBoxBundle\Response\ApiResponse;
 use Answear\LuigisBoxBundle\ValueObject\ContentAvailability;
 use Answear\LuigisBoxBundle\ValueObject\ContentAvailabilityCollection;
@@ -19,6 +20,7 @@ use Answear\LuigisBoxBundle\ValueObject\ContentRemovalCollection;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdate;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdateCollection;
 use Answear\LuigisBoxBundle\ValueObject\PartialContentUpdate;
+use Answear\LuigisBoxBundle\ValueObject\RecommendationsCollection;
 use Psr\Http\Message\ResponseInterface;
 use Webmozart\Assert\Assert;
 
@@ -32,6 +34,7 @@ class Request implements RequestInterface
         private ContentUpdateFactory $contentUpdateFactory,
         private PartialContentUpdateFactory $partialContentUpdateFactory,
         private ContentRemovalFactory $contentRemovalFactory,
+        private RecommendationsFactory $recommendationsFactory,
     ) {
     }
 
@@ -113,6 +116,25 @@ class Request implements RequestInterface
 
         return new ApiResponse(
             $object instanceof ContentAvailabilityCollection ? \count($object) : 1,
+            $this->handleResponse($request, $this->client->request($request))
+        );
+    }
+
+    /**
+     * @throws BadRequestException
+     * @throws TooManyRequestsException
+     * @throws TooManyItemsException
+     * @throws ServiceUnavailableException
+     * @throws MalformedResponseException
+     *
+     * @experimental This feature is in an experimental stage. Breaking changes may occur without prior notice.
+     */
+    public function getRecommendations(RecommendationsCollection $recommendationsCollection): ApiResponse
+    {
+        $request = $this->recommendationsFactory->prepareRequest($recommendationsCollection);
+
+        return new ApiResponse(
+            0,
             $this->handleResponse($request, $this->client->request($request))
         );
     }
