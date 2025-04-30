@@ -7,7 +7,6 @@ namespace Answear\LuigisBoxBundle\Tests\Acceptance\Service;
 use Answear\LuigisBoxBundle\Factory\ContentRemovalFactory;
 use Answear\LuigisBoxBundle\Factory\ContentUpdateFactory;
 use Answear\LuigisBoxBundle\Factory\PartialContentUpdateFactory;
-use Answear\LuigisBoxBundle\Factory\RecommendationsFactory;
 use Answear\LuigisBoxBundle\Service\Client;
 use Answear\LuigisBoxBundle\Service\ConfigProvider;
 use Answear\LuigisBoxBundle\Service\LuigisBoxSerializer;
@@ -18,7 +17,6 @@ use Answear\LuigisBoxBundle\Tests\ExampleConfiguration;
 use Answear\LuigisBoxBundle\ValueObject\ContentAvailability;
 use Answear\LuigisBoxBundle\ValueObject\ContentRemovalCollection;
 use Answear\LuigisBoxBundle\ValueObject\ContentUpdateCollection;
-use Answear\LuigisBoxBundle\ValueObject\RecommendationsCollection;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Uri;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
@@ -111,23 +109,6 @@ class RequestTest extends TestCase
         self::assertSame([], $response->errors);
     }
 
-    #[Test]
-    #[DataProviderExternal(RequestDataProvider::class, 'forRecommendationsRequest')]
-    public function getRecommendationsRequestPassed(
-        string $httpMethod,
-        RecommendationsCollection $collection,
-        string $expectedContent,
-        array $apiResponse,
-    ): void {
-        $response = $this
-            ->getRequestService($httpMethod, $expectedContent, $apiResponse, '/v1/recommend')
-            ->getRecommendations($collection);
-
-        self::assertTrue($response->isSuccess());
-        self::assertSame(0, $response->errorsCount);
-        self::assertSame([], $response->errors);
-    }
-
     private function getRequestService(
         string $httpMethod,
         string $expectedContent,
@@ -189,7 +170,6 @@ class RequestTest extends TestCase
             new ContentUpdateFactory($this->configProvider, $serializer),
             new PartialContentUpdateFactory($this->configProvider, $serializer),
             new ContentRemovalFactory($this->configProvider, $serializer),
-            new RecommendationsFactory($this->configProvider, $serializer)
         );
     }
 }

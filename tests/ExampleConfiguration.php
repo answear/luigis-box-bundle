@@ -21,6 +21,8 @@ class ExampleConfiguration
                     'requestTimeout' => 5.0,
                     'searchTimeout' => 2.0,
                     'searchCacheTtl' => 300,
+                    'recommendationsRequestTimeout' => 1.0,
+                    'recommendationsConnectionTimeout' => 10.0,
                 ],
             ]
         );
