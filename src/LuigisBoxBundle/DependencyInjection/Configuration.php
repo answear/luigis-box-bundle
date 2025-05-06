@@ -15,7 +15,7 @@ class Configuration implements ConfigurationInterface
     public const SEARCH_TIMEOUT = 6.0;
     public const SEARCH_CACHE_TIMEOUT = 0;
     public const RECOMMENDATIONS_REQUEST_TIMEOUT = 1.0;
-    public const RECOMMENDATIONS_CONNECTION_TIMEOUT = 10.0;
+    public const RECOMMENDATIONS_CONNECTION_TIMEOUT = 1.0;
 
     public function getConfigTreeBuilder(): TreeBuilder
     {
