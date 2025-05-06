@@ -21,6 +21,8 @@ readonly class ConfigDTO
         public float $requestTimeout = Configuration::REQUEST_TIMEOUT,
         public float $searchTimeout = Configuration::SEARCH_TIMEOUT,
         int $searchCacheTtl = Configuration::SEARCH_CACHE_TIMEOUT,
+        public float $recommendationsRequestTimeout = Configuration::RECOMMENDATIONS_REQUEST_TIMEOUT,
+        public float $recommendationsConnectionTimeout = Configuration::RECOMMENDATIONS_CONNECTION_TIMEOUT,
     ) {
         Assert::greaterThanEq($searchCacheTtl, 0, 'searchCacheTtl cannot be negative.');
         $this->searchCacheTtl = min($searchCacheTtl, self::MAX_SEARCH_CACHE_TTL);

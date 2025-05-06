@@ -14,6 +14,8 @@ class Configuration implements ConfigurationInterface
     public const REQUEST_TIMEOUT = 10.0;
     public const SEARCH_TIMEOUT = 6.0;
     public const SEARCH_CACHE_TIMEOUT = 0;
+    public const RECOMMENDATIONS_REQUEST_TIMEOUT = 1.0;
+    public const RECOMMENDATIONS_CONNECTION_TIMEOUT = 1.0;
 
     public function getConfigTreeBuilder(): TreeBuilder
     {
@@ -34,6 +36,8 @@ class Configuration implements ConfigurationInterface
                         ->floatNode('requestTimeout')->defaultValue(self::REQUEST_TIMEOUT)->end()
                         ->floatNode('searchTimeout')->defaultValue(self::SEARCH_TIMEOUT)->end()
                         ->integerNode('searchCacheTtl')->defaultValue(self::SEARCH_CACHE_TIMEOUT)->end()
+                        ->floatNode('recommendationsRequestTimeout')->defaultValue(self::RECOMMENDATIONS_REQUEST_TIMEOUT)->end()
+                        ->floatNode('recommendationsConnectionTimeout')->defaultValue(self::RECOMMENDATIONS_CONNECTION_TIMEOUT)->end()
                     ->end()
                     ->end()
                 ->end()

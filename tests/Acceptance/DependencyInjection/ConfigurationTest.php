@@ -284,6 +284,32 @@ class ConfigurationTest extends TestCase
             ],
             'other_config_name',
         ];
+
+        yield [
+            [
+                [
+                    'default_config' => 'other_config_name',
+                    'configs' => [
+                        'config_name' => [
+                            'host' => 'host',
+                            'publicKey' => 'public',
+                            'privateKey' => 'private',
+                            'connectionTimeout' => 23.2,
+                            'requestTimeout' => 17,
+                            'searchTimeout' => 4,
+                            'searchCacheTtl' => 100,
+                            'recommendationsRequestTimeout' => 10,
+                            'recommendationsConnectionTimeout' => 10,
+                        ],
+                        'other_config_name' => [
+                            'publicKey' => 'public',
+                            'privateKey' => 'private',
+                        ],
+                    ],
+                ],
+            ],
+            'other_config_name',
+        ];
     }
 
     protected function getContainerExtensions(): array
