@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Acceptance\Service;
+namespace Answear\LuigisBoxBundle\Tests\Acceptance\Service;
 
 use Answear\LuigisBoxBundle\Factory\RecommendationsFactory;
 use Answear\LuigisBoxBundle\Service\ConfigProvider;
