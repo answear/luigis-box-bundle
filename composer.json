@@ -4,7 +4,7 @@
   "type": "symfony-bundle",
   "license": "MIT",
   "require": {
-    "php": "^8.2",
+    "php": "^8.4",
     "ext-json": "*",
     "webmozart/assert": "^1.11",
     "symfony/validator": "^7.0",
