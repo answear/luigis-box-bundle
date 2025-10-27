@@ -44,7 +44,7 @@ class ConfigurationTest extends TestCase
 
     #[Test]
     #[DataProvider('provideValidConfig')]
-    public function valid(array $config): void
+    public function valid(array $config, string $expectedConfigName): void
     {
         $this->assertConfigurationIsValid($config);
     }

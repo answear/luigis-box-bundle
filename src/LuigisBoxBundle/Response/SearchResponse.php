@@ -19,7 +19,7 @@ class SearchResponse
     private const RESULTS_QUERY_PARAM = 'query';
     private const RESULTS_PARAM = 'results';
 
-    public readonly string $query;
+    public readonly ?string $query;
 
     public readonly ?string $correctedQuery;
 
@@ -48,23 +48,25 @@ class SearchResponse
         public readonly string $searchUrl,
         array $response,
     ) {
-        Assert::isArray($response[self::RESULTS_PARAM]);
         $result = $response[self::RESULTS_PARAM];
+        $query = $result[self::RESULTS_QUERY_PARAM] ?? null;
+        $correctedQuery = $result[self::RESULTS_CORRECTED_QUERY_PARAM] ?? null;
 
-        Assert::string($result[self::RESULTS_QUERY_PARAM]);
+        Assert::numeric($result[self::RESULTS_TOTAL_HITS_PARAM]);
+        $totalHits = (int) $result[self::RESULTS_TOTAL_HITS_PARAM];
 
-        $this->query = $result[self::RESULTS_QUERY_PARAM];
-        $this->correctedQuery = $result[self::RESULTS_CORRECTED_QUERY_PARAM] ?? null;
+        Assert::isArray($result);
+        Assert::nullOrString($query);
+        Assert::nullOrString($correctedQuery);
 
+        $this->query = $query;
+        $this->correctedQuery = $correctedQuery;
         $this->filters = $this->prepareFilters($result[self::RESULTS_FILTERS_PARAM]);
-
         $this->hits = $this->prepareHits($result[self::RESULTS_HITS_PARAM]);
         $this->quickSearchHits = $this->prepareHits($result[self::RESULTS_QUICKSEARCH_HITS_PARAM]);
         $this->facets = $this->prepareFacets($result[self::RESULTS_FACETS_PARAM]);
-
-        Assert::numeric($result[self::RESULTS_TOTAL_HITS_PARAM]);
-        $this->totalHits = (int) $result[self::RESULTS_TOTAL_HITS_PARAM];
-        $this->currentSize = isset($result[self::RESULTS_OFFSET_PARAM]) ? (int) $result[self::RESULTS_OFFSET_PARAM] : $result[self::RESULTS_TOTAL_HITS_PARAM];
+        $this->totalHits = $totalHits;
+        $this->currentSize = isset($result[self::RESULTS_OFFSET_PARAM]) ? (int) $result[self::RESULTS_OFFSET_PARAM] : $totalHits;
     }
 
     private function prepareFilters(array $filtersArray): array
