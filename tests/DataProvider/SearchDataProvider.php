@@ -199,6 +199,28 @@ class SearchDataProvider
         ];
 
         $urlBuilder = new SearchUrlBuilder();
+        $urlBuilder->setQuery('用户充值记录用');
+
+        yield [
+            $urlBuilder,
+            [
+                'results' => [
+                    'query' => null,
+                    'corrected_query' => null,
+                    'filters' => [],
+                    'filters_negative' => [],
+                    'accepted_filters' => [],
+                    'hits' => [],
+                    'quicksearch_hits' => [],
+                    'facets' => [],
+                    'suggested_facet' => 'null',
+                    'total_hits' => 0,
+                ],
+                'next_page' => null,
+            ],
+        ];
+
+        $urlBuilder = new SearchUrlBuilder();
         $urlBuilder->setQuery('fila');
         $urlBuilder->addFilter('price', '5|2');
 
