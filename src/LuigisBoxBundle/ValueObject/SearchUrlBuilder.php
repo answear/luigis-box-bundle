@@ -44,6 +44,7 @@ class SearchUrlBuilder
     private ?Search\Context $context = null;
 
     private ?string $userId = null;
+    private ?string $clientId = null;
 
     public function __construct(private readonly int $page = 1)
     {
@@ -235,9 +236,16 @@ class SearchUrlBuilder
         return $this;
     }
 
-    public function setUserId(string $userId): self
+    public function setUserId(?string $userId): self
     {
         $this->userId = $userId;
+
+        return $this;
+    }
+
+    public function setClientId(?string $clientId): self
+    {
+        $this->clientId = $clientId;
 
         return $this;
     }
@@ -259,6 +267,10 @@ class SearchUrlBuilder
 
         if (null !== $this->userId) {
             $queryFields['user_id'] = $this->userId;
+        }
+
+        if (null !== $this->clientId) {
+            $queryFields['client_id'] = $this->clientId;
         }
 
         if (null !== $this->filters) {
