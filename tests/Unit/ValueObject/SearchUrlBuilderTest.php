@@ -31,9 +31,11 @@ class SearchUrlBuilderTest extends TestCase
         $this->assertOk($query, $searchBuilder);
 
         $searchBuilder->setUserId('user-id');
+        $searchBuilder->setClientId('client-id');
         $searchBuilder->enableQueryUnderstanding();
         $query['qu'] = '1';
         $query['user_id'] = 'user-id';
+        $query['client_id'] = 'client-id';
         $this->assertOk($query, $searchBuilder);
 
         $searchBuilder->addFilter('category', 'Top & Top');
@@ -56,7 +58,7 @@ class SearchUrlBuilderTest extends TestCase
         $this->assertOk($query, $searchBuilder);
 
         $this->assertSame(
-            'size=10&page=3&q=to+search+query&qu=1&user_id=user-id&f%5B%5D=category%3ATop+%26+Top&f%5B%5D=category%3AJeans&f%5B%5D=available%3Afalse',
+            'size=10&page=3&q=to+search+query&qu=1&user_id=user-id&client_id=client-id&f%5B%5D=category%3ATop+%26+Top&f%5B%5D=category%3AJeans&f%5B%5D=available%3Afalse',
             $searchBuilder->toUrlQuery()
         );
 
@@ -159,7 +161,7 @@ class SearchUrlBuilderTest extends TestCase
 
         // simply check url string
         $this->assertSame(
-            'size=13&page=3&q=to+search+query&qu=1&user_id=user-id&f%5B%5D=brand%3AElo+%26+Hot16&f%5B%5D=category%3ATop&f%5B%5D=category%3AJeans&f%5B%5D=price%3A5%7C2&f_must%5B%5D=brand%3ABrand16&f_must%5B%5D=category%3AGeorge&f_must%5B%5D=category%3APrince&sort=price%3Aasc&quicksearch_types=price%2Ctitle&facets=brand%2Cattribute&dynamic_facets_size=5&use_fixits=0&prefer%5B%5D=category%3AGadgets&prefer%5B%5D=type%3AProducts&prefer%5B%5D=type%3ACategory&hit_fields=brand%2Cattribute&context%5Bgeo_location%5D=12.31%2C24.271&context%5Bgeo_location_field%5D=geolocation&context%5Bavailability_field%5D=availability&context%5Bboost_field%5D=boost&context%5Bfreshness_field%5D=freshness',
+            'size=13&page=3&q=to+search+query&qu=1&user_id=user-id&client_id=client-id&f%5B%5D=brand%3AElo+%26+Hot16&f%5B%5D=category%3ATop&f%5B%5D=category%3AJeans&f%5B%5D=price%3A5%7C2&f_must%5B%5D=brand%3ABrand16&f_must%5B%5D=category%3AGeorge&f_must%5B%5D=category%3APrince&sort=price%3Aasc&quicksearch_types=price%2Ctitle&facets=brand%2Cattribute&dynamic_facets_size=5&use_fixits=0&prefer%5B%5D=category%3AGadgets&prefer%5B%5D=type%3AProducts&prefer%5B%5D=type%3ACategory&hit_fields=brand%2Cattribute&context%5Bgeo_location%5D=12.31%2C24.271&context%5Bgeo_location_field%5D=geolocation&context%5Bavailability_field%5D=availability&context%5Bboost_field%5D=boost&context%5Bfreshness_field%5D=freshness',
             $searchBuilder->toUrlQuery()
         );
     }
