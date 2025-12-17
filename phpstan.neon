@@ -8,7 +8,3 @@ parameters:
         - %rootDir%/../../../src
     excludes_analyse:
         - src/LuigisBoxBundle/Tests/*
-    ignoreErrors:
-        - message: '#.*NodeDefinition::children.*#'
-          path: ./src/LuigisBoxBundle/DependencyInjection
-
