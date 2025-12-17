@@ -7,7 +7,7 @@ namespace Answear\LuigisBoxBundle\ValueObject;
 use Webmozart\Assert\Assert;
 
 /**
- * @see https://live.luigisbox.com/#search-as-a-service-tips
+ * @see https://live.luigisbox.tech/#search-as-a-service-tips
  */
 class SearchUrlBuilder
 {

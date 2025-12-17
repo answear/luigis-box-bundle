@@ -9,7 +9,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
-    public const HOST = 'https://live.luigisbox.com';
+    public const HOST = 'https://live.luigisbox.tech';
     public const CONNECTION_TIMEOUT = 4.0;
     public const REQUEST_TIMEOUT = 10.0;
     public const SEARCH_TIMEOUT = 6.0;
