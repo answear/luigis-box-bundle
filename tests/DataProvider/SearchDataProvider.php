@@ -155,6 +155,7 @@ class SearchDataProvider
                     'offset' => '4',
                 ],
                 'next_page' => 'https://live.luigisbox.com/search?tracker_id=111111-222222&f[]=type:product&quicksearch_types=category&page=2',
+                'guid' => 'b8881a60-20ea-457a-bf17-75a174ca8bbe',
             ],
         ];
 
@@ -195,6 +196,7 @@ class SearchDataProvider
                     'total_hits' => 1,
                 ],
                 'next_page' => null,
+                'guid' => 'b8881a60-20ea-457a-bf17-75a174ca8bbe',
             ],
         ];
 
@@ -217,6 +219,7 @@ class SearchDataProvider
                     'total_hits' => 0,
                 ],
                 'next_page' => null,
+                'guid' => 'b8881a60-20ea-457a-bf17-75a174ca8bbe',
             ],
         ];
 
@@ -239,6 +242,7 @@ class SearchDataProvider
                     'total_hits' => 0,
                 ],
                 'next_page' => null,
+                'guid' => 'b8881a60-20ea-457a-bf17-75a174ca8bbe',
             ],
         ];
     }

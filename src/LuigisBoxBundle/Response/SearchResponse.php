@@ -18,6 +18,7 @@ class SearchResponse
     private const RESULTS_CORRECTED_QUERY_PARAM = 'corrected_query';
     private const RESULTS_QUERY_PARAM = 'query';
     private const RESULTS_PARAM = 'results';
+    private const GUID_PARAM = 'guid';
 
     public readonly ?string $query;
 
@@ -43,6 +44,7 @@ class SearchResponse
     public readonly int $totalHits;
 
     public readonly int $currentSize;
+    public readonly ?string $guid;
 
     public function __construct(
         public readonly string $searchUrl,
@@ -51,6 +53,7 @@ class SearchResponse
         $result = $response[self::RESULTS_PARAM];
         $query = $result[self::RESULTS_QUERY_PARAM] ?? null;
         $correctedQuery = $result[self::RESULTS_CORRECTED_QUERY_PARAM] ?? null;
+        $guid = $response[self::GUID_PARAM] ?? null;
 
         Assert::numeric($result[self::RESULTS_TOTAL_HITS_PARAM]);
         $totalHits = (int) $result[self::RESULTS_TOTAL_HITS_PARAM];
@@ -58,6 +61,7 @@ class SearchResponse
         Assert::isArray($result);
         Assert::nullOrString($query);
         Assert::nullOrString($correctedQuery);
+        Assert::nullOrString($guid);
 
         $this->query = $query;
         $this->correctedQuery = $correctedQuery;
@@ -67,6 +71,7 @@ class SearchResponse
         $this->facets = $this->prepareFacets($result[self::RESULTS_FACETS_PARAM]);
         $this->totalHits = $totalHits;
         $this->currentSize = isset($result[self::RESULTS_OFFSET_PARAM]) ? (int) $result[self::RESULTS_OFFSET_PARAM] : $totalHits;
+        $this->guid = $guid;
     }
 
     private function prepareFilters(array $filtersArray): array
