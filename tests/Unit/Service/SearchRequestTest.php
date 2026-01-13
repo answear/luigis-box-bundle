@@ -40,6 +40,7 @@ class SearchRequestTest extends TestCase
         $this->assertHitsSame($rawResults['quicksearch_hits'], $response->quickSearchHits);
         $this->assertFacetsSame($rawResults['facets'], $response->facets);
         $this->assertSame($rawResults['total_hits'], $response->totalHits);
+        $this->assertSame($arrayRawResponse['guid'], $response->guid);
     }
 
     #[Test]
