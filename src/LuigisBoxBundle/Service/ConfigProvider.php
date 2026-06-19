@@ -53,7 +53,6 @@ class ConfigProvider
             );
         }
 
-        Assert::allIsInstanceOf($configsDTO, ConfigDTO::class);
         Assert::keyExists(
             $configsDTO,
             $defaultConfigName,
