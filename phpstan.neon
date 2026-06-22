@@ -6,5 +6,5 @@ parameters:
     treatPhpDocTypesAsCertain: false
     paths:
         - %rootDir%/../../../src
-    excludes_analyse:
+    excludePaths:
         - src/LuigisBoxBundle/Tests/*
