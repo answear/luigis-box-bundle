@@ -6,7 +6,7 @@
   "require": {
     "php": "^8.4",
     "ext-json": "*",
-    "webmozart/assert": "^1.11",
+    "webmozart/assert": "^1.11|^2.0",
     "symfony/validator": "^7.0|^8.0",
     "symfony/http-kernel": "^7.0|^8.0",
     "guzzlehttp/guzzle": "^7.8.2",
