@@ -12,6 +12,63 @@ use PHPUnit\Framework\TestCase;
 class SearchUrlBuilderTest extends TestCase
 {
     #[Test]
+    public function buildRequestBody(): void
+    {
+        $searchBuilder = new SearchUrlBuilder();
+        $this->assertFalse($searchBuilder->hasBodyFilters());
+        $this->assertNull($searchBuilder->toRequestBody());
+
+        $searchBuilder->addBodyFilterGroup('product', ['attributes.id' => [1016, '41411', 1016]]);
+        $searchBuilder->addBodyFilterGroup('product', ['attributes.id' => 1476, 'available' => false]);
+
+        $this->assertTrue($searchBuilder->hasBodyFilters());
+        $this->assertSame(
+            [
+                'filters' => [
+                    'product' => [
+                        'and' => [
+                            [
+                                'or' => [
+                                    ['filter' => 'attributes.id:1016'],
+                                    ['filter' => 'attributes.id:41411'],
+                                ],
+                            ],
+                            [
+                                'or' => [
+                                    ['filter' => 'attributes.id:1476'],
+                                    ['filter' => 'available:false'],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            $searchBuilder->toRequestBody()
+        );
+        $this->assertSame('size=10&page=1', $searchBuilder->toUrlQuery());
+
+        $searchBuilder->resetBodyFilters();
+        $this->assertFalse($searchBuilder->hasBodyFilters());
+        $this->assertNull($searchBuilder->toRequestBody());
+    }
+
+    #[Test]
+    public function emptyBodyFilterGroupIsNotAllowed(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        (new SearchUrlBuilder())->addBodyFilterGroup('product', []);
+    }
+
+    #[Test]
+    public function bodyFilterGroupWithoutValuesIsNotAllowed(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        (new SearchUrlBuilder())->addBodyFilterGroup('product', ['attributes.id' => []]);
+    }
+
+    #[Test]
     public function buildValidUrlTest(): void
     {
         $query = [

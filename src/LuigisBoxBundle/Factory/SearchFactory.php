@@ -23,17 +23,32 @@ class SearchFactory
         $urlQuery = $searchUrlBuilder->toUrlQuery();
         Assert::notEmpty($urlQuery);
 
+        $uri = new Uri(
+            sprintf(
+                '%s?tracker_id=%s&%s',
+                $this->configProvider->getHost() . self::ENDPOINT,
+                $this->configProvider->getPublicKey(),
+                $urlQuery
+            )
+        );
+
+        $body = $searchUrlBuilder->toRequestBody();
+        if (null === $body) {
+            return new Request('GET', $uri, $this->configProvider->headers);
+        }
+
         return new Request(
-            'GET',
-            new Uri(
-                sprintf(
-                    '%s?tracker_id=%s&%s',
-                    $this->configProvider->getHost() . self::ENDPOINT,
-                    $this->configProvider->getPublicKey(),
-                    $urlQuery
-                )
+            'POST',
+            $uri,
+            array_merge(
+                array_filter(
+                    $this->configProvider->headers,
+                    static fn(string $name): bool => 'content-type' !== strtolower($name),
+                    ARRAY_FILTER_USE_KEY
+                ),
+                ['Content-Type' => 'application/json']
             ),
-            $this->configProvider->headers
+            json_encode($body, JSON_THROW_ON_ERROR)
         );
     }
 
