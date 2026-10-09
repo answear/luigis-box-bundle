@@ -38,6 +38,11 @@ class SearchRequest implements SearchRequestInterface
         $url = $searchUrlBuilder->toUrlQuery();
         Assert::notEmpty($url);
 
+        $body = $searchUrlBuilder->toRequestBody();
+        if (null !== $body) {
+            $url .= '&body=' . md5(json_encode($body, JSON_THROW_ON_ERROR));
+        }
+
         return new SearchResponse(
             $url . '&v=' . $this->searchFactory->prepareRequestCacheHash(),
             $this->handleResponse($request, $this->client->request($request))

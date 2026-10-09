@@ -1,3 +1,10 @@
+v5.x
+===================
+
+* 5.5.0
+  * added complex filters sent in the request body (`SearchUrlBuilder::addBodyFilterGroup()`). When body filters are set, search is sent as `POST` with a JSON body, otherwise `GET` is used as before.
+  * `SearchResponse::$searchUrl` contains a hash of the request body when body filters are used.
+
 v3.x
 ===================
 

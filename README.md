@@ -231,6 +231,22 @@ $searchResponse = $request->search($urlBuilder);
 
 Check the Luigi's Box documentation to find out exact purpose of each field `SearchUrlBuilder` is exposing.
 
+#### Complex filters in request body (documentation [here](https://docs.luigisbox.com/search/api/v1/search-post/))
+
+Use `addBodyFilterGroup()` when you need nested boolean logic or when filters are too long for the url. Values within one group are joined with `OR`, groups are joined with `AND`. Remaining parameters (including `addFilter()`) stay in the url query.
+
+```php
+$urlBuilder = new SearchUrlBuilder();
+$urlBuilder
+    ->addFilter('type', 'product')
+    ->addBodyFilterGroup('product', ['attributes.id' => [1016, 41411]])
+    ->addBodyFilterGroup('product', ['attributes.id' => [1476]]);
+
+// (attributes.id:1016 OR attributes.id:41411) AND attributes.id:1476
+```
+
+When at least one body filter group is set, the request is sent as `POST` with a JSON body. Note that body filters are applied before facets are calculated, so facets show only values present in the filtered results.
+
 1. Response
 
 `SearchRequest::search()` will return a `SearchResponse` object with following fields:

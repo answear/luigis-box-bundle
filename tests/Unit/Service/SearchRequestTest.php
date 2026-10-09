@@ -44,6 +44,24 @@ class SearchRequestTest extends TestCase
     }
 
     #[Test]
+    public function searchUrlDistinguishesBodyFilters(): void
+    {
+        $apiResponse = iterator_to_array(SearchDataProvider::provideSuccessObjects(), false)[0][1];
+
+        $firstUrlBuilder = new SearchUrlBuilder();
+        $firstUrlBuilder->addBodyFilterGroup('product', ['attributes.id' => [1016]]);
+        $secondUrlBuilder = new SearchUrlBuilder();
+        $secondUrlBuilder->addBodyFilterGroup('product', ['attributes.id' => [1476]]);
+
+        $firstResponse = $this->getRequestService($firstUrlBuilder, $apiResponse)->search($firstUrlBuilder);
+        $secondResponse = $this->getRequestService($secondUrlBuilder, $apiResponse)->search($secondUrlBuilder);
+
+        $this->assertSame($firstUrlBuilder->toUrlQuery(), $secondUrlBuilder->toUrlQuery());
+        $this->assertNotSame($firstResponse->searchUrl, $secondResponse->searchUrl);
+        $this->assertStringStartsWith($firstUrlBuilder->toUrlQuery() . '&body=', $firstResponse->searchUrl);
+    }
+
+    #[Test]
     public function searchWithErrors(): void
     {
         $this->expectException(BadRequestException::class);

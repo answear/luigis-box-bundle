@@ -25,6 +25,11 @@ class SearchUrlBuilder
 
     private ?array $mustFilters = null;
 
+    /**
+     * @var array<string, array{and: list<array{or: list<array{filter: string}>}>}>
+     */
+    private array $bodyFilters = [];
+
     private int $size = self::DEFAULT_SIZE;
 
     private ?string $sort = null;
@@ -75,11 +80,7 @@ class SearchUrlBuilder
             $this->filters[$key] = [$this->filters[$key]];
         }
 
-        if (is_bool($value)) {
-            $this->filters[$key][] = false === $value ? 'false' : 'true';
-        } else {
-            $this->filters[$key][] = $value;
-        }
+        $this->filters[$key][] = $this->normalizeValue($value);
 
         $this->filters[$key] = array_unique($this->filters[$key]);
 
@@ -109,11 +110,7 @@ class SearchUrlBuilder
             $this->mustFilters[$key] = [$this->mustFilters[$key]];
         }
 
-        if (is_bool($value)) {
-            $this->mustFilters[$key][] = false === $value ? 'false' : 'true';
-        } else {
-            $this->mustFilters[$key][] = $value;
-        }
+        $this->mustFilters[$key][] = $this->normalizeValue($value);
 
         $this->mustFilters[$key] = array_unique($this->mustFilters[$key]);
 
@@ -148,6 +145,50 @@ class SearchUrlBuilder
         $this->mustFilters = null;
 
         return $this;
+    }
+
+    /**
+     * @param array<string, bool|int|string|array<bool|int|string>> $filters
+     */
+    public function addBodyFilterGroup(string $documentType, array $filters): self
+    {
+        Assert::notEmpty($documentType, 'Document type cannot be empty.');
+        Assert::allString(array_keys($filters), 'All filters keys must be string.');
+
+        $conditions = [];
+        foreach ($filters as $key => $values) {
+            foreach ((array) $values as $value) {
+                $conditions[] = $key . self::ARRAY_ITEM_SEPARATOR . $this->normalizeValue($value);
+            }
+        }
+
+        Assert::notEmpty($conditions, 'Filter group cannot be empty.');
+
+        $this->bodyFilters[$documentType]['and'][] = [
+            'or' => array_map(
+                static fn(string $condition): array => ['filter' => $condition],
+                array_values(array_unique($conditions)),
+            ),
+        ];
+
+        return $this;
+    }
+
+    public function resetBodyFilters(): self
+    {
+        $this->bodyFilters = [];
+
+        return $this;
+    }
+
+    public function hasBodyFilters(): bool
+    {
+        return \count($this->bodyFilters) > 0;
+    }
+
+    public function toRequestBody(): ?array
+    {
+        return $this->hasBodyFilters() ? ['filters' => $this->bodyFilters] : null;
     }
 
     public function setSize(int $size): self
@@ -367,5 +408,14 @@ class SearchUrlBuilder
     public function __toString(): string
     {
         return $this->toUrlQuery();
+    }
+
+    private function normalizeValue(bool|int|string $value): int|string
+    {
+        if (\is_bool($value)) {
+            return false === $value ? 'false' : 'true';
+        }
+
+        return $value;
     }
 }
